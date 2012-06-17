@@ -1,0 +1,3 @@
+#include "OOOCode.h"
+
+CLASS(MyNewClass)
