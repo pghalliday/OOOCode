@@ -5,68 +5,73 @@
 
 /* Calling conventions */
 
-#define CONSTRUCT(CLASS_NAME, ARGS...)		CLASS_NAME##_construct(##ARGS)
-#define DESTROY(INSTANCE)					INSTANCE->destroy(INSTANCE)
-#define INTERFACE(INTERFACE_NAME, INSTANCE)	(INSTANCE->p##INTERFACE_NAME)
-#define CALL(INTERFACE, METHOD, ARGS...)	(INTERFACE->pVTable->METHOD(INTERFACE->pInstance, ##ARGS))
+#define CONSTRUCT(CLASS_NAME, ARGS...)					CLASS_NAME##_construct(ARGS)
+#define DESTROY(CLASS_NAME, INSTANCE)					CLASS_NAME##_destroy(INSTANCE)
+#define INTERFACE(CLASS_NAME, INTERFACE_NAME, INSTANCE)	CLASS_NAME##_as##INTERFACE_NAME(INSTANCE)
+#define CALL(INTERFACE, METHOD, ARGS...)				(INTERFACE->METHOD(INTERFACE->pInstance, ##ARGS))
 
 /* Class implementation stuff */
 
-#define BEGIN_FIELDS(CLASS_NAME) \
-	struct _##CLASS_NAME##_Fields \
+#define BEGIN_CLASS(CLASS_NAME) \
+	struct _##CLASS_NAME \
 	{
 #define ADD_FIELD(FIELD)	FIELD;
-#define END_FIELDS \
-	};
-
-#define IMPLEMENT_INTERFACE_METHOD(INTERFACE_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
-	static RETURN_TYPE INTERFACE_NAME##_##METHOD_NAME(void * pInstance, ##ARGS)
-#define FIELD(CLASS_NAME, FIELD_NAME)	(((CLASS_NAME *) pInstance)->pFields->FIELD_NAME)
-
-
-/* Class header stuff */
-
-#define BEGIN_CLASS(CLASS_NAME, CONSTRUCTOR_ARGS...) \
-	typedef struct _##CLASS_NAME CLASS_NAME; \
-	extern CLASS_NAME * CLASS_NAME##_construct(##CONSTRUCTOR_ARGS); \
-	typedef struct _##CLASS_NAME##_Fields CLASS_NAME##_Fields; \
-	struct _##CLASS_NAME \
-	{ \
-		void (* destroy)(CLASS_NAME * pThis); \
-		CLASS_NAME##_Fields * pFields;
 #define ADD_INTERFACE(INTERFACE_NAME)	INTERFACE_NAME * p##INTERFACE_NAME;
 #define END_CLASS \
 	};
+
+#define IMPLEMENT_INTERFACE(CLASS_NAME, INTERFACE_NAME) \
+	INTERFACE_NAME * CLASS_NAME##_as##INTERFACE_NAME(CLASS_NAME * SELF) \
+	{ \
+		return SELF->p##INTERFACE_NAME; \
+	}
+
+#define BEGIN_INTERFACE_METHOD(CLASS_NAME, INTERFACE_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	static RETURN_TYPE INTERFACE_NAME##_##METHOD_NAME(void * INSTANCE, ##ARGS) \
+	{ \
+		CLASS_NAME * SELF = (CLASS_NAME *) INSTANCE;
+#define END_INTERFACE_METHOD \
+	}
+
+#define BEGIN_CONSTRUCTOR(CLASS_NAME, ARGS...) \
+	CLASS_NAME * CLASS_NAME##_construct(ARGS) \
+	{ \
+		CLASS_NAME * SELF = O_calloc(1, sizeof(CLASS_NAME));
+#define CONSTRUCT_INTERFACE(INTERFACE_NAME)	\
+	SELF->p##INTERFACE_NAME = O_calloc(1, sizeof(INTERFACE_NAME)); \
+	SELF->p##INTERFACE_NAME->pInstance = SELF
+#define REGISTER_INTERFACE_METHOD(INTERFACE_NAME, METHOD_NAME) SELF->p##INTERFACE_NAME->METHOD_NAME = INTERFACE_NAME##_##METHOD_NAME
+#define END_CONSTRUCTOR \
+		return SELF; \
+	}
+
+#define BEGIN_DESTRUCTOR(CLASS_NAME) \
+void CLASS_NAME##_destroy(CLASS_NAME * SELF) \
+	{
+#define DESTROY_INTERFACE(INTERFACE_NAME)	O_free(SELF->p##INTERFACE_NAME)
+#define END_DESTRUCTOR \
+		O_free(SELF); \
+	}
+
+/* Class header stuff */
+
+#define CLASS(CLASS_NAME, CONSTRUCTOR_ARGS...) \
+	typedef struct _##CLASS_NAME CLASS_NAME; \
+	extern CLASS_NAME * CLASS_NAME##_construct(CONSTRUCTOR_ARGS); \
+	extern void CLASS_NAME##_destroy(CLASS_NAME * pThis);
+
+#define EXPOSE_INTERFACE(CLASS_NAME, INTERFACE_NAME) \
+	extern INTERFACE_NAME * CLASS_NAME##_as##INTERFACE_NAME(CLASS_NAME * pThis);
 
 /* Interface header stuff */
 
 #define BEGIN_INTERFACE \
 	typedef struct \
-	{
+	{ \
+		void * pInstance;
 #define INTERFACE_METHOD(RETURN_TYPE, METHOD_NAME, ARGS...)	RETURN_TYPE (* METHOD_NAME)(void * pInstance, ##ARGS);
 #define END_INTERFACE(INTERFACE_NAME) \
 	} \
-	INTERFACE_NAME##_VTable; \
-	\
-	typedef struct \
-	{ \
-		void * pInstance; \
-		INTERFACE_NAME##_VTable * pVTable; \
-	} \
 	INTERFACE_NAME; \
-	\
-	static inline INTERFACE_NAME * INTERFACE_NAME##_construct(void * pInstance, INTERFACE_NAME##_VTable * pVTable) \
-	{ \
-		INTERFACE_NAME * pThis = O_malloc(sizeof(INTERFACE_NAME)); \
-		pThis->pInstance = pInstance; \
-		pThis->pVTable = pVTable; \
-		return pThis; \
-	} \
-	\
-	static inline void INTERFACE_NAME##_destroy(INTERFACE_NAME * pThis) \
-	{ \
-		O_free(pThis); \
-	}
-
 
 #endif

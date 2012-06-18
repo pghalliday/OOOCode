@@ -4,8 +4,12 @@
 #include "OOOCode.h"
 #include "MyNewInterface.h"
 
-BEGIN_CLASS(MyNewClass, int nMyField)
-	ADD_INTERFACE(MyNewInterface)
-END_CLASS
+BEGIN_INTERFACE
+	INTERFACE_METHOD(char *, anotherMethod, char * szFormat, int nArgument)
+END_INTERFACE(AnotherInterface)
+
+CLASS(MyNewClass, int nMyField)
+EXPOSE_INTERFACE(MyNewClass, AnotherInterface)
+EXPOSE_INTERFACE(MyNewClass, MyNewInterface)
 
 #endif

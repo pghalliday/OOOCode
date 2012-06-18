@@ -1,33 +1,51 @@
 #include "MyNewClass.h"
 
-BEGIN_FIELDS(MyNewClass)
-	ADD_FIELD(int nMyField)
-END_FIELDS
+BEGIN_CLASS(MyNewClass)
+ADD_FIELD(int nMyField)
+ADD_FIELD(char * szString)
+ADD_INTERFACE(AnotherInterface)
+ADD_INTERFACE(MyNewInterface)
+END_CLASS
 
-IMPLEMENT_INTERFACE_METHOD(MyNewInterface, int, myMethod, int nArgument)
+IMPLEMENT_INTERFACE(MyNewClass, AnotherInterface)
+IMPLEMENT_INTERFACE(MyNewClass, MyNewInterface)
+
+BEGIN_INTERFACE_METHOD(MyNewClass, AnotherInterface, char *, anotherMethod, char * szFormat, int nArgument)
 {
-	return FIELD(MyNewClass, nMyField) + nArgument;
+	if (SELF->szString)
+	{
+		O_free(SELF->szString);
+	}
+	SELF->szString = O_dsprintf(szFormat, nArgument, SELF->nMyField);
+	return SELF->szString;
 }
+END_INTERFACE_METHOD
 
-static MyNewInterface_VTable MyNewClass_tMyNewInterface_VTable =
+BEGIN_INTERFACE_METHOD(MyNewClass, MyNewInterface, int, myMethod, int nArgument)
 {
-	MyNewInterface_myMethod
-};
-
-static void MyNewClass_destroy(MyNewClass * pThis)
-{
-	O_free(pThis->pFields);
-	MyNewInterface_destroy(pThis->pMyNewInterface);
-	O_free(pThis);
+	return SELF->nMyField + nArgument;
 }
+END_INTERFACE_METHOD
 
-MyNewClass * MyNewClass_construct(int nMyField)
+BEGIN_CONSTRUCTOR(MyNewClass, int nMyField)
 {
-	MyNewClass * pThis = O_malloc(sizeof(MyNewClass));
-	pThis->destroy = MyNewClass_destroy;
-	pThis->pMyNewInterface = MyNewInterface_construct(pThis, &MyNewClass_tMyNewInterface_VTable);
-	pThis->pFields = O_malloc(sizeof(MyNewClass_Fields));
-	pThis->pFields->nMyField = nMyField;
-	return pThis;
+	CONSTRUCT_INTERFACE(AnotherInterface);
+	REGISTER_INTERFACE_METHOD(AnotherInterface, anotherMethod);
+	CONSTRUCT_INTERFACE(MyNewInterface);
+	REGISTER_INTERFACE_METHOD(MyNewInterface, myMethod);
+	SELF->nMyField = nMyField;
 }
+END_CONSTRUCTOR
+
+BEGIN_DESTRUCTOR(MyNewClass)
+{
+	DESTROY_INTERFACE(AnotherInterface);
+	DESTROY_INTERFACE(MyNewInterface);
+	if (SELF->szString)
+	{
+		O_free(SELF->szString);
+	}
+}
+END_DESTRUCTOR
+
 

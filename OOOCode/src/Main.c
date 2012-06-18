@@ -51,18 +51,22 @@ static void Main_testOriginalPattern(void)
 
 static void Main_testNewPattern(void)
 {
-	MyNewClass * pInstance = NULL;
-	MyNewInterface * pInterfaceInstance = NULL;
+	MyNewClass * pMyNewClass = NULL;
+	AnotherInterface * pAnotherInterface = NULL;
+	MyNewInterface * pMyNewInterface = NULL;
 
-	pInstance = CONSTRUCT(MyNewClass, 5);
-	assert(pInstance);
+	pMyNewClass = CONSTRUCT(MyNewClass, 5);
+	assert(pMyNewClass);
 
-	pInterfaceInstance = INTERFACE(MyNewInterface, pInstance);
-	assert(pInterfaceInstance);
+	pAnotherInterface = INTERFACE(MyNewClass, AnotherInterface, pMyNewClass);
+	assert(pAnotherInterface);
+	assert(O_strcmp(CALL(pAnotherInterface, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 5") == 0);
 
-	assert(CALL(pInterfaceInstance, myMethod, 3) == 8);
+	pMyNewInterface = INTERFACE(MyNewClass, MyNewInterface, pMyNewClass);
+	assert(pMyNewInterface);
+	assert(CALL(pMyNewInterface, myMethod, 3) == 8);
 
-	DESTROY(pInstance);
+	DESTROY(MyNewClass, pMyNewClass);
 }
 
 void main(void)
