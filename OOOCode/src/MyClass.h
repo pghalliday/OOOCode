@@ -1,3 +1,6 @@
+#ifndef MyClass_H
+#define MyClass_H
+
 /* Need to include the interface header */
 #include "MyInterface.h"
 
@@ -10,3 +13,5 @@ extern int MyClass_getMyField(MyClass * pThis);
 
 /* New method to "cast" MyClass to MyInterface */
 extern MyInterface * MyClass_asMyInterface(MyClass * pThis);
+
+#endif

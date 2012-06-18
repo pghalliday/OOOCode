@@ -1,3 +1,6 @@
+#ifndef MyInterface_H
+#define MyInterface_H
+
 #include "opentv.h"
 
 /*
@@ -43,3 +46,5 @@ static inline int MyInterface_myMethod(MyInterface * pThis, int nArgument)
 {
 	return pThis->cbMyMethod(pThis->pInstance, nArgument);
 }
+
+#endif

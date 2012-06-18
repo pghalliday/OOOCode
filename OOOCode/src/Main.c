@@ -47,15 +47,22 @@ static void Main_testOriginalPattern(void)
 }
 
 /* The new pattern */
-#include "MyNewClass.class"
+#include "MyNewClass.h"
 
 static void Main_testNewPattern(void)
 {
 	MyNewClass * pInstance = NULL;
-	pInstance = CONSTRUCT(MyNewClass);
+	MyNewInterface * pInterfaceInstance = NULL;
+
+	pInstance = CONSTRUCT(MyNewClass, 5);
 	assert(pInstance);
+
+	pInterfaceInstance = INTERFACE(MyNewInterface, pInstance);
+	assert(pInterfaceInstance);
+
+	assert(CALL(pInterfaceInstance, myMethod, 3) == 8);
+
 	DESTROY(pInstance);
-	assert(!pInstance);
 }
 
 void main(void)
