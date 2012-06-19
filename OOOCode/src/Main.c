@@ -32,7 +32,7 @@ static void Main_waitToExit(void)
 }
 
 /* The new pattern */
-#include "MyNewClass.h"
+#include "MyClass.h"
 
 static void Main_testNewPattern(void)
 {

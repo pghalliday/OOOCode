@@ -1,7 +1,9 @@
 #include "MyClass.h"
+
+#define OOOClassName	MyClass
 #include "OOOCode.h"
 
-OOOClass(MyClass)
+OOOClass
 {
 	int nMyField;
 	char * szString;
@@ -9,13 +11,13 @@ OOOClass(MyClass)
 	OOOImplement(MyInterface);
 };
 
-OOOConstructor(MyClass, int nMyField)
+OOOConstructor(int nMyField)
 {
 	OOOThis->nMyField = nMyField;
 }
 OOOConstructorEnd
 
-OOODestructor(MyClass)
+OOODestructor
 {
 	if (OOOThis->szString)
 	{
@@ -24,7 +26,7 @@ OOODestructor(MyClass)
 }
 OOODestructorEnd
 
-OOOImplementation(MyClass, char *, MyClass_anotherMethod, char * szFormat, int nArgument)
+OOOImplementation(char *, MyClass_anotherMethod, char * szFormat, int nArgument)
 {
 	if (OOOThis->szString)
 	{
@@ -35,19 +37,19 @@ OOOImplementation(MyClass, char *, MyClass_anotherMethod, char * szFormat, int n
 }
 OOOImplementationEnd
 
-OOOCastImplementation(MyClass, AnotherInterface)
+OOOCastImplementation(AnotherInterface)
 {
 	OOORegisterMethod(anotherMethod, MyClass_anotherMethod);
 }
 OOOCastImplementationEnd
 
-OOOImplementation(MyClass, int, MyClass_myMethod, int nArgument)
+OOOImplementation(int, MyClass_myMethod, int nArgument)
 {
 	return OOOThis->nMyField + nArgument;
 }
 OOOImplementationEnd
 
-OOOCastImplementation(MyClass, MyInterface)
+OOOCastImplementation(MyInterface)
 {
 	OOORegisterMethod(myMethod, MyClass_myMethod);
 }
