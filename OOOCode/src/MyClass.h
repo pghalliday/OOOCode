@@ -2,14 +2,18 @@
 #define MyClass_H
 
 #include "OOOCode.h"
-#include "MyInterface.h"
+#include "IMyInterface.h"
 
-OOOInterface(AnotherInterface)
-	OOOMethod(char *, anotherMethod, char * szFormat, int nArgument);
+OOOInterface(IMyClass)
+	OOOInterfaceMethod(char *, anotherMethod, char * szFormat, int nArgument);
 OOOInterfaceEnd
 
-OOOExportClass(MyClass, int nMyField)
-OOOExportCast(MyClass, AnotherInterface)
-OOOExportCast(MyClass, MyInterface)
+OOOExportClass(MyClass, int nMyField);
+
+OOOExportMethod(MyClass, int, getMyField);
+OOOExportMethod(MyClass, void, setMyField, int nMyField);
+
+OOOExportCast(MyClass, IMyClass);
+OOOExportCast(MyClass, IMyInterface);
 
 #endif

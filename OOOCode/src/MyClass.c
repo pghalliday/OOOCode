@@ -1,14 +1,14 @@
 #include "MyClass.h"
-
-#define OOOClassName	MyClass
 #include "OOOCode.h"
+
+#define OOOClassName MyClass
 
 OOOClass
 {
 	int nMyField;
 	char * szString;
-	OOOImplement(AnotherInterface);
-	OOOImplement(MyInterface);
+	OOOImplement(IMyClass);
+	OOOImplement(IMyInterface);
 };
 
 OOOConstructor(int nMyField)
@@ -26,7 +26,19 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOImplementation(char *, MyClass_anotherMethod, char * szFormat, int nArgument)
+OOOMethod(int, getMyField)
+{
+	return OOOThis->nMyField;
+}
+OOOMethodEnd
+
+OOOMethod(void, setMyField, int nMyField)
+{
+	OOOThis->nMyField = nMyField;
+}
+OOOMethodEnd
+
+OOOImplementMethod(char *, MyClass_anotherMethod, char * szFormat, int nArgument)
 {
 	if (OOOThis->szString)
 	{
@@ -35,22 +47,22 @@ OOOImplementation(char *, MyClass_anotherMethod, char * szFormat, int nArgument)
 	OOOThis->szString = O_dsprintf(szFormat, nArgument, OOOThis->nMyField);
 	return OOOThis->szString;
 }
-OOOImplementationEnd
+OOOImplementMethodEnd
 
-OOOCastImplementation(AnotherInterface)
+OOOImplementCast(IMyClass)
 {
 	OOORegisterMethod(anotherMethod, MyClass_anotherMethod);
 }
-OOOCastImplementationEnd
+OOOImplementCastEnd
 
-OOOImplementation(int, MyClass_myMethod, int nArgument)
+OOOImplementMethod(int, MyClass_myMethod, int nArgument)
 {
 	return OOOThis->nMyField + nArgument;
 }
-OOOImplementationEnd
+OOOImplementMethodEnd
 
-OOOCastImplementation(MyInterface)
+OOOImplementCast(IMyInterface)
 {
 	OOORegisterMethod(myMethod, MyClass_myMethod);
 }
-OOOCastImplementationEnd
+OOOImplementCastEnd
