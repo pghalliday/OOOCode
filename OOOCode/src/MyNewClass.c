@@ -1,16 +1,17 @@
 #include "MyNewClass.h"
+#include "OOOCode.h"
 
-BEGIN_CLASS(MyNewClass)
-ADD_FIELD(int nMyField)
-ADD_FIELD(char * szString)
-ADD_INTERFACE(AnotherInterface)
-ADD_INTERFACE(MyNewInterface)
+OOOC_Class(MyNewClass)
+	int nMyField;
+	char * szString;
+	OOOC_Implement(AnotherInterface);
+	OOOC_Implement(MyNewInterface);
 END_CLASS
 
-IMPLEMENT_INTERFACE(MyNewClass, AnotherInterface)
-IMPLEMENT_INTERFACE(MyNewClass, MyNewInterface)
+OOOC_ImplementCast(MyNewClass, AnotherInterface)
+OOOC_ImplementCast(MyNewClass, MyNewInterface)
 
-BEGIN_INTERFACE_METHOD(MyNewClass, AnotherInterface, char *, anotherMethod, char * szFormat, int nArgument)
+OOOC_Implementation(MyNewClass, char *, MyNewClass_anotherMethod, char * szFormat, int nArgument)
 {
 	if (SELF->szString)
 	{
@@ -19,33 +20,33 @@ BEGIN_INTERFACE_METHOD(MyNewClass, AnotherInterface, char *, anotherMethod, char
 	SELF->szString = O_dsprintf(szFormat, nArgument, SELF->nMyField);
 	return SELF->szString;
 }
-END_INTERFACE_METHOD
+OOOC_EndImplementation
 
-BEGIN_INTERFACE_METHOD(MyNewClass, MyNewInterface, int, myMethod, int nArgument)
+OOOC_Implementation(MyNewClass, int, MyNewClass_myMethod, int nArgument)
 {
 	return SELF->nMyField + nArgument;
 }
-END_INTERFACE_METHOD
+OOOC_EndImplementation
 
-BEGIN_CONSTRUCTOR(MyNewClass, int nMyField)
+OOOC_Constructor(MyNewClass, int nMyField)
 {
-	CONSTRUCT_INTERFACE(AnotherInterface);
-	REGISTER_INTERFACE_METHOD(AnotherInterface, anotherMethod);
-	CONSTRUCT_INTERFACE(MyNewInterface);
-	REGISTER_INTERFACE_METHOD(MyNewInterface, myMethod);
+	OOOC_ConstructInterface(AnotherInterface);
+	OOOC_RegisterMethod(AnotherInterface, anotherMethod, MyNewClass_anotherMethod);
+	OOOC_ConstructInterface(MyNewInterface);
+	OOOC_RegisterMethod(MyNewInterface, myMethod, MyNewClass_myMethod);
 	SELF->nMyField = nMyField;
 }
-END_CONSTRUCTOR
+OOOC_EndConstructor
 
-BEGIN_DESTRUCTOR(MyNewClass)
+OOOC_Destructor(MyNewClass)
 {
-	DESTROY_INTERFACE(AnotherInterface);
-	DESTROY_INTERFACE(MyNewInterface);
+	OOOC_DestroyInterface(AnotherInterface);
+	OOOC_DestroyInterface(MyNewInterface);
 	if (SELF->szString)
 	{
 		O_free(SELF->szString);
 	}
 }
-END_DESTRUCTOR
+OOOC_EndDestructor
 
 

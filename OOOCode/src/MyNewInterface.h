@@ -3,8 +3,8 @@
 
 #include "OOOCode.h"
 
-BEGIN_INTERFACE
-	INTERFACE_METHOD(int, myMethod, int nArgument)
-END_INTERFACE(MyNewInterface)
+OOOC_Interface
+	int OOOC_Method(myMethod, int nArgument);
+OOOC_EndInterface(MyNewInterface)
 
 #endif

@@ -1,77 +1,15 @@
-#ifndef OOOCODE_H_
-#define OOOCODE_H_
-
-#include "opentv.h"
+#ifndef OOOCode_H
+#define OOOCode_H
 
 /* Calling conventions */
 
 #define CONSTRUCT(CLASS_NAME, ARGS...)					CLASS_NAME##_construct(ARGS)
 #define DESTROY(CLASS_NAME, INSTANCE)					CLASS_NAME##_destroy(INSTANCE)
-#define INTERFACE(CLASS_NAME, INTERFACE_NAME, INSTANCE)	CLASS_NAME##_as##INTERFACE_NAME(INSTANCE)
+#define CAST(CLASS_NAME, INTERFACE_NAME, INSTANCE)		CLASS_NAME##_as##INTERFACE_NAME(INSTANCE)
 #define CALL(INTERFACE, METHOD, ARGS...)				(INTERFACE->METHOD(INTERFACE->pInstance, ##ARGS))
 
-/* Class implementation stuff */
-
-#define BEGIN_CLASS(CLASS_NAME) \
-	struct _##CLASS_NAME \
-	{
-#define ADD_FIELD(FIELD)	FIELD;
-#define ADD_INTERFACE(INTERFACE_NAME)	INTERFACE_NAME * p##INTERFACE_NAME;
-#define END_CLASS \
-	};
-
-#define IMPLEMENT_INTERFACE(CLASS_NAME, INTERFACE_NAME) \
-	INTERFACE_NAME * CLASS_NAME##_as##INTERFACE_NAME(CLASS_NAME * SELF) \
-	{ \
-		return SELF->p##INTERFACE_NAME; \
-	}
-
-#define BEGIN_INTERFACE_METHOD(CLASS_NAME, INTERFACE_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
-	static RETURN_TYPE INTERFACE_NAME##_##METHOD_NAME(void * INSTANCE, ##ARGS) \
-	{ \
-		CLASS_NAME * SELF = (CLASS_NAME *) INSTANCE;
-#define END_INTERFACE_METHOD \
-	}
-
-#define BEGIN_CONSTRUCTOR(CLASS_NAME, ARGS...) \
-	CLASS_NAME * CLASS_NAME##_construct(ARGS) \
-	{ \
-		CLASS_NAME * SELF = O_calloc(1, sizeof(CLASS_NAME));
-#define CONSTRUCT_INTERFACE(INTERFACE_NAME)	\
-	SELF->p##INTERFACE_NAME = O_calloc(1, sizeof(INTERFACE_NAME)); \
-	SELF->p##INTERFACE_NAME->pInstance = SELF
-#define REGISTER_INTERFACE_METHOD(INTERFACE_NAME, METHOD_NAME) SELF->p##INTERFACE_NAME->METHOD_NAME = INTERFACE_NAME##_##METHOD_NAME
-#define END_CONSTRUCTOR \
-		return SELF; \
-	}
-
-#define BEGIN_DESTRUCTOR(CLASS_NAME) \
-void CLASS_NAME##_destroy(CLASS_NAME * SELF) \
-	{
-#define DESTROY_INTERFACE(INTERFACE_NAME)	O_free(SELF->p##INTERFACE_NAME)
-#define END_DESTRUCTOR \
-		O_free(SELF); \
-	}
-
-/* Class header stuff */
-
-#define CLASS(CLASS_NAME, CONSTRUCTOR_ARGS...) \
-	typedef struct _##CLASS_NAME CLASS_NAME; \
-	extern CLASS_NAME * CLASS_NAME##_construct(CONSTRUCTOR_ARGS); \
-	extern void CLASS_NAME##_destroy(CLASS_NAME * pThis);
-
-#define EXPOSE_INTERFACE(CLASS_NAME, INTERFACE_NAME) \
-	extern INTERFACE_NAME * CLASS_NAME##_as##INTERFACE_NAME(CLASS_NAME * pThis);
-
-/* Interface header stuff */
-
-#define BEGIN_INTERFACE \
-	typedef struct \
-	{ \
-		void * pInstance;
-#define INTERFACE_METHOD(RETURN_TYPE, METHOD_NAME, ARGS...)	RETURN_TYPE (* METHOD_NAME)(void * pInstance, ##ARGS);
-#define END_INTERFACE(INTERFACE_NAME) \
-	} \
-	INTERFACE_NAME; \
+#include "OOOCode_Interface.h"
+#include "OOOCode_ClassHeader.h"
+#include "OOOCode_ClassImplementation.h"
 
 #endif

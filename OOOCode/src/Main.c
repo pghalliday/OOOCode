@@ -58,11 +58,11 @@ static void Main_testNewPattern(void)
 	pMyNewClass = CONSTRUCT(MyNewClass, 5);
 	assert(pMyNewClass);
 
-	pAnotherInterface = INTERFACE(MyNewClass, AnotherInterface, pMyNewClass);
+	pAnotherInterface = CAST(MyNewClass, AnotherInterface, pMyNewClass);
 	assert(pAnotherInterface);
 	assert(O_strcmp(CALL(pAnotherInterface, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 5") == 0);
 
-	pMyNewInterface = INTERFACE(MyNewClass, MyNewInterface, pMyNewClass);
+	pMyNewInterface = CAST(MyNewClass, MyNewInterface, pMyNewClass);
 	assert(pMyNewInterface);
 	assert(CALL(pMyNewInterface, myMethod, 3) == 8);
 
