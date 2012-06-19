@@ -1,52 +1,54 @@
 #include "MyNewClass.h"
 #include "OOOCode.h"
 
-OOOC_Class(MyNewClass)
+OOOClass(MyNewClass)
+{
 	int nMyField;
 	char * szString;
-	OOOC_Implement(AnotherInterface);
-	OOOC_Implement(MyNewInterface);
-END_CLASS
+	OOOImplement(AnotherInterface);
+	OOOImplement(MyNewInterface);
+};
 
-OOOC_ImplementCast(MyNewClass, AnotherInterface)
-OOOC_ImplementCast(MyNewClass, MyNewInterface)
-
-OOOC_Implementation(MyNewClass, char *, MyNewClass_anotherMethod, char * szFormat, int nArgument)
+OOOConstructor(MyNewClass, int nMyField)
 {
-	if (SELF->szString)
+	OOOThis->nMyField = nMyField;
+}
+OOOEndConstructor
+
+OOODestructor(MyNewClass)
+{
+	if (OOOThis->szString)
 	{
-		O_free(SELF->szString);
-	}
-	SELF->szString = O_dsprintf(szFormat, nArgument, SELF->nMyField);
-	return SELF->szString;
-}
-OOOC_EndImplementation
-
-OOOC_Implementation(MyNewClass, int, MyNewClass_myMethod, int nArgument)
-{
-	return SELF->nMyField + nArgument;
-}
-OOOC_EndImplementation
-
-OOOC_Constructor(MyNewClass, int nMyField)
-{
-	OOOC_ConstructInterface(AnotherInterface);
-	OOOC_RegisterMethod(AnotherInterface, anotherMethod, MyNewClass_anotherMethod);
-	OOOC_ConstructInterface(MyNewInterface);
-	OOOC_RegisterMethod(MyNewInterface, myMethod, MyNewClass_myMethod);
-	SELF->nMyField = nMyField;
-}
-OOOC_EndConstructor
-
-OOOC_Destructor(MyNewClass)
-{
-	OOOC_DestroyInterface(AnotherInterface);
-	OOOC_DestroyInterface(MyNewInterface);
-	if (SELF->szString)
-	{
-		O_free(SELF->szString);
+		O_free(OOOThis->szString);
 	}
 }
-OOOC_EndDestructor
+OOOEndDestructor
 
+OOOImplementation(MyNewClass, char *, MyNewClass_anotherMethod, char * szFormat, int nArgument)
+{
+	if (OOOThis->szString)
+	{
+		O_free(OOOThis->szString);
+	}
+	OOOThis->szString = O_dsprintf(szFormat, nArgument, OOOThis->nMyField);
+	return OOOThis->szString;
+}
+OOOEndImplementation
 
+OOOImplementation(MyNewClass, int, MyNewClass_myMethod, int nArgument)
+{
+	return OOOThis->nMyField + nArgument;
+}
+OOOEndImplementation
+
+OOOCastImplementation(MyNewClass, AnotherInterface)
+{
+	OOORegisterMethod(anotherMethod, MyNewClass_anotherMethod);
+}
+OOOEndCastImplementation
+
+OOOCastImplementation(MyNewClass, MyNewInterface)
+{
+	OOORegisterMethod(myMethod, MyNewClass_myMethod);
+}
+OOOEndCastImplementation

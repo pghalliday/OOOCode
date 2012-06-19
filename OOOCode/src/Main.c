@@ -51,22 +51,17 @@ static void Main_testOriginalPattern(void)
 
 static void Main_testNewPattern(void)
 {
-	MyNewClass * pMyNewClass = NULL;
-	AnotherInterface * pAnotherInterface = NULL;
-	MyNewInterface * pMyNewInterface = NULL;
+	MyNewClass * pMyNewClass = OOOConstruct(MyNewClass, 5);
+	AnotherInterface * pAnotherInterface = OOOCast(MyNewClass, AnotherInterface, pMyNewClass);
+	MyNewInterface * pMyNewInterface = OOOCast(MyNewClass, MyNewInterface, pMyNewClass);
 
-	pMyNewClass = CONSTRUCT(MyNewClass, 5);
 	assert(pMyNewClass);
-
-	pAnotherInterface = CAST(MyNewClass, AnotherInterface, pMyNewClass);
 	assert(pAnotherInterface);
-	assert(O_strcmp(CALL(pAnotherInterface, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 5") == 0);
-
-	pMyNewInterface = CAST(MyNewClass, MyNewInterface, pMyNewClass);
 	assert(pMyNewInterface);
-	assert(CALL(pMyNewInterface, myMethod, 3) == 8);
+	assert(O_strcmp(OOOCall(pAnotherInterface, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 5") == 0);
+	assert(OOOCall(pMyNewInterface, myMethod, 3) == 8);
 
-	DESTROY(MyNewClass, pMyNewClass);
+	OOODestroy(MyNewClass, pMyNewClass);
 }
 
 void main(void)

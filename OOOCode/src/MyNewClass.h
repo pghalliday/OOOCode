@@ -4,12 +4,12 @@
 #include "OOOCode.h"
 #include "MyNewInterface.h"
 
-OOOC_Interface
-	char * OOOC_Method(anotherMethod, char * szFormat, int nArgument);
-OOOC_EndInterface(AnotherInterface)
+OOOInterface(AnotherInterface)
+	OOOMethod(char *, anotherMethod, char * szFormat, int nArgument);
+OOOEndInterface
 
-OOOC_ExportClass(MyNewClass, int nMyField)
-OOOC_ExportCast(MyNewClass, AnotherInterface)
-OOOC_ExportCast(MyNewClass, MyNewInterface)
+OOOExportClass(MyNewClass, int nMyField)
+OOOExportCast(MyNewClass, AnotherInterface)
+OOOExportCast(MyNewClass, MyNewInterface)
 
 #endif
