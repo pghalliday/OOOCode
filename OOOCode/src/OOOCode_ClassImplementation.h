@@ -10,14 +10,14 @@
 	CLASS_NAME * CLASS_NAME##_construct(ARGS) \
 	{ \
 		CLASS_NAME * OOOThis = O_calloc(1, sizeof(CLASS_NAME));
-#define OOOEndConstructor \
+#define OOOConstructorEnd \
 		return OOOThis; \
 	}
 
 #define OOODestructor(CLASS_NAME) \
 void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 	{
-#define OOOEndDestructor \
+#define OOODestructorEnd \
 		O_free(OOOThis); \
 	}
 
@@ -25,7 +25,7 @@ void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 	static RETURN_TYPE METHOD_NAME(void * INSTANCE, ##ARGS) \
 	{ \
 		CLASS_NAME * OOOThis = (CLASS_NAME *) INSTANCE;
-#define OOOEndImplementation \
+#define OOOImplementationEnd \
 	}
 
 
@@ -36,7 +36,7 @@ void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 		INTERFACE->pInstance = OOOThis;
 #define OOORegisterMethod(METHOD_NAME, IMPLEMENTATION_METHOD_NAME) \
 		INTERFACE->METHOD_NAME = IMPLEMENTATION_METHOD_NAME
-#define OOOEndCastImplementation \
+#define OOOCastImplementationEnd \
 		return INTERFACE; \
 	}
 

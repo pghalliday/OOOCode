@@ -31,42 +31,26 @@ static void Main_waitToExit(void)
 	}
 }
 
-/* The old pattern */
-#include "MyClass.h"
-
-static void Main_testOriginalPattern(void)
-{
-	MyClass * pInstance = MyClass_create(5);
-	MyInterface * pInterfaceInstance = MyClass_asMyInterface(pInstance);
-
-	/* Method tests */
-	assert(MyClass_getMyField(pInstance) == 5);
-	assert(MyInterface_myMethod(pInterfaceInstance, 3) == 8);
-
-	MyClass_destroy(pInstance);
-}
-
 /* The new pattern */
 #include "MyNewClass.h"
 
 static void Main_testNewPattern(void)
 {
-	MyNewClass * pMyNewClass = OOOConstruct(MyNewClass, 5);
-	AnotherInterface * pAnotherInterface = OOOCast(MyNewClass, AnotherInterface, pMyNewClass);
-	MyNewInterface * pMyNewInterface = OOOCast(MyNewClass, MyNewInterface, pMyNewClass);
+	MyClass * pMyClass = OOOConstruct(MyClass, 5);
+	AnotherInterface * pAnotherInterface = OOOCast(MyClass, AnotherInterface, pMyClass);
+	MyInterface * pMyInterface = OOOCast(MyClass, MyInterface, pMyClass);
 
-	assert(pMyNewClass);
+	assert(pMyClass);
 	assert(pAnotherInterface);
-	assert(pMyNewInterface);
+	assert(pMyInterface);
 	assert(O_strcmp(OOOCall(pAnotherInterface, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 5") == 0);
-	assert(OOOCall(pMyNewInterface, myMethod, 3) == 8);
+	assert(OOOCall(pMyInterface, myMethod, 3) == 8);
 
-	OOODestroy(MyNewClass, pMyNewClass);
+	OOODestroy(MyClass, pMyClass);
 }
 
 void main(void)
 {
-	RUN_TEST(Main_testOriginalPattern);
 	RUN_TEST(Main_testNewPattern);
 
 	/* Stick around so the VSTB does not exit and we know we ran everything */

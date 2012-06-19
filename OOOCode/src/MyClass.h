@@ -1,17 +1,15 @@
 #ifndef MyClass_H
 #define MyClass_H
 
-/* Need to include the interface header */
+#include "OOOCode.h"
 #include "MyInterface.h"
 
-typedef struct _MyClass MyClass;
+OOOInterface(AnotherInterface)
+	OOOMethod(char *, anotherMethod, char * szFormat, int nArgument);
+OOOInterfaceEnd
 
-extern MyClass * MyClass_create(int nMyField);
-extern void MyClass_destroy(MyClass * pThis);
-
-extern int MyClass_getMyField(MyClass * pThis);
-
-/* New method to "cast" MyClass to MyInterface */
-extern MyInterface * MyClass_asMyInterface(MyClass * pThis);
+OOOExportClass(MyClass, int nMyField)
+OOOExportCast(MyClass, AnotherInterface)
+OOOExportCast(MyClass, MyInterface)
 
 #endif

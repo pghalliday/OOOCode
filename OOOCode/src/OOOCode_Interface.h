@@ -7,7 +7,7 @@
 	{ \
 		void * pInstance;
 #define OOOMethod(RETURN_TYPE, METHOD_NAME, ARGS...)	RETURN_TYPE (* METHOD_NAME)(void * pInstance, ##ARGS)
-#define OOOEndInterface \
+#define OOOInterfaceEnd \
 	};
 
 #endif
