@@ -17,26 +17,26 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOPrivateMethod(int, printMyField)
+OOOMethod(int, printMyFieldX)
 {
 	O_debug("MyField: %d\n", OOOField(OOOThis, nMyField));
 	return OOOField(OOOThis, nMyField);
 }
-OOOPrivateMethodEnd
+OOOMethodEnd
 
-OOOImplementMethod(int, getMyField)
+OOOMethod(int, getMyFieldX)
 {
-	return OOOPrivateCall(OOOThis, printMyField);
+	return OOOPrivateCall(OOOThis, printMyFieldX);
 }
-OOOImplementMethodEnd
+OOOMethodEnd
 
-OOOImplementMethod(void, setMyField, int nMyField)
+OOOMethod(void, setMyFieldX, int nMyField)
 {
 	OOOField(OOOThis, nMyField) = nMyField;
 }
-OOOImplementMethodEnd
+OOOMethodEnd
 
-OOOImplementVirtual(char *, IMyClass, anotherMethod, char * szFormat, int nArgument)
+OOOMethod(char *, anotherMethodX, char * szFormat, int nArgument)
 {
 	if (OOOField(OOOThis, szString))
 	{
@@ -45,28 +45,32 @@ OOOImplementVirtual(char *, IMyClass, anotherMethod, char * szFormat, int nArgum
 	OOOField(OOOThis, szString) = O_dsprintf(szFormat, nArgument, OOOField(OOOThis, nMyField));
 	return OOOField(OOOThis, szString);
 }
-OOOImplementVirtualEnd
+OOOMethodEnd
 
-OOOImplementVirtual(int, IMyInterface, myMethod, int nArgument)
+OOOMethod(int, myMethodX, int nArgument)
 {
 	return OOOField(OOOThis, nMyField) + nArgument;
 }
-OOOImplementVirtualEnd
+OOOMethodEnd
 
 OOOConstructor(int nMyField)
 {
 	OOOMapMethods
-		OOOMethodMapping(getMyField),
-		OOOMethodMapping(setMyField)
+		OOOMethodMapping(getMyFieldX),
+		OOOMethodMapping(setMyFieldX)
 	OOOMapMethodsEnd
 
-	OOOMapVirtuals(IMyClass)
-		OOOVirtualMapping(IMyClass, anotherMethod)
-	OOOMapVirtualsEnd(IMyClass)
+	#define OOOInterfaceName IMyClass
+	OOOMapVirtuals
+		OOOVirtualMapping(anotherMethodX)
+	OOOMapVirtualsEnd
+	#undef OOOInterfaceName
 
-	OOOMapVirtuals(IMyInterface)
-		OOOVirtualMapping(IMyInterface, myMethod)
-	OOOMapVirtualsEnd(IMyInterface)
+	#define OOOInterfaceName IMyInterface
+	OOOMapVirtuals
+		OOOVirtualMapping(myMethodX)
+	OOOMapVirtualsEnd
+	#undef OOOInterfaceName
 
 	OOOField(OOOThis, nMyField) = nMyField;
 }

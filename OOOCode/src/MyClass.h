@@ -15,9 +15,9 @@ OOOInterfaceEnd
 OOOClass(int nMyField)
 	OOOImplement(IMyClass);
 	OOOImplement(IMyInterface);
-OOOMethods
-	OOOMethod(int, getMyField);
-	OOOMethod(void, setMyField, int nMyField);
+OOOExports
+	OOOExport(int, getMyField);
+	OOOExport(void, setMyField, int nMyField);
 OOOClassEnd
 #undef OOOClassName
 

@@ -22,20 +22,20 @@
 	} \
 	CLASS_NAME##_Interfaces; \
 	typedef struct \
-	{ \
-		void (* destroy)(CLASS_NAME * OOOThis);
+	{
 #define _OOOMethods(CLASS_NAME) __OOOMethods(CLASS_NAME)
-#define OOOMethods _OOOMethods(OOOClassName)
+#define OOOExports _OOOMethods(OOOClassName)
 #define __OOOMethod(RETURN_TYPE, CLASS_NAME, METHOD_NAME, ARGS...) \
-	RETURN_TYPE (* METHOD_NAME)(CLASS_NAME * OOOThis , ##ARGS)
+	RETURN_TYPE (* METHOD_NAME)(void * OOOThis , ##ARGS)
 #define _OOOMethod(RETURN_TYPE, CLASS_NAME, METHOD_NAME, ARGS...) __OOOMethod(RETURN_TYPE, CLASS_NAME, METHOD_NAME , ##ARGS)
-#define OOOMethod(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOMethod(RETURN_TYPE, OOOClassName, METHOD_NAME , ##ARGS)
+#define OOOExport(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOMethod(RETURN_TYPE, OOOClassName, METHOD_NAME , ##ARGS)
 #define __OOOClassEnd(CLASS_NAME) \
 	} \
 	CLASS_NAME##_VTable; \
 	typedef struct _##CLASS_NAME##_PrivateData CLASS_NAME##_PrivateData; \
 	struct _##CLASS_NAME \
 	{ \
+		void (* destroy)(CLASS_NAME * OOOThis); \
 		CLASS_NAME##_PrivateData * pPrivateData; \
 		CLASS_NAME##_VTable * pVTable; \
 		CLASS_NAME##_Interfaces tInterfaces; \

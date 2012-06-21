@@ -44,12 +44,12 @@ static void Main_testNewPattern(void)
 	assert(iMyClass);
 	assert(iMyInterface);
 	assert(OOOCall(pMyClass, getMyField) == 5);
-	assert(O_strcmp(OOOCall(iMyClass, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 5") == 0);
-	assert(OOOCall(iMyInterface, myMethod, 3) == 8);
+	assert(O_strcmp(OOOInterfaceCall(iMyClass, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 5") == 0);
+	assert(OOOInterfaceCall(iMyInterface, myMethod, 3) == 8);
 	OOOCall(pMyClass, setMyField, 16);
 	assert(OOOCall(pMyClass, getMyField) == 16);
-	assert(O_strcmp(OOOCall(iMyClass, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 16") == 0);
-	assert(OOOCall(iMyInterface, myMethod, 3) == 19);
+	assert(O_strcmp(OOOInterfaceCall(iMyClass, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 16") == 0);
+	assert(OOOInterfaceCall(iMyInterface, myMethod, 3) == 19);
 
 	OOODestroy(pMyClass);
 }

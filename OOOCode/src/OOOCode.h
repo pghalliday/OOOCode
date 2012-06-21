@@ -21,7 +21,7 @@
 #define OOOConstruct(CLASS_NAME, ARGS...) _OOOConstruct(CLASS_NAME , ##ARGS)
 
 #define _OOODestroy(INSTANCE) \
-	(INSTANCE->pVTable->destroy(INSTANCE))
+	(INSTANCE->destroy(INSTANCE))
 #define OOODestroy(INSTANCE) _OOODestroy(INSTANCE)
 
 #define _OOOCast(INTERFACE_NAME, INSTANCE) \
@@ -31,6 +31,10 @@
 #define _OOOCall(INSTANCE, METHOD_NAME, ARGS...) \
 	(INSTANCE->pVTable->METHOD_NAME(INSTANCE , ##ARGS))
 #define OOOCall(INSTANCE, METHOD_NAME, ARGS...) _OOOCall(INSTANCE, METHOD_NAME , ##ARGS)
+
+#define _OOOInterfaceCall(INTERFACE, METHOD_NAME, ARGS...) \
+	(INTERFACE->pVTable->METHOD_NAME(INTERFACE->pInstance , ##ARGS))
+#define OOOInterfaceCall(INTERFACE, METHOD_NAME, ARGS...) _OOOInterfaceCall(INTERFACE, METHOD_NAME , ##ARGS)
 
 #define __OOOPrivateCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) \
 	(CLASS_NAME##_##METHOD_NAME(INSTANCE , ##ARGS))

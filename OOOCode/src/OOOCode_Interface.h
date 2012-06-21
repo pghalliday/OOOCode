@@ -21,7 +21,7 @@
 #define _OOOInterface(INTERFACE_NAME) __OOOInterface(INTERFACE_NAME)
 #define OOOInterface _OOOInterface(OOOInterfaceName)
 #define __OOOVirtual(RETURN_TYPE, INTERFACE_NAME, METHOD_NAME, ARGS...) \
-	RETURN_TYPE (* METHOD_NAME)(INTERFACE_NAME * OOOIThis , ##ARGS)
+	RETURN_TYPE (* METHOD_NAME)(void * OOOInstance , ##ARGS)
 #define _OOOVirtual(RETURN_TYPE, INTERFACE_NAME, METHOD_NAME, ARGS...) __OOOVirtual(RETURN_TYPE, INTERFACE_NAME, METHOD_NAME , ##ARGS)
 #define OOOVirtual(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOVirtual(RETURN_TYPE, OOOInterfaceName, METHOD_NAME , ##ARGS)
 #define OOOInterfaceEnd \
