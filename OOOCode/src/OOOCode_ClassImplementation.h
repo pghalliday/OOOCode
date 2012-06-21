@@ -30,6 +30,15 @@ void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 		O_free(OOOThis); \
 	}
 
+#define __OOOPrivateMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis , ##ARGS) \
+	{ \
+		assert(OOOThis);
+#define _OOOPrivateMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) __OOOPrivateMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME , ##ARGS)
+#define OOOPrivateMethod(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOPrivateMethod(OOOClassName, RETURN_TYPE, METHOD_NAME , ##ARGS)
+#define OOOPrivateMethodEnd \
+	}
+
 #define __OOOImplementMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
 	RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis , ##ARGS) \
 	{ \

@@ -32,9 +32,14 @@
 	(INSTANCE->pVTable->METHOD_NAME(INSTANCE , ##ARGS))
 #define OOOCall(INSTANCE, METHOD_NAME, ARGS...) _OOOCall(INSTANCE, METHOD_NAME , ##ARGS)
 
-#define _OOOField(FIELD_NAME) \
-	(OOOThis->pPrivateData->FIELD_NAME)
-#define OOOField(FIELD_NAME) _OOOField(FIELD_NAME)
+#define __OOOPrivateCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) \
+	(CLASS_NAME##_##METHOD_NAME(INSTANCE , ##ARGS))
+#define _OOOPrivateCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) __OOOPrivateCall(CLASS_NAME, INSTANCE, METHOD_NAME , ##ARGS)
+#define OOOPrivateCall(INSTANCE, METHOD_NAME, ARGS...) _OOOPrivateCall(OOOClassName, INSTANCE, METHOD_NAME , ##ARGS)
+
+#define _OOOField(INSTANCE, FIELD_NAME) \
+	(INSTANCE->pPrivateData->FIELD_NAME)
+#define OOOField(INSTANCE, FIELD_NAME) _OOOField(INSTANCE, FIELD_NAME)
 
 #include "OOOCode_Interface.h"
 #include "OOOCode_ClassHeader.h"

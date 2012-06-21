@@ -10,39 +10,46 @@ OOOPrivateDataEnd
 
 OOODestructor
 {
-	if (OOOField(szString))
+	if (OOOField(OOOThis, szString))
 	{
-		O_free(OOOField(szString));
+		O_free(OOOField(OOOThis, szString));
 	}
 }
 OOODestructorEnd
 
+OOOPrivateMethod(int, printMyField)
+{
+	O_debug("MyField: %d\n", OOOField(OOOThis, nMyField));
+	return OOOField(OOOThis, nMyField);
+}
+OOOPrivateMethodEnd
+
 OOOImplementMethod(int, getMyField)
 {
-	return OOOField(nMyField);
+	return OOOPrivateCall(OOOThis, printMyField);
 }
 OOOImplementMethodEnd
 
 OOOImplementMethod(void, setMyField, int nMyField)
 {
-	OOOField(nMyField) = nMyField;
+	OOOField(OOOThis, nMyField) = nMyField;
 }
 OOOImplementMethodEnd
 
 OOOImplementVirtual(char *, IMyClass, anotherMethod, char * szFormat, int nArgument)
 {
-	if (OOOField(szString))
+	if (OOOField(OOOThis, szString))
 	{
-		O_free(OOOField(szString));
+		O_free(OOOField(OOOThis, szString));
 	}
-	OOOField(szString) = O_dsprintf(szFormat, nArgument, OOOField(nMyField));
-	return OOOField(szString);
+	OOOField(OOOThis, szString) = O_dsprintf(szFormat, nArgument, OOOField(OOOThis, nMyField));
+	return OOOField(OOOThis, szString);
 }
 OOOImplementVirtualEnd
 
 OOOImplementVirtual(int, IMyInterface, myMethod, int nArgument)
 {
-	return OOOField(nMyField) + nArgument;
+	return OOOField(OOOThis, nMyField) + nArgument;
 }
 OOOImplementVirtualEnd
 
@@ -61,7 +68,7 @@ OOOConstructor(int nMyField)
 		OOOVirtualMapping(IMyInterface, myMethod)
 	OOOMapVirtualsEnd(IMyInterface)
 
-	OOOField(nMyField) = nMyField;
+	OOOField(OOOThis, nMyField) = nMyField;
 }
 OOOConstructorEnd
 
