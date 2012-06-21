@@ -1,68 +1,68 @@
 #include "MyClass.h"
-#include "OOOCode.h"
 
+#include "OOOCode.h"
 #define OOOClassName MyClass
 
-OOOClass
-{
+OOOPrivateData
 	int nMyField;
 	char * szString;
-	OOOImplement(IMyClass);
-	OOOImplement(IMyInterface);
-};
-
-OOOConstructor(int nMyField)
-{
-	OOOThis->nMyField = nMyField;
-}
-OOOConstructorEnd
+OOOPrivateDataEnd
 
 OOODestructor
 {
-	if (OOOThis->szString)
+	if (OOOField(szString))
 	{
-		O_free(OOOThis->szString);
+		O_free(OOOField(szString));
 	}
 }
 OOODestructorEnd
 
-OOOMethod(int, getMyField)
+OOOImplementMethod(int, getMyField)
 {
-	return OOOThis->nMyField;
+	return OOOField(nMyField);
 }
-OOOMethodEnd
+OOOImplementMethodEnd
 
-OOOMethod(void, setMyField, int nMyField)
+OOOImplementMethod(void, setMyField, int nMyField)
 {
-	OOOThis->nMyField = nMyField;
+	OOOField(nMyField) = nMyField;
 }
-OOOMethodEnd
+OOOImplementMethodEnd
 
-OOOImplementMethod(char *, MyClass_anotherMethod, char * szFormat, int nArgument)
+OOOImplementVirtual(char *, IMyClass, anotherMethod, char * szFormat, int nArgument)
 {
-	if (OOOThis->szString)
+	if (OOOField(szString))
 	{
-		O_free(OOOThis->szString);
+		O_free(OOOField(szString));
 	}
-	OOOThis->szString = O_dsprintf(szFormat, nArgument, OOOThis->nMyField);
-	return OOOThis->szString;
+	OOOField(szString) = O_dsprintf(szFormat, nArgument, OOOField(nMyField));
+	return OOOField(szString);
 }
-OOOImplementMethodEnd
+OOOImplementVirtualEnd
 
-OOOImplementCast(IMyClass)
+OOOImplementVirtual(int, IMyInterface, myMethod, int nArgument)
 {
-	OOORegisterMethod(anotherMethod, MyClass_anotherMethod);
+	return OOOField(nMyField) + nArgument;
 }
-OOOImplementCastEnd
+OOOImplementVirtualEnd
 
-OOOImplementMethod(int, MyClass_myMethod, int nArgument)
+OOOConstructor(int nMyField)
 {
-	return OOOThis->nMyField + nArgument;
-}
-OOOImplementMethodEnd
+	OOOMapMethods
+		OOOMethodMapping(getMyField),
+		OOOMethodMapping(setMyField)
+	OOOMapMethodsEnd
 
-OOOImplementCast(IMyInterface)
-{
-	OOORegisterMethod(myMethod, MyClass_myMethod);
+	OOOMapVirtuals(IMyClass)
+		OOOVirtualMapping(IMyClass, anotherMethod)
+	OOOMapVirtualsEnd(IMyClass)
+
+	OOOMapVirtuals(IMyInterface)
+		OOOVirtualMapping(IMyInterface, myMethod)
+	OOOMapVirtualsEnd(IMyInterface)
+
+	OOOField(nMyField) = nMyField;
 }
-OOOImplementCastEnd
+OOOConstructorEnd
+
+#undef OOOClassName

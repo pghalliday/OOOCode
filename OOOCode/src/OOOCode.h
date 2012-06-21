@@ -8,23 +8,33 @@
  * NB. Check MacroNotes.txt for guidelines
  */
 
-#include "assert.h"
+#ifdef OOOClassName
+#error "OOOClassName should not be defined before including OOOCode.h - check that previous includes have #undef'd it"
+#endif
+
+#ifdef OOOInterfaceName
+#error "OOOInterfaceName should not be defined before including OOOCode.h - check that previous includes have #undef'd it"
+#endif
 
 #define _OOOConstruct(CLASS_NAME, ARGS...) \
 	CLASS_NAME##_construct(ARGS)
 #define OOOConstruct(CLASS_NAME, ARGS...) _OOOConstruct(CLASS_NAME , ##ARGS)
 
-#define _OOODestroy(CLASS_NAME, INSTANCE) \
-	CLASS_NAME##_destroy(INSTANCE)
-#define OOODestroy(CLASS_NAME, INSTANCE) _OOODestroy(CLASS_NAME, INSTANCE)
+#define _OOODestroy(INSTANCE) \
+	(INSTANCE->pVTable->destroy(INSTANCE))
+#define OOODestroy(INSTANCE) _OOODestroy(INSTANCE)
 
-#define _OOOCast(CLASS_NAME, INTERFACE_NAME, INSTANCE) \
-	CLASS_NAME##_as##INTERFACE_NAME(INSTANCE)
-#define OOOCast(CLASS_NAME, INTERFACE_NAME, INSTANCE) _OOOCast(CLASS_NAME, INTERFACE_NAME, INSTANCE)
+#define _OOOCast(INTERFACE_NAME, INSTANCE) \
+	(&(INSTANCE->tInterfaces.t##INTERFACE_NAME))
+#define OOOCast(INTERFACE_NAME, INSTANCE) _OOOCast(INTERFACE_NAME, INSTANCE)
 
-#define _OOOCall(INTERFACE, METHOD_NAME, ARGS...)	\
-	(INTERFACE->METHOD_NAME(INTERFACE->pInstance , ##ARGS))
-#define OOOCall(INTERFACE, METHOD_NAME, ARGS...) _OOOCall(INTERFACE, METHOD_NAME , ##ARGS)
+#define _OOOCall(INSTANCE, METHOD_NAME, ARGS...) \
+	(INSTANCE->pVTable->METHOD_NAME(INSTANCE , ##ARGS))
+#define OOOCall(INSTANCE, METHOD_NAME, ARGS...) _OOOCall(INSTANCE, METHOD_NAME , ##ARGS)
+
+#define _OOOField(FIELD_NAME) \
+	(OOOThis->pPrivateData->FIELD_NAME)
+#define OOOField(FIELD_NAME) _OOOField(FIELD_NAME)
 
 #include "OOOCode_Interface.h"
 #include "OOOCode_ClassHeader.h"

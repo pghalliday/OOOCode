@@ -1,19 +1,24 @@
 #ifndef MyClass_H
 #define MyClass_H
 
-#include "OOOCode.h"
 #include "IMyInterface.h"
 
-OOOInterface(IMyClass)
-	OOOInterfaceMethod(char *, anotherMethod, char * szFormat, int nArgument);
+#include "OOOCode.h"
+
+#define OOOInterfaceName IMyClass
+OOOInterface
+	OOOVirtual(char *, anotherMethod, char * szFormat, int nArgument);
 OOOInterfaceEnd
+#undef OOOInterfaceName
 
-OOOExportClass(MyClass, int nMyField);
-
-OOOExportMethod(MyClass, int, getMyField);
-OOOExportMethod(MyClass, void, setMyField, int nMyField);
-
-OOOExportCast(MyClass, IMyClass);
-OOOExportCast(MyClass, IMyInterface);
+#define OOOClassName MyClass
+OOOClass(int nMyField)
+	OOOMethod(int, getMyField);
+	OOOMethod(void, setMyField, int nMyField);
+OOOInterfaces
+	OOOImplement(IMyClass);
+	OOOImplement(IMyInterface);
+OOOClassEnd
+#undef OOOClassName
 
 #endif
