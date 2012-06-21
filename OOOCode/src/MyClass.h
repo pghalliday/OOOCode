@@ -13,11 +13,11 @@ OOOInterfaceEnd
 
 #define OOOClassName MyClass
 OOOClass(int nMyField)
-	OOOMethod(int, getMyField);
-	OOOMethod(void, setMyField, int nMyField);
-OOOInterfaces
 	OOOImplement(IMyClass);
 	OOOImplement(IMyInterface);
+OOOMethods
+	OOOMethod(int, getMyField);
+	OOOMethod(void, setMyField, int nMyField);
 OOOClassEnd
 #undef OOOClassName
 

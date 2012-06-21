@@ -13,26 +13,26 @@
 	typedef struct _##CLASS_NAME CLASS_NAME; \
 	extern CLASS_NAME * CLASS_NAME##_construct(CONSTRUCTOR_ARGS); \
 	typedef struct \
-	{ \
-		void (* destroy)(CLASS_NAME * OOOThis);
+	{
 #define _OOOClass(CLASS_NAME, CONSTRUCTOR_ARGS...) __OOOClass(CLASS_NAME , ##CONSTRUCTOR_ARGS)
 #define OOOClass(CONSTRUCTOR_ARGS...) _OOOClass(OOOClassName , ##CONSTRUCTOR_ARGS)
+#define OOOImplement(INTERFACE_NAME) \
+		INTERFACE_NAME t##INTERFACE_NAME
+#define __OOOMethods(CLASS_NAME) \
+	} \
+	CLASS_NAME##_Interfaces; \
+	typedef struct \
+	{ \
+		void (* destroy)(CLASS_NAME * OOOThis);
+#define _OOOMethods(CLASS_NAME) __OOOMethods(CLASS_NAME)
+#define OOOMethods _OOOMethods(OOOClassName)
 #define __OOOMethod(RETURN_TYPE, CLASS_NAME, METHOD_NAME, ARGS...) \
 	RETURN_TYPE (* METHOD_NAME)(CLASS_NAME * OOOThis , ##ARGS)
 #define _OOOMethod(RETURN_TYPE, CLASS_NAME, METHOD_NAME, ARGS...) __OOOMethod(RETURN_TYPE, CLASS_NAME, METHOD_NAME , ##ARGS)
 #define OOOMethod(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOMethod(RETURN_TYPE, OOOClassName, METHOD_NAME , ##ARGS)
-#define __OOOInterfaces(CLASS_NAME) \
-	} \
-	CLASS_NAME##_VTable; \
-	typedef struct \
-	{
-#define _OOOInterfaces(CLASS_NAME) __OOOInterfaces(CLASS_NAME)
-#define OOOInterfaces _OOOInterfaces(OOOClassName)
-#define OOOImplement(INTERFACE_NAME) \
-		INTERFACE_NAME t##INTERFACE_NAME
 #define __OOOClassEnd(CLASS_NAME) \
 	} \
-	CLASS_NAME##_Interfaces; \
+	CLASS_NAME##_VTable; \
 	typedef struct _##CLASS_NAME##_PrivateData CLASS_NAME##_PrivateData; \
 	struct _##CLASS_NAME \
 	{ \
