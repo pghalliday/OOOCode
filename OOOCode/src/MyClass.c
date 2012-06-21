@@ -5,15 +5,10 @@
 
 OOOPrivateData
 	int nMyField;
-	char * szString;
 OOOPrivateDataEnd
 
 OOODestructor
 {
-	if (OOOField(OOOThis, szString))
-	{
-		O_free(OOOField(OOOThis, szString));
-	}
 }
 OOODestructorEnd
 
@@ -36,17 +31,6 @@ OOOMethod(void, setMyFieldX, int nMyField)
 }
 OOOMethodEnd
 
-OOOMethod(char *, anotherMethodX, char * szFormat, int nArgument)
-{
-	if (OOOField(OOOThis, szString))
-	{
-		O_free(OOOField(OOOThis, szString));
-	}
-	OOOField(OOOThis, szString) = O_dsprintf(szFormat, nArgument, OOOField(OOOThis, nMyField));
-	return OOOField(OOOThis, szString);
-}
-OOOMethodEnd
-
 OOOMethod(int, myMethodX, int nArgument)
 {
 	return OOOField(OOOThis, nMyField) + nArgument;
@@ -59,12 +43,6 @@ OOOConstructor(int nMyField)
 		OOOMethodMapping(getMyFieldX),
 		OOOMethodMapping(setMyFieldX)
 	OOOMapMethodsEnd
-
-	#define OOOInterfaceName IMyClass
-	OOOMapVirtuals
-		OOOVirtualMapping(anotherMethodX)
-	OOOMapVirtualsEnd
-	#undef OOOInterfaceName
 
 	#define OOOInterfaceName IMyInterface
 	OOOMapVirtuals

@@ -37,18 +37,14 @@ static void Main_waitToExit(void)
 static void Main_testNewPattern(void)
 {
 	MyClass * pMyClass = OOOConstruct(MyClass, 5);
-	IMyClass * iMyClass = OOOCast(IMyClass, pMyClass);
 	IMyInterface * iMyInterface = OOOCast(IMyInterface, pMyClass);
 
 	assert(pMyClass);
-	assert(iMyClass);
 	assert(iMyInterface);
 	assert(OOOCall(pMyClass, getMyField) == 5);
-	assert(O_strcmp(OOOInterfaceCall(iMyClass, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 5") == 0);
 	assert(OOOInterfaceCall(iMyInterface, myMethod, 3) == 8);
 	OOOCall(pMyClass, setMyField, 16);
 	assert(OOOCall(pMyClass, getMyField) == 16);
-	assert(O_strcmp(OOOInterfaceCall(iMyClass, anotherMethod, "Numbers: %d: %d", -87), "Numbers: -87: 16") == 0);
 	assert(OOOInterfaceCall(iMyInterface, myMethod, 3) == 19);
 
 	OOODestroy(pMyClass);

@@ -5,15 +5,8 @@
 
 #include "OOOCode.h"
 
-#define OOOInterfaceName IMyClass
-OOOInterface
-	OOOVirtual(char *, anotherMethod, char * szFormat, int nArgument);
-OOOInterfaceEnd
-#undef OOOInterfaceName
-
 #define OOOClassName MyClass
 OOOClass(int nMyField)
-	OOOImplement(IMyClass);
 	OOOImplement(IMyInterface);
 OOOExports
 	OOOExport(int, getMyField);
