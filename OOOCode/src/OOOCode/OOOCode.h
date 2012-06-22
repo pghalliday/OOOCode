@@ -2,11 +2,6 @@
 #define OOOCode_H
 
 /*
- * To use
- */
-
-
-/*
  * If you see something strange in here it is probably deliberate!
  * So if you change it make sure you test a lot.
  *
