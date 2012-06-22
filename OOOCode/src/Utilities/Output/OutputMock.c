@@ -13,26 +13,26 @@ OOOPrivateDataEnd
 
 OOODestructor
 {
-	if (OOO(szBuffer))
+	if (OOOF(szBuffer))
 	{
-		O_free(OOO(szBuffer));
+		O_free(OOOF(szBuffer));
 	}
 }
 OOODestructorEnd
 
 OOOMethod(void, append)
 {
-	size_t uNewLength = O_strlen(OOO(szLogMessage));
-	if (OOO(szBuffer))
+	size_t uNewLength = O_strlen(OOOF(szLogMessage));
+	if (OOOF(szBuffer))
 	{
-		uNewLength += O_strlen(OOO(szBuffer));
-		OOO(szBuffer) = O_realloc(OOO(szBuffer), uNewLength + 1);
+		uNewLength += O_strlen(OOOF(szBuffer));
+		OOOF(szBuffer) = O_realloc(OOOF(szBuffer), uNewLength + 1);
 	}
 	else
 	{
-		OOO(szBuffer) = O_calloc(uNewLength + 1, sizeof(char));
+		OOOF(szBuffer) = O_calloc(uNewLength + 1, sizeof(char));
 	}
-	O_strcat(OOO(szBuffer), OOO(szLogMessage));
+	O_strcat(OOOF(szBuffer), OOOF(szLogMessage));
 }
 OOOMethodEnd
 
@@ -43,7 +43,7 @@ OOOMethod(void, print, char * szMessage, ...)
 	assert(szMessage);
 
 	va_start(aArgs, szMessage);
-	nMessageLength = O_vsprintf(OOO(szLogMessage), szMessage, aArgs);
+	nMessageLength = O_vsprintf(OOOF(szLogMessage), szMessage, aArgs);
 	va_end(aArgs);
 
 	/* There is a fixed size buffer for formatting the
@@ -51,26 +51,26 @@ OOOMethod(void, print, char * szMessage, ...)
 	 * nicer way of doing this as far as i know) */
 	assert(nMessageLength < OutputDebug_LOG_MESSAGE_MAX_SIZE);
 
-	OOOPCall(OOOThis, append);
-	O_debug(OOO(szLogMessage));
+	OOOC(append);
+	O_debug(OOOF(szLogMessage));
 }
 OOOMethodEnd
 
 OOOMethod(bool, check, char * szCompare);
 {
 	bool bCorrect = (szCompare == NULL);
-	if (OOO(szBuffer))
+	if (OOOF(szBuffer))
 	{
 		if (szCompare)
 		{
-			bCorrect = (O_strcmp(szCompare, OOO(szBuffer)) == 0);
+			bCorrect = (O_strcmp(szCompare, OOOF(szBuffer)) == 0);
 		}
 		else
 		{
 			bCorrect = FALSE;
 		}
-		O_free(OOO(szBuffer));
-		OOO(szBuffer) = NULL;
+		O_free(OOOF(szBuffer));
+		OOOF(szBuffer) = NULL;
 	}
 	return bCorrect;
 }

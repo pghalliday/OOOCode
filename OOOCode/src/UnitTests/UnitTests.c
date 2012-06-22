@@ -10,9 +10,9 @@ OOOPrivateDataEnd
 
 OOODestructor
 {
-	if (OOO(szName))
+	if (OOOF(szName))
 	{
-		O_free(OOO(szName));
+		O_free(OOOF(szName));
 	}
 }
 OOODestructorEnd
@@ -21,22 +21,22 @@ OOOMethod(void, addTest, char * szName, IUnitTest * iTest)
 {
 	assert(szName);
 	assert(iTest);
-	OOO(iTest) = iTest;
-	if (OOO(szName))
+	OOOF(iTest) = iTest;
+	if (OOOF(szName))
 	{
-		O_free(OOO(szName));
+		O_free(OOOF(szName));
 	}
-	OOO(szName) = O_strdup(szName);
+	OOOF(szName) = O_strdup(szName);
 }
 OOOMethodEnd
 
 OOOMethod(void, runAll)
 {
-	OOOCall(OOO(pReporter), startReport);
-	OOOCall(OOO(pReporter), startTestReport, OOO(szName));
-	OOOICall(OOO(iTest), run, OOO(pReporter));
-	OOOCall(OOO(pReporter), endTestReport);
-	OOOCall(OOO(pReporter), endReport);
+	OOOCall(OOOF(pReporter), startReport);
+	OOOCall(OOOF(pReporter), startTestReport, OOOF(szName));
+	OOOICall(OOOF(iTest), run, OOOF(pReporter));
+	OOOCall(OOOF(pReporter), endTestReport);
+	OOOCall(OOOF(pReporter), endReport);
 }
 OOOMethodEnd
 

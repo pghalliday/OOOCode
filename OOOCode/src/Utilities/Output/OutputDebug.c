@@ -21,7 +21,7 @@ OOOMethod(void, print, char * szMessage, ...)
 	int nMessageLength = 0;
 
 	va_start(aArgs, szMessage);
-	nMessageLength = O_vsprintf(OOO(szLogMessage), szMessage, aArgs);
+	nMessageLength = O_vsprintf(OOOF(szLogMessage), szMessage, aArgs);
 	va_end(aArgs);
 
 	/* There is a fixed size buffer for formatting the
@@ -29,7 +29,7 @@ OOOMethod(void, print, char * szMessage, ...)
 	 * nicer way of doing this as far as i know) */
 	assert(nMessageLength < OutputDebug_LOG_MESSAGE_MAX_SIZE);
 
-	O_debug(OOO(szLogMessage));
+	O_debug(OOOF(szLogMessage));
 }
 OOOMethodEnd
 

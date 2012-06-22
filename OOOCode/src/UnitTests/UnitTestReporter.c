@@ -28,20 +28,20 @@ OOODestructorEnd
 OOOMethod(void, report, char * szText)
 {
 	/* At the moment we only write to debug in a format that is easy to sed */
-	OOOICall(OOO(iOutput), print, UnitTestReporter_DEBUG_OUTPUT_FORMAT, szText);
+	OOOICall(OOOF(iOutput), print, UnitTestReporter_DEBUG_OUTPUT_FORMAT, szText);
 }
 OOOMethodEnd
 
 OOOMethod(void, startReport)
 {
-	OOOPCall(OOOThis, report, UnitTestReporter_LOG_START_REPORT_FORMAT);
+	OOOC(report, UnitTestReporter_LOG_START_REPORT_FORMAT);
 }
 OOOMethodEnd
 
 OOOMethod(void, startTestReport, char * szName)
 {
 	char * szText = O_dsprintf(UnitTestReporter_LOG_START_TEST_FORMAT, szName);
-	OOOPCall(OOOThis, report, szText);
+	OOOC(report, szText);
 	O_free(szText);
 }
 OOOMethodEnd
@@ -53,7 +53,7 @@ OOOMethod(void, log, UnitTestReporter_LogLevel nLogLevel, char * szFile, int nLi
 	char * szText = NULL;
 
 	va_start(aArgs, szMessage);
-	nMessageLength = O_vsprintf(OOO(szLogMessage), szMessage, aArgs);
+	nMessageLength = O_vsprintf(OOOF(szLogMessage), szMessage, aArgs);
 	va_end(aArgs);
 
 	/* There is a fixed size buffer for formatting the
@@ -64,19 +64,19 @@ OOOMethod(void, log, UnitTestReporter_LogLevel nLogLevel, char * szFile, int nLi
 	switch (nLogLevel)
 	{
 	case UnitTestReporter_LogLevel_Information:
-		szText = O_dsprintf(UnitTestReporter_LOG_INFORMATION_FORMAT, szFile, nLine, OOO(szLogMessage));
+		szText = O_dsprintf(UnitTestReporter_LOG_INFORMATION_FORMAT, szFile, nLine, OOOF(szLogMessage));
 		break;
 	case UnitTestReporter_LogLevel_Warning:
-		szText = O_dsprintf(UnitTestReporter_LOG_WARNING_FORMAT, szFile, nLine, OOO(szLogMessage));
+		szText = O_dsprintf(UnitTestReporter_LOG_WARNING_FORMAT, szFile, nLine, OOOF(szLogMessage));
 		break;
 	case UnitTestReporter_LogLevel_Error:
-		szText = O_dsprintf(UnitTestReporter_LOG_ERROR_FORMAT, szFile, nLine, OOO(szLogMessage));
+		szText = O_dsprintf(UnitTestReporter_LOG_ERROR_FORMAT, szFile, nLine, OOOF(szLogMessage));
 		break;
 	}
 
 	if (szText)
 	{
-		OOOPCall(OOOThis, report, szText);
+		OOOC(report, szText);
 		O_free(szText);
 	}
 }
@@ -86,7 +86,7 @@ OOOMethod(bool, check, bool bCondition, char * szFile, int nLine, char * szCondi
 {
 	if (!bCondition)
 	{
-		OOOPCall(OOOThis, log, UnitTestReporter_LogLevel_Error, szFile, nLine, "Failed check: %s", szCondition);
+		OOOC(log, UnitTestReporter_LogLevel_Error, szFile, nLine, "Failed check: %s", szCondition);
 	}
 	return bCondition;
 }
@@ -94,13 +94,13 @@ OOOMethodEnd
 
 OOOMethod(void, endTestReport)
 {
-	OOOPCall(OOOThis, report, UnitTestReporter_LOG_END_TEST_FORMAT);
+	OOOC(report, UnitTestReporter_LOG_END_TEST_FORMAT);
 }
 OOOMethodEnd
 
 OOOMethod(void, endReport)
 {
-	OOOPCall(OOOThis, report, UnitTestReporter_LOG_END_REPORT_FORMAT);
+	OOOC(report, UnitTestReporter_LOG_END_REPORT_FORMAT);
 }
 OOOMethodEnd
 
@@ -115,7 +115,7 @@ OOOConstructor(IOutput * iOutput)
 		OOOMethodMapping(endReport)
 	OOOMapMethodsEnd
 
-	OOO(iOutput) = iOutput;
+	OOOF(iOutput) = iOutput;
 }
 OOOConstructorEnd
 
