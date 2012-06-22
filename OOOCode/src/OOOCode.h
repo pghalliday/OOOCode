@@ -8,14 +8,6 @@
  * NB. Check MacroNotes.txt for guidelines
  */
 
-#ifdef OOOClassName
-#error "OOOClassName should not be defined before including OOOCode.h - check that previous includes have #undef'd it"
-#endif
-
-#ifdef OOOInterfaceName
-#error "OOOInterfaceName should not be defined before including OOOCode.h - check that previous includes have #undef'd it"
-#endif
-
 #define _OOOConstruct(CLASS_NAME, ARGS...) \
 	CLASS_NAME##_construct(ARGS)
 #define OOOConstruct(CLASS_NAME, ARGS...) _OOOConstruct(CLASS_NAME , ##ARGS)
@@ -32,14 +24,14 @@
 	(INSTANCE->pVTable->METHOD_NAME(INSTANCE , ##ARGS))
 #define OOOCall(INSTANCE, METHOD_NAME, ARGS...) _OOOCall(INSTANCE, METHOD_NAME , ##ARGS)
 
-#define _OOOInterfaceCall(INTERFACE, METHOD_NAME, ARGS...) \
+#define _OOOICall(INTERFACE, METHOD_NAME, ARGS...) \
 	(INTERFACE->pVTable->METHOD_NAME(INTERFACE->pInstance , ##ARGS))
-#define OOOInterfaceCall(INTERFACE, METHOD_NAME, ARGS...) _OOOInterfaceCall(INTERFACE, METHOD_NAME , ##ARGS)
+#define OOOICall(INTERFACE, METHOD_NAME, ARGS...) _OOOICall(INTERFACE, METHOD_NAME , ##ARGS)
 
-#define __OOOPrivateCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) \
+#define __OOOPCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) \
 	(CLASS_NAME##_##METHOD_NAME(INSTANCE , ##ARGS))
-#define _OOOPrivateCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) __OOOPrivateCall(CLASS_NAME, INSTANCE, METHOD_NAME , ##ARGS)
-#define OOOPrivateCall(INSTANCE, METHOD_NAME, ARGS...) _OOOPrivateCall(OOOClass, INSTANCE, METHOD_NAME , ##ARGS)
+#define _OOOPCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) __OOOPCall(CLASS_NAME, INSTANCE, METHOD_NAME , ##ARGS)
+#define OOOPCall(INSTANCE, METHOD_NAME, ARGS...) _OOOPCall(OOOClass, INSTANCE, METHOD_NAME , ##ARGS)
 
 #define _OOOField(INSTANCE, FIELD_NAME) \
 	(INSTANCE->pPrivateData->FIELD_NAME)

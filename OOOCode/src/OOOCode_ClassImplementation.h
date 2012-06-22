@@ -11,35 +11,65 @@
 #include "opentv.h"
 #include "assert.h"
 
+/*
+ * Private data structure
+ */
+
+/* begin the private data structure */
 #define __OOOPrivateData(CLASS_NAME) \
 	struct _##CLASS_NAME##_PrivateData \
 	{
 #define _OOOPrivateData(CLASS_NAME) __OOOPrivateData(CLASS_NAME)
 #define OOOPrivateData _OOOPrivateData(OOOClass)
+
+/* End the private data structure */
 #define OOOPrivateDataEnd \
 	};
 
+/*
+ * Destructor
+ */
+
+/* begin the destructor */
 #define __OOODestructor(CLASS_NAME) \
 void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 	{ \
 		assert(OOOThis);
 #define _OOODestructor(CLASS_NAME) __OOODestructor(CLASS_NAME)
 #define OOODestructor _OOODestructor(OOOClass)
+
+/* end the destructor, freeing memory */
 #define OOODestructorEnd \
 		O_free(OOOThis->pPrivateData); \
 		O_free(OOOThis); \
 	}
 
+/*
+ * Method
+ */
+
+/*
+ * begin the method also creating a new type that is consistent with
+ * the method prototype and can be used for safe casts when mapping
+ * to virtuals in interface vtables
+ */
 #define __OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
-	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(void * OOOInstance , ##ARGS) \
+	typedef RETURN_TYPE (* OOOVirtual_##CLASS_NAME##_##METHOD_NAME)(void * OOOThis , ##ARGS); \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis , ##ARGS) \
 	{ \
-		CLASS_NAME * OOOThis = (CLASS_NAME *) OOOInstance; \
 		assert(OOOThis);
 #define _OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) __OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME , ##ARGS)
 #define OOOMethod(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOMethod(OOOClass, RETURN_TYPE, METHOD_NAME , ##ARGS)
+
+/* end the method */
 #define OOOMethodEnd \
 	}
 
+/*
+ * Constructor
+ */
+
+/* begin the constructor, allocating memory */
 #define __OOOConstructor(CLASS_NAME , ARGS...) \
 	CLASS_NAME * CLASS_NAME##_construct(ARGS) \
 	{ \
@@ -50,30 +80,59 @@ void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 		OOOThis->destroy = CLASS_NAME##_destroy;
 #define _OOOConstructor(CLASS_NAME, ARGS...) __OOOConstructor(CLASS_NAME , ##ARGS)
 #define OOOConstructor(ARGS...) _OOOConstructor(OOOClass , ##ARGS)
+
+/*
+ * Start the map of public methods to vtable entries. This is static
+ * so that it is assigned at compile time and there is only one instance
+ * in memory.
+ */
 #define __OOOMapMethods(CLASS_NAME) \
 		{ \
 			static CLASS_NAME##_VTable OOOVTable = \
 			{
 #define _OOOMapMethods(CLASS_NAME) __OOOMapMethods(CLASS_NAME)
 #define OOOMapMethods _OOOMapMethods(OOOClass)
+
+/* add methods to the vtable in the same order as they are declared in the class declaration */
 #define __OOOMethodMapping(CLASS_NAME, METHOD_NAME) \
 				CLASS_NAME##_##METHOD_NAME
 #define _OOOMethodMapping(CLASS_NAME, METHOD_NAME) __OOOMethodMapping(CLASS_NAME, METHOD_NAME)
 #define OOOMethodMapping(METHOD_NAME) _OOOMethodMapping(OOOClass, METHOD_NAME)
+
+/* end the vtable mapping and assign to the instance */
 #define OOOMapMethodsEnd \
 			}; \
 			OOOThis->pVTable = &OOOVTable; \
 		}
+
+/*
+ * Start a map of methods to interface vtable entries. This is static
+ * so that it is assigned at compile time and there is only one instance
+ * in memory.
+ *
+ * #define OOOInterface before calling this macro so that the compiler knows
+ * which interface is being mapped
+ *
+ */
 #define __OOOMapVirtuals(INTERFACE_NAME) \
 		{ \
 			static INTERFACE_NAME##_VTable OOOVTable = \
 			{
 #define _OOOMapVirtuals(INTERFACE_NAME) __OOOMapVirtuals(INTERFACE_NAME)
 #define OOOMapVirtuals _OOOMapVirtuals(OOOInterface)
-#define __OOOVirtualMapping(CLASS_NAME, INTERFACE_NAME, METHOD_NAME) \
-				CLASS_NAME##_##METHOD_NAME
-#define _OOOVirtualMapping(CLASS_NAME, INTERFACE_NAME, METHOD_NAME) __OOOVirtualMapping(CLASS_NAME, INTERFACE_NAME, METHOD_NAME)
-#define OOOVirtualMapping(METHOD_NAME) _OOOVirtualMapping(OOOClass, OOOInterface, METHOD_NAME)
+
+/* add methods to the vtable in the same order as they are declared in the interface declaration */
+#define __OOOVirtualMapping(CLASS_NAME, METHOD_NAME) \
+				(OOOVirtual_##CLASS_NAME##_##METHOD_NAME) CLASS_NAME##_##METHOD_NAME
+#define _OOOVirtualMapping(CLASS_NAME, METHOD_NAME) __OOOVirtualMapping(CLASS_NAME, METHOD_NAME)
+#define OOOVirtualMapping(METHOD_NAME) _OOOVirtualMapping(OOOClass, METHOD_NAME)
+
+/*
+ * end the vtable mapping and assign to the instance
+ *
+ * #undef OOOInterface after calling this macro so that further interfaces
+ * can be mapped
+ */
 #define __OOOMapVirtualsEnd(INTERFACE_NAME) \
 			}; \
 			OOOThis->tInterfaces.t##INTERFACE_NAME.pInstance = OOOThis; \
@@ -81,6 +140,8 @@ void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 		}
 #define _OOOMapVirtualsEnd(INTERFACE_NAME) __OOOMapVirtualsEnd(INTERFACE_NAME)
 #define OOOMapVirtualsEnd _OOOMapVirtualsEnd(OOOInterface)
+
+/* end the constructor */
 #define OOOConstructorEnd \
 		return OOOThis; \
 	}

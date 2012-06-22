@@ -42,10 +42,10 @@ static void Main_testNewPattern(void)
 	assert(pMyClass);
 	assert(iMyInterface);
 	assert(OOOCall(pMyClass, getMyField) == 5);
-	assert(OOOInterfaceCall(iMyInterface, myMethod, 3) == 8);
+	assert(OOOICall(iMyInterface, myMethod, 3) == 8);
 	OOOCall(pMyClass, setMyField, 16);
 	assert(OOOCall(pMyClass, getMyField) == 16);
-	assert(OOOInterfaceCall(iMyInterface, myMethod, 3) == 19);
+	assert(OOOICall(iMyInterface, myMethod, 3) == 19);
 
 	OOODestroy(pMyClass);
 }

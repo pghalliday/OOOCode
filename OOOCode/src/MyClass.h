@@ -5,18 +5,15 @@
 #include "IMyInterface.h"
 
 #define OOOClass MyClass
-
-OOOImplements
-	OOOImplement(IMyInterface);
-OOOImplementsEnd
-
-OOOExports
-	OOOExport(int, getMyField);
-	OOOExport(void, setMyField, int nMyField);
-OOOExportsEnd
-
-OOOExportConstructor(int nMyField)
-
+OOODeclare(int nMyField)
+	OOOImplements
+		OOOImplement(IMyInterface);
+	OOOImplementsEnd
+	OOOExports
+		OOOExport(int, getMyField);
+		OOOExport(void, setMyField, int nMyField);
+	OOOExportsEnd
+OOODeclareEnd
 #undef OOOClass
 
 #endif

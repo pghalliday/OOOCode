@@ -21,7 +21,7 @@ OOOMethodEnd
 
 OOOMethod(int, getMyFieldX)
 {
-	return OOOPrivateCall(OOOThis, printMyFieldX);
+	return OOOPCall(OOOThis, printMyFieldX);
 }
 OOOMethodEnd
 
