@@ -18,17 +18,17 @@
 #define OOOClass(CONSTRUCTOR_ARGS...) _OOOClass(OOOClassName , ##CONSTRUCTOR_ARGS)
 #define OOOImplement(INTERFACE_NAME) \
 		INTERFACE_NAME t##INTERFACE_NAME
-#define __OOOMethods(CLASS_NAME) \
+#define __OOOExports(CLASS_NAME) \
 	} \
 	CLASS_NAME##_Interfaces; \
 	typedef struct \
 	{
-#define _OOOMethods(CLASS_NAME) __OOOMethods(CLASS_NAME)
-#define OOOExports _OOOMethods(OOOClassName)
-#define __OOOMethod(RETURN_TYPE, CLASS_NAME, METHOD_NAME, ARGS...) \
+#define _OOOExports(CLASS_NAME) __OOOExports(CLASS_NAME)
+#define OOOExports _OOOExports(OOOClassName)
+#define __OOOExport(RETURN_TYPE, CLASS_NAME, METHOD_NAME, ARGS...) \
 	RETURN_TYPE (* METHOD_NAME)(void * OOOThis , ##ARGS)
-#define _OOOMethod(RETURN_TYPE, CLASS_NAME, METHOD_NAME, ARGS...) __OOOMethod(RETURN_TYPE, CLASS_NAME, METHOD_NAME , ##ARGS)
-#define OOOExport(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOMethod(RETURN_TYPE, OOOClassName, METHOD_NAME , ##ARGS)
+#define _OOOExport(RETURN_TYPE, CLASS_NAME, METHOD_NAME, ARGS...) __OOOExport(RETURN_TYPE, CLASS_NAME, METHOD_NAME , ##ARGS)
+#define OOOExport(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOExport(RETURN_TYPE, OOOClassName, METHOD_NAME , ##ARGS)
 #define __OOOClassEnd(CLASS_NAME) \
 	} \
 	CLASS_NAME##_VTable; \

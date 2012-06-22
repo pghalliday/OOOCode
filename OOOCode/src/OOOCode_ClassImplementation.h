@@ -30,13 +30,13 @@ void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 		O_free(OOOThis); \
 	}
 
-#define __OOOImplementMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+#define __OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
 	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(void * OOOInstance , ##ARGS) \
 	{ \
 		CLASS_NAME * OOOThis = (CLASS_NAME *) OOOInstance; \
 		assert(OOOThis);
-#define _OOOImplementMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) __OOOImplementMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME , ##ARGS)
-#define OOOMethod(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOImplementMethod(OOOClassName, RETURN_TYPE, METHOD_NAME , ##ARGS)
+#define _OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) __OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME , ##ARGS)
+#define OOOMethod(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOMethod(OOOClassName, RETURN_TYPE, METHOD_NAME , ##ARGS)
 #define OOOMethodEnd \
 	}
 
