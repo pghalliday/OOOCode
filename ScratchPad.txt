@@ -1,0 +1,7 @@
+Accessing fields could do with a shortcut... F(name) perhaps?
+Don't much like having 3 method calling conventions but i think i can live with it for now
+Should do some performance checks as worried about:
+- indirection in function calls
+- indirection in field access
+- indirection in destroy function
+- extra memory used for destroy function entry in object instance

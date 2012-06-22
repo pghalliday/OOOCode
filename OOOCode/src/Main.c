@@ -32,29 +32,107 @@ static void Main_waitToExit(void)
 }
 
 /* The new pattern */
-#include "MyClass.h"
+#include "OutputMock.h"
+#include "UnitTests.h"
 
-static void Main_testNewPattern(void)
+#define OOOClass MyUnitTest
+
+OOODeclare()
+	OOOImplements
+		OOOImplement(IUnitTest);
+	OOOImplementsEnd
+	OOOExports
+	OOOExportsEnd
+OOODeclareEnd
+
+OOOPrivateData
+OOOPrivateDataEnd
+
+OOODestructor
 {
-	MyClass * pMyClass = OOOConstruct(MyClass, 5);
-	IMyInterface * iMyInterface = OOOCast(IMyInterface, pMyClass);
+}
+OOODestructorEnd
 
-	assert(pMyClass);
-	assert(iMyInterface);
-	assert(OOOCall(pMyClass, getMyField) == 5);
-	assert(OOOICall(iMyInterface, myMethod, 3) == 8);
-	OOOCall(pMyClass, setMyField, 16);
-	assert(OOOCall(pMyClass, getMyField) == 16);
-	assert(OOOICall(iMyInterface, myMethod, 3) == 19);
+OOOMethod(void, run, UnitTestReporter * pReporter);
+{
+	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Information, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Warning, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Error, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	OOOCall(pReporter, check, TRUE, "My File", 10, "TRUE");
+	OOOCall(pReporter, check, FALSE, "My File", 10, "FALSE");
+}
+OOOMethodEnd
 
-	OOODestroy(pMyClass);
+OOOConstructor()
+{
+	#define OOOInterface IUnitTest
+	OOOMapVirtuals
+		OOOVirtualMapping(run)
+	OOOMapVirtualsEnd
+	#undef OOOInterface
+}
+OOOConstructorEnd
+
+#undef OOOClass
+
+static void Main_testUnitTestsLibrary(void)
+{
+	OutputMock * pOutputMock = OOOConstruct(OutputMock);
+	UnitTestReporter * pReporter = OOOConstruct(UnitTestReporter, OOOCast(IOutput, pOutputMock));
+	MyUnitTest * pTest = OOOConstruct(MyUnitTest);
+	UnitTests * pTests = OOOConstruct(UnitTests, pReporter);
+
+	OOOCall(pReporter, startReport);
+	assert(OOOCall(pOutputMock, check, "BEGIN_UNIT_TEST_OUTPUT\n<?xml version \"1.0\"?><REPORT>\nEND_UNIT_TEST_OUTPUT\n"));
+
+	OOOCall(pReporter, startTestReport, "My Test");
+	assert(OOOCall(pOutputMock, check, "BEGIN_UNIT_TEST_OUTPUT\n<TEST name=\"My Test\">\nEND_UNIT_TEST_OUTPUT\n"));
+
+	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Information, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	assert(OOOCall(pOutputMock, check, "BEGIN_UNIT_TEST_OUTPUT\n<INFORMATION file=\"My File\" line=\"10\">Test Information: Hello: 55</INFORMATION>\nEND_UNIT_TEST_OUTPUT\n"));
+
+	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Warning, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	assert(OOOCall(pOutputMock, check, "BEGIN_UNIT_TEST_OUTPUT\n<WARNING file=\"My File\" line=\"10\">Test Information: Hello: 55</WARNING>\nEND_UNIT_TEST_OUTPUT\n"));
+
+	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Error, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	assert(OOOCall(pOutputMock, check, "BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Test Information: Hello: 55</ERROR>\nEND_UNIT_TEST_OUTPUT\n"));
+
+	assert(OOOCall(pReporter, check, TRUE, "My File", 10, "TRUE"));
+	assert(OOOCall(pOutputMock, check, NULL));
+
+	assert(!OOOCall(pReporter, check, FALSE, "My File", 10, "FALSE"));
+	assert(OOOCall(pOutputMock, check, "BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Failed check: FALSE</ERROR>\nEND_UNIT_TEST_OUTPUT\n"));
+
+	OOOCall(pReporter, endTestReport);
+	assert(OOOCall(pOutputMock, check, "BEGIN_UNIT_TEST_OUTPUT\n</TEST>\nEND_UNIT_TEST_OUTPUT\n"));
+
+	OOOCall(pReporter, endReport);
+	assert(OOOCall(pOutputMock, check, "BEGIN_UNIT_TEST_OUTPUT\n</REPORT>\nEND_UNIT_TEST_OUTPUT\n"));
+
+	OOOCall(pTests, addTest, "My Test", OOOCast(IUnitTest, pTest));
+	OOOCall(pTests, runAll);
+	assert(OOOCall(pOutputMock, check,
+			"BEGIN_UNIT_TEST_OUTPUT\n<?xml version \"1.0\"?><REPORT>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n<TEST name=\"My Test\">\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n<INFORMATION file=\"My File\" line=\"10\">Test Information: Hello: 55</INFORMATION>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n<WARNING file=\"My File\" line=\"10\">Test Information: Hello: 55</WARNING>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Test Information: Hello: 55</ERROR>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Failed check: FALSE</ERROR>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n</TEST>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n</REPORT>\nEND_UNIT_TEST_OUTPUT\n"
+			));
+
+	OOODestroy(pTests);
+	OOODestroy(pTest);
+	OOODestroy(pReporter);
+	OOODestroy(pOutputMock);
 }
 
 void main(void)
 {
-	RUN_TEST(Main_testNewPattern);
+	RUN_TEST(Main_testUnitTestsLibrary);
+	O_debug("OOOCode: Tests passed\n");
 
 	/* Stick around so the VSTB does not exit and we know we ran everything */
-	O_debug("OOOCode: Tests passed\n");
 	Main_waitToExit();
 }
