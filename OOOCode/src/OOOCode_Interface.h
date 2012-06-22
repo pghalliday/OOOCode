@@ -8,7 +8,7 @@
  * NB. Check MacroNotes.txt for guidelines
  */
 
-#define __OOOInterface(INTERFACE_NAME) \
+#define __OOOVirtuals(INTERFACE_NAME) \
 	typedef struct _##INTERFACE_NAME##_VTable INTERFACE_NAME##_VTable; \
 	typedef struct _##INTERFACE_NAME INTERFACE_NAME; \
 	struct _##INTERFACE_NAME \
@@ -18,13 +18,13 @@
 	}; \
 	struct _##INTERFACE_NAME##_VTable \
 	{
-#define _OOOInterface(INTERFACE_NAME) __OOOInterface(INTERFACE_NAME)
-#define OOOInterface _OOOInterface(OOOInterfaceName)
+#define _OOOVirtuals(INTERFACE_NAME) __OOOVirtuals(INTERFACE_NAME)
+#define OOOVirtuals _OOOVirtuals(OOOInterface)
 #define __OOOVirtual(RETURN_TYPE, INTERFACE_NAME, METHOD_NAME, ARGS...) \
 	RETURN_TYPE (* METHOD_NAME)(void * OOOInstance , ##ARGS)
 #define _OOOVirtual(RETURN_TYPE, INTERFACE_NAME, METHOD_NAME, ARGS...) __OOOVirtual(RETURN_TYPE, INTERFACE_NAME, METHOD_NAME , ##ARGS)
-#define OOOVirtual(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOVirtual(RETURN_TYPE, OOOInterfaceName, METHOD_NAME , ##ARGS)
-#define OOOInterfaceEnd \
+#define OOOVirtual(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOVirtual(RETURN_TYPE, OOOInterface, METHOD_NAME , ##ARGS)
+#define OOOVirtualsEnd \
 	};
 
 #endif

@@ -8,30 +8,34 @@
  * NB. Check MacroNotes.txt for guidelines
  */
 
-
-#define __OOOClass(CLASS_NAME, CONSTRUCTOR_ARGS...) \
-	typedef struct _##CLASS_NAME CLASS_NAME; \
-	extern CLASS_NAME * CLASS_NAME##_construct(CONSTRUCTOR_ARGS); \
+#define __OOOImplements(CLASS_NAME) \
 	typedef struct \
 	{
-#define _OOOClass(CLASS_NAME, CONSTRUCTOR_ARGS...) __OOOClass(CLASS_NAME , ##CONSTRUCTOR_ARGS)
-#define OOOClass(CONSTRUCTOR_ARGS...) _OOOClass(OOOClassName , ##CONSTRUCTOR_ARGS)
+#define _OOOImplements(CLASS_NAME) __OOOImplements(CLASS_NAME)
+#define OOOImplements _OOOImplements(OOOClass)
 #define OOOImplement(INTERFACE_NAME) \
 		INTERFACE_NAME t##INTERFACE_NAME
-#define __OOOExports(CLASS_NAME) \
+#define __OOOImplementsEnd(CLASS_NAME) \
 	} \
-	CLASS_NAME##_Interfaces; \
+	CLASS_NAME##_Interfaces;
+#define _OOOImplementsEnd(CLASS_NAME) __OOOImplementsEnd(CLASS_NAME)
+#define OOOImplementsEnd _OOOImplementsEnd(OOOClass)
+
+#define __OOOExports(CLASS_NAME) \
 	typedef struct \
 	{
 #define _OOOExports(CLASS_NAME) __OOOExports(CLASS_NAME)
-#define OOOExports _OOOExports(OOOClassName)
-#define __OOOExport(RETURN_TYPE, CLASS_NAME, METHOD_NAME, ARGS...) \
+#define OOOExports _OOOExports(OOOClass)
+#define OOOExport(RETURN_TYPE, METHOD_NAME, ARGS...) \
 	RETURN_TYPE (* METHOD_NAME)(void * OOOThis , ##ARGS)
-#define _OOOExport(RETURN_TYPE, CLASS_NAME, METHOD_NAME, ARGS...) __OOOExport(RETURN_TYPE, CLASS_NAME, METHOD_NAME , ##ARGS)
-#define OOOExport(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOExport(RETURN_TYPE, OOOClassName, METHOD_NAME , ##ARGS)
-#define __OOOClassEnd(CLASS_NAME) \
+#define __OOOExportsEnd(CLASS_NAME) \
 	} \
-	CLASS_NAME##_VTable; \
+	CLASS_NAME##_VTable;
+#define _OOOExportsEnd(CLASS_NAME) __OOOExportsEnd(CLASS_NAME)
+#define OOOExportsEnd _OOOExportsEnd(OOOClass)
+
+#define __OOOExportConstructor(CLASS_NAME, CONSTRUCTOR_ARGS...) \
+	typedef struct _##CLASS_NAME CLASS_NAME; \
 	typedef struct _##CLASS_NAME##_PrivateData CLASS_NAME##_PrivateData; \
 	struct _##CLASS_NAME \
 	{ \
@@ -39,13 +43,9 @@
 		CLASS_NAME##_PrivateData * pPrivateData; \
 		CLASS_NAME##_VTable * pVTable; \
 		CLASS_NAME##_Interfaces tInterfaces; \
-	};
-#define _OOOClassEnd(CLASS_NAME) __OOOClassEnd(CLASS_NAME)
-#define OOOClassEnd _OOOClassEnd(OOOClassName)
-
-#define __OOOExportConstructor(CLASS_NAME, CONSTRUCTOR_NAME, CONSTRUCTOR_ARGS...) \
-	extern CLASS_NAME * CLASS_NAME##_##CONSTRUCTOR_NAME(CONSTRUCTOR_ARGS)
-#define _OOOExportConstructor(CLASS_NAME, CONSTRUCTOR_NAME, CONSTRUCTOR_ARGS...) __OOOExportConstructor(CLASS_NAME, CONSTRUCTOR_NAME , ##CONSTRUCTOR_ARGS)
-#define OOOExportConstructor(CONSTRUCTOR_NAME, CONSTRUCTOR_ARGS...) _OOOExportConstructor(OOOClassName, CONSTRUCTOR_NAME , ##CONSTRUCTOR_ARGS)
+	}; \
+	extern CLASS_NAME * CLASS_NAME##_construct(CONSTRUCTOR_ARGS);
+#define _OOOExportConstructor(CLASS_NAME, CONSTRUCTOR_ARGS...) __OOOExportConstructor(CLASS_NAME , ##CONSTRUCTOR_ARGS)
+#define OOOExportConstructor(CONSTRUCTOR_ARGS...) _OOOExportConstructor(OOOClass , ##CONSTRUCTOR_ARGS)
 
 #endif

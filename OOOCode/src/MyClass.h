@@ -1,17 +1,22 @@
 #ifndef MyClass_H
 #define MyClass_H
 
+#include "OOOCode.h"
 #include "IMyInterface.h"
 
-#include "OOOCode.h"
+#define OOOClass MyClass
 
-#define OOOClassName MyClass
-OOOClass(int nMyField)
+OOOImplements
 	OOOImplement(IMyInterface);
+OOOImplementsEnd
+
 OOOExports
 	OOOExport(int, getMyField);
 	OOOExport(void, setMyField, int nMyField);
-OOOClassEnd
-#undef OOOClassName
+OOOExportsEnd
+
+OOOExportConstructor(int nMyField)
+
+#undef OOOClass
 
 #endif

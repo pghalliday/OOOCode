@@ -3,10 +3,10 @@
 
 #include "OOOCode.h"
 
-#define OOOInterfaceName IMyInterface
-OOOInterface
+#define OOOInterface IMyInterface
+OOOVirtuals
 	OOOVirtual(int, myMethod, int nArgument);
-OOOInterfaceEnd
-#undef OOOInterfaceName
+OOOVirtualsEnd
+#undef OOOInterface
 
 #endif

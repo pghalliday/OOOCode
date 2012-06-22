@@ -1,7 +1,7 @@
 #include "MyClass.h"
-
 #include "OOOCode.h"
-#define OOOClassName MyClass
+
+#define OOOClass MyClass
 
 OOOPrivateData
 	int nMyField;
@@ -44,14 +44,14 @@ OOOConstructor(int nMyField)
 		OOOMethodMapping(setMyFieldX)
 	OOOMapMethodsEnd
 
-	#define OOOInterfaceName IMyInterface
+	#define OOOInterface IMyInterface
 	OOOMapVirtuals
 		OOOVirtualMapping(myMethodX)
 	OOOMapVirtualsEnd
-	#undef OOOInterfaceName
+	#undef OOOInterface
 
 	OOOField(OOOThis, nMyField) = nMyField;
 }
 OOOConstructorEnd
 
-#undef OOOClassName
+#undef OOOClass
