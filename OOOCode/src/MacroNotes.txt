@@ -38,7 +38,7 @@ Sometimes we need another level of indirection as in the following example
 
   #define __MY_MACRO(FORMAT, ARGS...) O_debug(FORMAT , ##ARGS)
   #define _MY_MACRO(FORMAT, ARGS...) __MY_MACRO(FORMAT , ##ARGS)
-  #define MY_MACRO(ARGS...) __MY_MACRO(STANDARD_FORMAT , ##ARGS)
+  #define MY_MACRO(ARGS...) _MY_MACRO(STANDARD_FORMAT , ##ARGS)
 
 We may do this if we want to have a standard parameter defined that can then
 be used in multiple macros and/or macro calls as in the following example

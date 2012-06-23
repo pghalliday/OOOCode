@@ -45,15 +45,10 @@
 #define OOOField(INSTANCE, FIELD_NAME) _OOOField(INSTANCE, FIELD_NAME)
 
 /* shortcut to access a field of the current OOOThis instance */
-#define _OOOF(FIELD_NAME) \
-	(OOOThis->pPrivateData->FIELD_NAME)
-#define OOOF(FIELD_NAME) _OOOF(FIELD_NAME)
+#define OOOF(FIELD_NAME) OOOField(OOOThis, FIELD_NAME)
 
 /* shortcut to call an instance method directly with the current OOOThis instance */
-#define __OOOC(CLASS_NAME, METHOD_NAME, ARGS...) \
-	(CLASS_NAME##_##METHOD_NAME(OOOThis , ##ARGS))
-#define _OOOC(CLASS_NAME, METHOD_NAME, ARGS...) __OOOC(CLASS_NAME, METHOD_NAME , ##ARGS)
-#define OOOC(METHOD_NAME, ARGS...) _OOOC(OOOClass, METHOD_NAME , ##ARGS)
+#define OOOC(METHOD_NAME, ARGS...) OOOPCall(OOOThis, METHOD_NAME , ##ARGS)
 
 #include "OOOCode_Interface.h"
 #include "OOOCode_ClassHeader.h"

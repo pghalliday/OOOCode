@@ -24,8 +24,8 @@
      <com.opentv.ide.sdk.core.res_include value="RC_INCLUDES2 +=  -I&quot;../src/OOOCode&quot; -I&quot;../src/UnitTests&quot; -I&quot;../src/Utilities&quot; -I&quot;../src/Utilities/Output&quot; "/>
      <com.opentv.ide.sdk.core.code_compile_bigcode value=""/>
      <com.opentv.ide.sdk.core.code_compile_includes value="../src/OOOCode, ../src/UnitTests, ../src/Utilities, ../src/Utilities/Output"/>
-     <com.opentv.ide.sdk.core.graphBitDepth value="4"/>
      <com.opentv.ide.sdk.core.isResourceTypeIdAllowDuplicate value=""/>
+     <com.opentv.ide.sdk.core.graphBitDepth value="4"/>
      <com.opentv.ide.sdk.core.code_compile_bigdata value=""/>
      <com.opentv.ide.sdk.core.graphjpgDataStructure value="static"/>
      <com.opentv.ide.sdk.core.graphjpgExtraArgs value=""/>
