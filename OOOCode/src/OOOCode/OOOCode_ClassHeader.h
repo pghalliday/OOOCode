@@ -70,11 +70,9 @@
  */
 
 #define __OOODeclareEnd(CLASS_NAME) \
-	typedef struct _##CLASS_NAME##_PrivateData CLASS_NAME##_PrivateData; \
 	struct _##CLASS_NAME \
 	{ \
 		void (* destroy)(CLASS_NAME * OOOThis); \
-		CLASS_NAME##_PrivateData * pPrivateData; \
 		CLASS_NAME##_VTable * pVTable; \
 		CLASS_NAME##_Interfaces tInterfaces; \
 	};

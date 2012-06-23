@@ -40,9 +40,10 @@
 #define OOOPCall(INSTANCE, METHOD_NAME, ARGS...) _OOOPCall(OOOClass, INSTANCE, METHOD_NAME , ##ARGS)
 
 /* access a field of the given instance */
-#define _OOOField(INSTANCE, FIELD_NAME) \
-	(INSTANCE->pPrivateData->FIELD_NAME)
-#define OOOField(INSTANCE, FIELD_NAME) _OOOField(INSTANCE, FIELD_NAME)
+#define __OOOField(CLASS_NAME, INSTANCE, FIELD_NAME) \
+	(((CLASS_NAME##_PrivateData *) INSTANCE)->FIELD_NAME)
+#define _OOOField(CLASS_NAME, INSTANCE, FIELD_NAME) __OOOField(CLASS_NAME, INSTANCE, FIELD_NAME)
+#define OOOField(INSTANCE, FIELD_NAME) _OOOField(OOOClass, INSTANCE, FIELD_NAME)
 
 /* shortcut to access a field of the current OOOThis instance */
 #define OOOF(FIELD_NAME) OOOField(OOOThis, FIELD_NAME)

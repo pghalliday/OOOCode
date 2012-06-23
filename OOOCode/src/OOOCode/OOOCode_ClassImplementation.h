@@ -12,19 +12,30 @@
 #include "assert.h"
 
 /*
- * Private data structure
+ * Private data structure. This is the same as the main class
+ * type structure except that it adds the private data fields.
+ * When constructing an instance it is this structure that is
+ * allocated. Internally casts are used to access fields and in
+ * the destructor to ensure the correct memory is freed. We do
+ * this to optimise the memory usage and access times for fields.
  */
 
 /* begin the private data structure */
 #define __OOOPrivateData(CLASS_NAME) \
-	struct _##CLASS_NAME##_PrivateData \
-	{
+	typedef struct \
+	{ \
+		void (* destroy)(CLASS_NAME * OOOThis); \
+		CLASS_NAME##_VTable * pVTable; \
+		CLASS_NAME##_Interfaces tInterfaces;
 #define _OOOPrivateData(CLASS_NAME) __OOOPrivateData(CLASS_NAME)
 #define OOOPrivateData _OOOPrivateData(OOOClass)
 
 /* End the private data structure */
-#define OOOPrivateDataEnd \
-	};
+#define __OOOPrivateDataEnd(CLASS_NAME) \
+	} \
+	CLASS_NAME##_PrivateData;
+#define _OOOPrivateDataEnd(CLASS_NAME) __OOOPrivateDataEnd(CLASS_NAME)
+#define OOOPrivateDataEnd _OOOPrivateDataEnd(OOOClass)
 
 /*
  * Destructor
@@ -39,10 +50,11 @@ void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 #define OOODestructor _OOODestructor(OOOClass)
 
 /* end the destructor, freeing memory */
-#define OOODestructorEnd \
-		O_free(OOOThis->pPrivateData); \
-		O_free(OOOThis); \
+#define __OOODestructorEnd(CLASS_NAME) \
+		O_free((CLASS_NAME##_PrivateData *) OOOThis); \
 	}
+#define _OOODestructorEnd(CLASS_NAME) __OOODestructorEnd(CLASS_NAME)
+#define OOODestructorEnd _OOODestructorEnd(OOOClass)
 
 /*
  * Method
@@ -66,17 +78,18 @@ void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 	}
 
 /*
- * Constructor
+ * Constructor. Note that this actually allocates a private data
+ * structure as described above but then casts it to the class type.
+ * This may not seem very safe but it is wrapped in the macros which
+ * have been tested and should not be a problem
  */
 
 /* begin the constructor, allocating memory */
 #define __OOOConstructor(CLASS_NAME , ARGS...) \
 	CLASS_NAME * CLASS_NAME##_construct(ARGS) \
 	{ \
-		CLASS_NAME * OOOThis = O_calloc(1, sizeof(CLASS_NAME)); \
+		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
 		assert(OOOThis); \
-		OOOThis->pPrivateData = O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
-		assert(OOOThis->pPrivateData); \
 		OOOThis->destroy = CLASS_NAME##_destroy;
 #define _OOOConstructor(CLASS_NAME, ARGS...) __OOOConstructor(CLASS_NAME , ##ARGS)
 #define OOOConstructor(ARGS...) _OOOConstructor(OOOClass , ##ARGS)
