@@ -5,7 +5,7 @@
 
 /* Start the implementation of IUnitTest called NAME */
 #define OOOTest(NAME) \
-	_OOODeclare(NAME, char * szName) \
+	_OOODeclare(NAME) \
 		OOOImplements \
 			OOOImplement(OOOIUnitTest); \
 		_OOOImplementsEnd(NAME) \
@@ -14,7 +14,6 @@
 	_OOODeclareEnd(NAME) \
 	\
 	_OOOPrivateData(NAME) \
-		char * szName; \
 	_OOOPrivateDataEnd(NAME) \
 	\
 	_OOODestructor(NAME) \
@@ -26,16 +25,15 @@
 	OOOMethodEnd \
 	\
 	_OOOMethod(NAME, char *, getName) \
-		return _OOOField(NAME, OOOThis, szName); \
+		return OOOQuote(NAME); \
 	OOOMethodEnd \
 	\
-	_OOOConstructor(NAME, char * szName) \
+	_OOOConstructor(NAME) \
 		_OOOMapVirtuals(OOOIUnitTest) \
 			_OOOVirtualMapping(NAME, run), \
 			_OOOVirtualMapping(NAME, getName), \
 			_OOOVirtualMapping(NAME, destroy) \
 		_OOOMapVirtualsEnd(OOOIUnitTest) \
-		_OOOField(NAME, OOOThis, szName) = szName; \
 	OOOConstructorEnd \
 	\
 	static void OOOPaste(NAME, _actuallyRun)(NAME * OOOThis, OOOUnitTestReporter * OOOReporter)

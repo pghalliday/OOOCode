@@ -6,7 +6,7 @@
 
 /* Declare the test classes */
 #define OOOTest(NAME) \
-	_OOODeclare(NAME, char * szName) \
+	_OOODeclare(NAME) \
 		OOOImplements \
 			OOOImplement(OOOIUnitTest); \
 		_OOOImplementsEnd(NAME) \
@@ -21,7 +21,7 @@ static void OOOUnitTestsRun(void)
 	OOOIUnitTest * aTests[] =
 	{
 		/* add the test instances */
-#define OOOTest(NAME) OOOCast(OOOIUnitTest, OOOConstruct(NAME, OOOQuote(NAME))),
+#define OOOTest(NAME) OOOCast(OOOIUnitTest, OOOConstruct(NAME)),
 #include "OOOTests.h"
 #undef OOOTest
 		NULL
