@@ -2,21 +2,13 @@
 #include "assert.h"
 #include "OOOUnitTestsRun.h"
 
-/* Test running and memory checking code */
-static size_t Main_uMemory;
-static void Main_recordMemory(void)
+void main(void)
 {
-	Main_uMemory = O_heap_available();
-}
-static void Main_checkMemory(void)
-{
-	assert(O_heap_available() == Main_uMemory);
-}
-#define RUN_TEST(TEST) {Main_recordMemory(); TEST(); Main_checkMemory();}
+	size_t uMemory = O_heap_available();
+	OOOUnitTestsRun();
+	assert(O_heap_available() == uMemory);
 
-/* This method just waits for a quit message and then exits the application */
-static void Main_waitToExit(void)
-{
+	/* Stick around so the VSTB does not exit and we know we ran everything */
 	while (TRUE)
 	{
 		o_message tMessage;
@@ -29,12 +21,4 @@ static void Main_waitToExit(void)
 			}
 		}
 	}
-}
-
-void main(void)
-{
-	RUN_TEST(OOOUnitTestsRun);
-
-	/* Stick around so the VSTB does not exit and we know we ran everything */
-	Main_waitToExit();
 }
