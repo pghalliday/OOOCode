@@ -21,6 +21,8 @@ OOODeclare(IOutput * iOutput)
 		OOOExport(void, startTestReport, char * szName);
 		OOOExport(void, log, UnitTestReporter_LogLevel nLogLevel, char * szFile, int nLine, char * szMessage, ...);
 		OOOExport(bool, check, bool bCondition, char * szFile, int nLine, char * szCondition);
+		OOOExport(void, memoryLeak, char * szTest, size_t uBytesLost);
+		OOOExport(void, memoryMagic, char * szTest, size_t uBytesGained);
 		OOOExport(void, endTestReport);
 		OOOExport(void, endReport);
 	OOOExportsEnd

@@ -12,6 +12,8 @@
 #define UnitTestReporter_LOG_INFORMATION_FORMAT		"<INFORMATION file=\"%s\" line=\"%d\">%s</INFORMATION>"
 #define UnitTestReporter_LOG_WARNING_FORMAT			"<WARNING file=\"%s\" line=\"%d\">%s</WARNING>"
 #define UnitTestReporter_LOG_ERROR_FORMAT			"<ERROR file=\"%s\" line=\"%d\">%s</ERROR>"
+#define UnitTestReporter_MEMORY_LEAK_FORMAT			"<MEMORY_LEAK test=\"%s\" bytes=\"%u\"/>"
+#define UnitTestReporter_MEMORY_MAGIC_FORMAT		"<MEMORY_MAGIC test=\"%s\" bytes=\"%u\"/>"
 #define UnitTestReporter_LOG_END_TEST_FORMAT		"</TEST>"
 #define UnitTestReporter_LOG_END_REPORT_FORMAT		"</REPORT>"
 
@@ -92,6 +94,22 @@ OOOMethod(bool, check, bool bCondition, char * szFile, int nLine, char * szCondi
 }
 OOOMethodEnd
 
+OOOMethod(void, memoryLeak, char * szTest, size_t uBytesLost)
+{
+	char *szText = O_dsprintf(UnitTestReporter_MEMORY_LEAK_FORMAT, szTest, uBytesLost);
+	OOOC(report, szText);
+	O_free(szText);
+}
+OOOMethodEnd
+
+OOOMethod(void, memoryMagic, char * szTest, size_t uBytesGained)
+{
+	char *szText = O_dsprintf(UnitTestReporter_MEMORY_MAGIC_FORMAT, szTest, uBytesGained);
+	OOOC(report, szText);
+	O_free(szText);
+}
+OOOMethodEnd
+
 OOOMethod(void, endTestReport)
 {
 	OOOC(report, UnitTestReporter_LOG_END_TEST_FORMAT);
@@ -111,6 +129,8 @@ OOOConstructor(IOutput * iOutput)
 		OOOMethodMapping(startTestReport),
 		OOOMethodMapping(log),
 		OOOMethodMapping(check),
+		OOOMethodMapping(memoryLeak),
+		OOOMethodMapping(memoryMagic),
 		OOOMethodMapping(endTestReport),
 		OOOMethodMapping(endReport)
 	OOOMapMethodsEnd

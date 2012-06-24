@@ -32,9 +32,25 @@ OOOMethodEnd
 
 OOOMethod(void, runAll)
 {
+	size_t uHeapAvailableBefore = 0;
+	size_t uHeapAvailableAfter = 0;
+
 	OOOCall(OOOF(pReporter), startReport);
 	OOOCall(OOOF(pReporter), startTestReport, OOOF(szName));
+
+	uHeapAvailableBefore = O_heap_available();
 	OOOICall(OOOF(iTest), run, OOOF(pReporter));
+	uHeapAvailableAfter = O_heap_available();
+
+	if (uHeapAvailableBefore > uHeapAvailableAfter)
+	{
+		OOOCall(OOOF(pReporter), memoryLeak, OOOF(szName), uHeapAvailableBefore - uHeapAvailableAfter);
+	}
+	else if (uHeapAvailableAfter > uHeapAvailableBefore)
+	{
+		OOOCall(OOOF(pReporter), memoryMagic, OOOF(szName), uHeapAvailableAfter - uHeapAvailableBefore);
+	}
+
 	OOOCall(OOOF(pReporter), endTestReport);
 	OOOCall(OOOF(pReporter), endReport);
 }

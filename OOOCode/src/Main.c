@@ -71,7 +71,7 @@ static void Main_testUnitTestReporter(void)
 	OOODestroy(pOutputMock);
 }
 
-#define OOOClass MyUnitTest
+#define OOOClass ReportTest
 
 OOODeclare()
 	OOOImplements
@@ -89,7 +89,7 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(void, run, UnitTestReporter * pReporter);
+OOOMethod(void, run, UnitTestReporter * pReporter)
 {
 	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Information, "My File", 10, "Test Information: %s: %d", "Hello", 55);
 	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Warning, "My File", 10, "Test Information: %s: %d", "Hello", 55);
@@ -111,14 +111,97 @@ OOOConstructorEnd
 
 #undef OOOClass
 
+#define OOOClass MemoryLeakTest
+
+OOODeclare()
+	OOOImplements
+		OOOImplement(IUnitTest);
+	OOOImplementsEnd
+	OOOExports
+	OOOExportsEnd
+OOODeclareEnd
+
+OOOPrivateData
+	void * pMemoryLeak;
+OOOPrivateDataEnd
+
+OOODestructor
+{
+	if (OOOF(pMemoryLeak))
+	{
+		O_free(OOOF(pMemoryLeak));
+	}
+}
+OOODestructorEnd
+
+OOOMethod(void, run, UnitTestReporter * pReporter)
+{
+	OOOF(pMemoryLeak) = O_malloc(10000);
+}
+OOOMethodEnd
+
+OOOConstructor()
+{
+	#define OOOInterface IUnitTest
+	OOOMapVirtuals
+		OOOVirtualMapping(run)
+	OOOMapVirtualsEnd
+	#undef OOOInterface
+}
+OOOConstructorEnd
+
+#undef OOOClass
+
+#define OOOClass MemoryMagicTest
+
+OOODeclare(void * szMemoryMagic)
+	OOOImplements
+		OOOImplement(IUnitTest);
+	OOOImplementsEnd
+	OOOExports
+	OOOExportsEnd
+OOODeclareEnd
+
+OOOPrivateData
+	void * pMemoryMagic;
+OOOPrivateDataEnd
+
+OOODestructor
+{
+}
+OOODestructorEnd
+
+OOOMethod(void, run, UnitTestReporter * pReporter)
+{
+	O_free(OOOF(pMemoryMagic));
+}
+OOOMethodEnd
+
+OOOConstructor(void * pMemoryMagic)
+{
+	#define OOOInterface IUnitTest
+	OOOMapVirtuals
+		OOOVirtualMapping(run)
+	OOOMapVirtualsEnd
+	#undef OOOInterface
+
+	OOOF(pMemoryMagic) = pMemoryMagic;
+}
+OOOConstructorEnd
+
+#undef OOOClass
+
 static void Main_testUnitTests(void)
 {
 	OutputMock * pOutputMock = OOOConstruct(OutputMock);
 	UnitTestReporter * pReporter = OOOConstruct(UnitTestReporter, OOOCast(IOutput, pOutputMock));
-	MyUnitTest * pTest = OOOConstruct(MyUnitTest);
+	ReportTest * pReportTest = OOOConstruct(ReportTest);
+	MemoryLeakTest * pMemoryLeakTest = OOOConstruct(MemoryLeakTest);
+	void * pMemoryMagic = O_malloc(10000);
+	MemoryMagicTest * pMemoryMagicTest = OOOConstruct(MemoryMagicTest, pMemoryMagic);
 	UnitTests * pTests = OOOConstruct(UnitTests, pReporter);
 
-	OOOCall(pTests, addTest, "My Test", OOOCast(IUnitTest, pTest));
+	OOOCall(pTests, addTest, "My Test", OOOCast(IUnitTest, pReportTest));
 	OOOCall(pTests, runAll);
 	assert(OOOCall(pOutputMock, check,
 			"BEGIN_UNIT_TEST_OUTPUT\n<?xml version \"1.0\"?><REPORT>\nEND_UNIT_TEST_OUTPUT\n"
@@ -127,12 +210,42 @@ static void Main_testUnitTests(void)
 			"BEGIN_UNIT_TEST_OUTPUT\n<WARNING file=\"My File\" line=\"10\">Test Information: Hello: 55</WARNING>\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Test Information: Hello: 55</ERROR>\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Failed check: FALSE</ERROR>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n<MEMORY_LEAK test=\"My Test\" bytes=\"%u\"/>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n</TEST>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n</REPORT>\nEND_UNIT_TEST_OUTPUT\n",
+			/* Memory lost in OutputMock while running the test (will be recovered after check method exits) */
+			O_strlen(
+					"BEGIN_UNIT_TEST_OUTPUT\n<INFORMATION file=\"My File\" line=\"10\">Test Information: Hello: 55</INFORMATION>\nEND_UNIT_TEST_OUTPUT\n"
+					"BEGIN_UNIT_TEST_OUTPUT\n<WARNING file=\"My File\" line=\"10\">Test Information: Hello: 55</WARNING>\nEND_UNIT_TEST_OUTPUT\n"
+					"BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Test Information: Hello: 55</ERROR>\nEND_UNIT_TEST_OUTPUT\n"
+					"BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Failed check: FALSE</ERROR>\nEND_UNIT_TEST_OUTPUT\n"
+					)
+			));
+
+	OOOCall(pTests, addTest, "My Test", OOOCast(IUnitTest, pMemoryLeakTest));
+	OOOCall(pTests, runAll);
+	assert(OOOCall(pOutputMock, check,
+			"BEGIN_UNIT_TEST_OUTPUT\n<?xml version \"1.0\"?><REPORT>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n<TEST name=\"My Test\">\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n<MEMORY_LEAK test=\"My Test\" bytes=\"10004\"/>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n</TEST>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n</REPORT>\nEND_UNIT_TEST_OUTPUT\n"
+			));
+
+	OOOCall(pTests, addTest, "My Test", OOOCast(IUnitTest, pMemoryMagicTest));
+	OOOCall(pTests, runAll);
+	assert(OOOCall(pOutputMock, check,
+			"BEGIN_UNIT_TEST_OUTPUT\n<?xml version \"1.0\"?><REPORT>\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n<TEST name=\"My Test\">\nEND_UNIT_TEST_OUTPUT\n"
+			"BEGIN_UNIT_TEST_OUTPUT\n<MEMORY_MAGIC test=\"My Test\" bytes=\"10004\"/>\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n</TEST>\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n</REPORT>\nEND_UNIT_TEST_OUTPUT\n"
 			));
 
 	OOODestroy(pTests);
-	OOODestroy(pTest);
+	OOODestroy(pReportTest);
+	OOODestroy(pMemoryLeakTest);
+	OOODestroy(pMemoryMagicTest);
 	OOODestroy(pReporter);
 	OOODestroy(pOutputMock);
 }

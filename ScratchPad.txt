@@ -1,7 +1,25 @@
-Accessing fields could do with a shortcut... F(name) perhaps?
+ToDo
+----
+
+Write lots of tests for calling conventions and macro use focusing on:
+- empty argument lists
+- using macros in macro arguments
+- maximum number of macro arguments
+Test for memory leaks in unit tests
+Support multiple unit tests
+Implement macros for simple test definitions - wrap _OOOCode macros to allow passing of class name without #defining it (all unit test implementations will look the same and have only one method so this should be possible and still simple/intuitive)
+
+
+Concerns
+--------
+
+I don't really need to use interfaces and classes for unit test definitions (could just use function pointers as I have in the past) but it has an elegance... It will also take longer to compile and run though!! Gah!
+
+Cannot copy instances easily. Memcpy will result in interfaces pointing at incorrect instances and all fields will be lost. Do I care?
+
 Don't much like having 3 method calling conventions but i think i can live with it for now
+
 Should do some performance checks as worried about:
 - indirection in function calls
-- indirection in field access
 - indirection in destroy function
 - extra memory used for destroy function entry in object instance
