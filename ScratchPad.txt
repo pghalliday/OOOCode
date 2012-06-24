@@ -1,10 +1,14 @@
 ToDo
 ----
 
-Write lots of tests for calling conventions and macro use focusing on:
+OOOEmptyArguments.Test
+OOOPastingAndQuoting.Test
+OOOCode.Test - Write lots of tests for calling conventions and macro use focusing on:
 - empty argument lists
 - using macros in macro arguments
 - maximum number of macro arguments
+
+Automate OOOTests.h generation / Integrate advanced build scripts
 
 Concerns
 --------
