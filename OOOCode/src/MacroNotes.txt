@@ -1,6 +1,8 @@
 Notes on the safe implementation of macros
 ========================================== 
 
+NB. This is nonsense! Don't trust the information here
+
 Variadic macros
 ---------------
 
