@@ -1,4 +1,4 @@
-#include "UnitTestDefines.h"
+#include "OOOUnitTestDefines.h"
 
 OOOTest(Hello)
 {

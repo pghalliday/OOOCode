@@ -1,10 +1,10 @@
-#include "UnitTests.h"
+#include "OOOUnitTests.h"
 
-#define OOOClass UnitTests
+#define OOOClass OOOUnitTests
 
 OOOPrivateData
-	UnitTestReporter * pReporter;
-	IUnitTest ** aTests;
+	OOOUnitTestReporter * pReporter;
+	OOOIUnitTest ** aTests;
 OOOPrivateDataEnd
 
 OOODestructor
@@ -14,7 +14,7 @@ OOOMethod(void, run)
 {
 	size_t uHeapAvailableBefore = 0;
 	size_t uHeapAvailableAfter = 0;
-	IUnitTest ** pTest = OOOF(aTests);
+	OOOIUnitTest ** pTest = OOOF(aTests);
 
 	OOOCall(OOOF(pReporter), startReport);
 
@@ -42,7 +42,7 @@ OOOMethod(void, run)
 }
 OOOMethodEnd
 
-OOOConstructor(UnitTestReporter * pReporter, IUnitTest ** aTests)
+OOOConstructor(OOOUnitTestReporter * pReporter, OOOIUnitTest ** aTests)
 {
 	OOOMapMethods
 		OOOMethodMapping(run)

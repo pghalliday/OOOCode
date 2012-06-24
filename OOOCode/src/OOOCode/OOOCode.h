@@ -8,8 +8,8 @@
  * NB. Check MacroNotes.txt for guidelines
  */
 
-#include "PastingAndQuoting.h"
-#include "EmptyArguments.h"
+#include "OOOPastingAndQuoting.h"
+#include "OOOEmptyArguments.h"
 
 /* Construct an instance of a class */
 #define _OOOConstruct(CLASS_NAME, ARGS...) \
@@ -31,7 +31,7 @@
 	((INSTANCE)->pVTable->METHOD_NAME(INSTANCE, ARGS))
 #define _OOOCall1(INSTANCE, METHOD_NAME, ARGS...) \
 	((INSTANCE)->pVTable->METHOD_NAME(INSTANCE))
-#define _OOOCall(INSTANCE, METHOD_NAME, ARGS...) PASTE(_OOOCall, ISEMPTY(ARGS))(INSTANCE, METHOD_NAME, ARGS)
+#define _OOOCall(INSTANCE, METHOD_NAME, ARGS...) OOOPaste(_OOOCall, OOOIsEmpty(ARGS))(INSTANCE, METHOD_NAME, ARGS)
 #define OOOCall(INSTANCE, METHOD_NAME, ARGS...) _OOOCall(INSTANCE, METHOD_NAME, ARGS)
 
 /* call an interface method through it's vtable */
@@ -39,7 +39,7 @@
 	((INTERFACE)->pVTable->METHOD_NAME((INTERFACE)->pInstance, ARGS))
 #define _OOOICall1(INTERFACE, METHOD_NAME, ARGS...) \
 	((INTERFACE)->pVTable->METHOD_NAME((INTERFACE)->pInstance))
-#define _OOOICall(INTERFACE, METHOD_NAME, ARGS...) PASTE(_OOOICall, ISEMPTY(ARGS))(INTERFACE, METHOD_NAME, ARGS)
+#define _OOOICall(INTERFACE, METHOD_NAME, ARGS...) OOOPaste(_OOOICall, OOOIsEmpty(ARGS))(INTERFACE, METHOD_NAME, ARGS)
 #define OOOICall(INTERFACE, METHOD_NAME, ARGS...) _OOOICall(INTERFACE, METHOD_NAME, ARGS)
 
 /* call an instance method directly (can only be used inside the class implementation) */
@@ -47,7 +47,7 @@
 	(CLASS_NAME##_##METHOD_NAME(INSTANCE, ARGS))
 #define _OOOPCall1(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) \
 	(CLASS_NAME##_##METHOD_NAME(INSTANCE))
-#define _OOOPCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) PASTE(_OOOPCall, ISEMPTY(ARGS))(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS)
+#define _OOOPCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) OOOPaste(_OOOPCall, OOOIsEmpty(ARGS))(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS)
 #define OOOPCall(INSTANCE, METHOD_NAME, ARGS...) _OOOPCall(OOOClass, INSTANCE, METHOD_NAME, ARGS)
 
 /* access a field of the given instance */

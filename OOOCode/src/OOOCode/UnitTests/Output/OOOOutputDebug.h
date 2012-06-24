@@ -1,13 +1,13 @@
-#ifndef OutputDebug_H
-#define OutputDebug_H
+#ifndef OOOOutputDebug_H
+#define OOOOutputDebug_H
 
 #include "OOOCode.h"
-#include "IOutput.h"
+#include "OOOIOutput.h"
 
-#define OOOClass OutputDebug
+#define OOOClass OOOOutputDebug
 OOODeclare()
 	OOOImplements
-		OOOImplement(IOutput);
+		OOOImplement(OOOIOutput);
 	OOOImplementsEnd
 	OOOExports
 	OOOExportsEnd

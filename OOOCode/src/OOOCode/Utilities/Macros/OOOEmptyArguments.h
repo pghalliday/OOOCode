@@ -1,5 +1,5 @@
-#ifndef EmptyArguments_H
-#define EmptyArguments_H
+#ifndef OOOEmptyArguments_H
+#define OOOEmptyArguments_H
 
 /*
  * This stuff is derived directly from the following article by Jens Gustedt (June 8, 2010)
@@ -42,7 +42,7 @@
  * but 0 for argument lists of 1 argument (note that to the preprocessor an empty argument list
  * actually contains 1 argument which is the empty token)
  */
-#define _ARG121(                                               \
+#define OOOArg121(                                             \
  _1, _2, _3, _4, _5, _6, _7, _8,                               \
  _9, _10, _11, _12, _13, _14, _15, _16,                        \
  _17, _18, _19, _20, _21, _22, _23, _24,                       \
@@ -60,7 +60,7 @@
  _113, _114, _115, _116, _117, _118, _119, _120,               \
  _121,                                                         \
  ARGS...) _121
-#define _HAS_COMMA(ARGS...) _ARG121(ARGS,                      \
+#define OOOHasComma(ARGS...) OOOArg121(ARGS,                   \
  1, 1, 1, 1, 1, 1, 1,                                          \
  1, 1, 1, 1, 1, 1, 1, 1,                                       \
  1, 1, 1, 1, 1, 1, 1, 1,                                       \
@@ -78,22 +78,22 @@
  1, 1, 1, 1, 1, 1, 1, 1, 0, 0)
 
 /*
- * This is the clever bit
+ * This stuff checks that the arguments passed to _OOOIsEmpty are (0, 0, 0, 1)
  */
-#define _TRIGGER_PARENTHESIS_(ARGS...) ,
-#define ISEMPTY(ARGS...)                                                \
-_ISEMPTY(                                                               \
-          _HAS_COMMA(ARGS),                                       		\
-          _HAS_COMMA(_TRIGGER_PARENTHESIS_ ARGS),                 		\
-          _HAS_COMMA(ARGS (/*empty*/)),                           		\
-          _HAS_COMMA(_TRIGGER_PARENTHESIS_ ARGS (/*empty*/))      		\
-          )
+#define OOOIsEmptyCase0001 ,
+#define OOOPaste5(_0, _1, _2, _3, _4) _0 ## _1 ## _2 ## _3 ## _4
+#define _OOOIsEmpty(_0, _1, _2, _3) OOOHasComma(OOOPaste5(OOOIsEmptyCase, _0, _1, _2, _3))
 
 /*
- * This stuff checks that the arguments passed to _ISEMPTY are (0, 0, 0, 1)
+ * This is the clever bit
  */
-#define _PASTE5(_0, _1, _2, _3, _4) _0 ## _1 ## _2 ## _3 ## _4
-#define _ISEMPTY(_0, _1, _2, _3) _HAS_COMMA(_PASTE5(_IS_EMPTY_CASE_, _0, _1, _2, _3))
-#define _IS_EMPTY_CASE_0001 ,
+#define OOOTriggerParenthesis(ARGS...) ,
+#define OOOIsEmpty(ARGS...)                                             \
+_OOOIsEmpty(                                                            \
+          OOOHasComma(ARGS),                                       		\
+          OOOHasComma(OOOTriggerParenthesis ARGS),                 		\
+          OOOHasComma(ARGS (/*empty*/)),                           		\
+          OOOHasComma(OOOTriggerParenthesis ARGS (/*empty*/))      		\
+          )
 
 #endif

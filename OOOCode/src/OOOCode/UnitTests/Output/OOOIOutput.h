@@ -1,9 +1,9 @@
-#ifndef IOutput_H
-#define IOutput_H
+#ifndef OOOIOutput_H
+#define OOOIOutput_H
 
 #include "OOOCode.h"
 
-#define OOOInterface IOutput
+#define OOOInterface OOOIOutput
 OOOVirtuals
 	OOOVirtual(void, print, char * szMessage, ...);
 OOOVirtualsEnd

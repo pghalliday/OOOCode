@@ -5,10 +5,6 @@ Write lots of tests for calling conventions and macro use focusing on:
 - empty argument lists
 - using macros in macro arguments
 - maximum number of macro arguments
-Test for memory leaks in unit tests
-Support multiple unit tests
-Implement macros for simple test definitions - wrap _OOOCode macros to allow passing of class name without #defining it (all unit test implementations will look the same and have only one method so this should be possible and still simple/intuitive)
-
 
 Concerns
 --------

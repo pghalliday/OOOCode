@@ -1,6 +1,6 @@
 #include "opentv.h"
 #include "assert.h"
-#include "UnitTestsRun.h"
+#include "OOOUnitTestsRun.h"
 
 /* Test running and memory checking code */
 static size_t Main_uMemory;
@@ -33,7 +33,7 @@ static void Main_waitToExit(void)
 
 void main(void)
 {
-	RUN_TEST(UnitTestsRun);
+	RUN_TEST(OOOUnitTestsRun);
 
 	/* Stick around so the VSTB does not exit and we know we ran everything */
 	Main_waitToExit();

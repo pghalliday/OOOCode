@@ -1,13 +1,13 @@
-#include "UnitTestDefines.h"
+#include "OOOUnitTestDefines.h"
 
-#include "OutputMock.h"
-#include "UnitTests.h"
+#include "OOOOutputMock.h"
+#include "OOOUnitTests.h"
 
 #define OOOClass ReportTest
 
 OOODeclare()
 	OOOImplements
-		OOOImplement(IUnitTest);
+		OOOImplement(OOOIUnitTest);
 	OOOImplementsEnd
 	OOOExports
 	OOOExportsEnd
@@ -21,11 +21,11 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(void, run, UnitTestReporter * pReporter)
+OOOMethod(void, run, OOOUnitTestReporter * pReporter)
 {
-	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Information, "My File", 10, "Test Information: %s: %d", "Hello", 55);
-	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Warning, "My File", 10, "Test Information: %s: %d", "Hello", 55);
-	OOOCall(pReporter, log, UnitTestReporter_LogLevel_Error, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	OOOCall(pReporter, log, OOOUnitTestReporter_LogLevel_Information, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	OOOCall(pReporter, log, OOOUnitTestReporter_LogLevel_Warning, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	OOOCall(pReporter, log, OOOUnitTestReporter_LogLevel_Error, "My File", 10, "Test Information: %s: %d", "Hello", 55);
 	OOOCall(pReporter, check, TRUE, "My File", 10, "TRUE");
 	OOOCall(pReporter, check, FALSE, "My File", 10, "FALSE");
 }
@@ -39,7 +39,7 @@ OOOMethodEnd
 
 OOOConstructor()
 {
-	#define OOOInterface IUnitTest
+	#define OOOInterface OOOIUnitTest
 	OOOMapVirtuals
 		OOOVirtualMapping(run),
 		OOOVirtualMapping(getName),
@@ -55,7 +55,7 @@ OOOConstructorEnd
 
 OOODeclare()
 	OOOImplements
-		OOOImplement(IUnitTest);
+		OOOImplement(OOOIUnitTest);
 	OOOImplementsEnd
 	OOOExports
 	OOOExportsEnd
@@ -74,7 +74,7 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(void, run, UnitTestReporter * pReporter)
+OOOMethod(void, run, OOOUnitTestReporter * pReporter)
 {
 	OOOF(pMemoryLeak) = O_malloc(10000);
 }
@@ -88,7 +88,7 @@ OOOMethodEnd
 
 OOOConstructor()
 {
-	#define OOOInterface IUnitTest
+	#define OOOInterface OOOIUnitTest
 	OOOMapVirtuals
 		OOOVirtualMapping(run),
 		OOOVirtualMapping(getName),
@@ -104,7 +104,7 @@ OOOConstructorEnd
 
 OOODeclare(void * szMemoryMagic)
 	OOOImplements
-		OOOImplement(IUnitTest);
+		OOOImplement(OOOIUnitTest);
 	OOOImplementsEnd
 	OOOExports
 	OOOExportsEnd
@@ -119,7 +119,7 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(void, run, UnitTestReporter * pReporter)
+OOOMethod(void, run, OOOUnitTestReporter * pReporter)
 {
 	O_free(OOOF(pMemoryMagic));
 }
@@ -133,7 +133,7 @@ OOOMethodEnd
 
 OOOConstructor(void * pMemoryMagic)
 {
-	#define OOOInterface IUnitTest
+	#define OOOInterface OOOIUnitTest
 	OOOMapVirtuals
 		OOOVirtualMapping(run),
 		OOOVirtualMapping(getName),
@@ -147,22 +147,22 @@ OOOConstructorEnd
 
 #undef OOOClass
 
-OOOTest(UnitTests_Test)
+OOOTest(OOOUnitTests_Test)
 {
-	OutputMock * pOutputMock = OOOConstruct(OutputMock);
-	UnitTestReporter * pReporter = OOOConstruct(UnitTestReporter, OOOCast(IOutput, pOutputMock));
+	OOOOutputMock * pOutputMock = OOOConstruct(OOOOutputMock);
+	OOOUnitTestReporter * pReporter = OOOConstruct(OOOUnitTestReporter, OOOCast(OOOIOutput, pOutputMock));
 	ReportTest * pReportTest = OOOConstruct(ReportTest);
 	MemoryLeakTest * pMemoryLeakTest = OOOConstruct(MemoryLeakTest);
 	void * pMemoryMagic = O_malloc(10000);
 	MemoryMagicTest * pMemoryMagicTest = OOOConstruct(MemoryMagicTest, pMemoryMagic);
-	IUnitTest * aTests[] =
+	OOOIUnitTest * aTests[] =
 	{
-		OOOCast(IUnitTest, pReportTest),
-		OOOCast(IUnitTest, pMemoryLeakTest),
-		OOOCast(IUnitTest, pMemoryMagicTest),
+		OOOCast(OOOIUnitTest, pReportTest),
+		OOOCast(OOOIUnitTest, pMemoryLeakTest),
+		OOOCast(OOOIUnitTest, pMemoryMagicTest),
 		NULL
 	};
-	UnitTests * pTests = OOOConstruct(UnitTests, pReporter, aTests);
+	OOOUnitTests * pTests = OOOConstruct(OOOUnitTests, pReporter, aTests);
 
 	OOOCall(pTests, run);
 

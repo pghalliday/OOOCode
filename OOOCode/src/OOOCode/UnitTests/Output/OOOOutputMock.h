@@ -1,13 +1,13 @@
-#ifndef OutputMock_H
-#define OutputMock_H
+#ifndef OOOOutputMock_H
+#define OOOOutputMock_H
 
 #include "OOOCode.h"
-#include "IOutput.h"
+#include "OOOIOutput.h"
 
-#define OOOClass OutputMock
+#define OOOClass OOOOutputMock
 OOODeclare()
 	OOOImplements
-		OOOImplement(IOutput);
+		OOOImplement(OOOIOutput);
 	OOOImplementsEnd
 	OOOExports
 		OOOExport(bool, check, char * szCompare, ...);

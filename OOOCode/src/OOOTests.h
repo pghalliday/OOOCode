@@ -1,3 +1,4 @@
 OOOTest(Hello)
-#include "UnitTestReporter.Test.h"
-#include "UnitTests.Test.h"
+#include "OOOUnitTestReporter.Test.h"
+#include "OOOUnitTests.Test.h"
+#include "OOOOutputMock.Test.h"
