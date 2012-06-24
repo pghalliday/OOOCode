@@ -27,9 +27,11 @@
 #define OOOVirtuals _OOOVirtuals(OOOInterface)
 
 /* Declare a vtable entry */
-#define _OOOVirtual(RETURN_TYPE, METHOD_NAME, ARGS...) \
-	RETURN_TYPE (* METHOD_NAME)(void * OOOInstance , ##ARGS)
-#define OOOVirtual(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOVirtual(RETURN_TYPE, METHOD_NAME , ##ARGS)
+#define _OOOVirtual0(RETURN_TYPE, METHOD_NAME, ARGS...) \
+	RETURN_TYPE (* METHOD_NAME)(void * OOOInstance, ARGS)
+#define _OOOVirtual1(RETURN_TYPE, METHOD_NAME, ARGS...) \
+	RETURN_TYPE (* METHOD_NAME)(void * OOOInstance)
+#define OOOVirtual(RETURN_TYPE, METHOD_NAME, ARGS...) PASTE(_OOOVirtual, ISEMPTY(ARGS))(RETURN_TYPE, METHOD_NAME, ARGS)
 
 /* end the vtable structure */
 #define OOOVirtualsEnd \

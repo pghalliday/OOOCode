@@ -6,12 +6,11 @@
 #include "IUnitTest.h"
 
 #define OOOClass UnitTests
-OOODeclare(UnitTestReporter * pReporter)
+OOODeclare(UnitTestReporter * pReporter, IUnitTest ** aTests)
 	OOOImplements
 	OOOImplementsEnd
 	OOOExports
-		OOOExport(void, addTest, char * szName, IUnitTest * iTest);
-		OOOExport(void, runAll);
+		OOOExport(void, run);
 	OOOExportsEnd
 OOODeclareEnd
 #undef OOOClass

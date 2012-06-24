@@ -18,27 +18,27 @@
 
 /* destroy an instance of a class */
 #define _OOODestroy(INSTANCE) \
-	(INSTANCE->destroy(INSTANCE))
+	((INSTANCE)->destroy(INSTANCE))
 #define OOODestroy(INSTANCE) _OOODestroy(INSTANCE)
 
 /* cast an instance to an interface */
 #define _OOOCast(INTERFACE_NAME, INSTANCE) \
-	(&(INSTANCE->tInterfaces.t##INTERFACE_NAME))
+	(&((INSTANCE)->tInterfaces.t##INTERFACE_NAME))
 #define OOOCast(INTERFACE_NAME, INSTANCE) _OOOCast(INTERFACE_NAME, INSTANCE)
 
 /* call an instance method through it's vtable */
 #define _OOOCall0(INSTANCE, METHOD_NAME, ARGS...) \
-	(INSTANCE->pVTable->METHOD_NAME(INSTANCE, ARGS))
+	((INSTANCE)->pVTable->METHOD_NAME(INSTANCE, ARGS))
 #define _OOOCall1(INSTANCE, METHOD_NAME, ARGS...) \
-	(INSTANCE->pVTable->METHOD_NAME(INSTANCE))
+	((INSTANCE)->pVTable->METHOD_NAME(INSTANCE))
 #define _OOOCall(INSTANCE, METHOD_NAME, ARGS...) PASTE(_OOOCall, ISEMPTY(ARGS))(INSTANCE, METHOD_NAME, ARGS)
 #define OOOCall(INSTANCE, METHOD_NAME, ARGS...) _OOOCall(INSTANCE, METHOD_NAME, ARGS)
 
 /* call an interface method through it's vtable */
 #define _OOOICall0(INTERFACE, METHOD_NAME, ARGS...) \
-	(INTERFACE->pVTable->METHOD_NAME(INTERFACE->pInstance, ARGS))
+	((INTERFACE)->pVTable->METHOD_NAME((INTERFACE)->pInstance, ARGS))
 #define _OOOICall1(INTERFACE, METHOD_NAME, ARGS...) \
-	(INTERFACE->pVTable->METHOD_NAME(INTERFACE->pInstance))
+	((INTERFACE)->pVTable->METHOD_NAME((INTERFACE)->pInstance))
 #define _OOOICall(INTERFACE, METHOD_NAME, ARGS...) PASTE(_OOOICall, ISEMPTY(ARGS))(INTERFACE, METHOD_NAME, ARGS)
 #define OOOICall(INTERFACE, METHOD_NAME, ARGS...) _OOOICall(INTERFACE, METHOD_NAME, ARGS)
 
@@ -52,7 +52,7 @@
 
 /* access a field of the given instance */
 #define __OOOField(CLASS_NAME, INSTANCE, FIELD_NAME) \
-	(((CLASS_NAME##_PrivateData *) INSTANCE)->FIELD_NAME)
+	(((CLASS_NAME##_PrivateData *) (INSTANCE))->FIELD_NAME)
 #define _OOOField(CLASS_NAME, INSTANCE, FIELD_NAME) __OOOField(CLASS_NAME, INSTANCE, FIELD_NAME)
 #define OOOField(INSTANCE, FIELD_NAME) _OOOField(OOOClass, INSTANCE, FIELD_NAME)
 

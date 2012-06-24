@@ -15,19 +15,17 @@
 #define __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) \
 	typedef struct _##CLASS_NAME CLASS_NAME; \
 	extern CLASS_NAME * CLASS_NAME##_construct(CONSTRUCTOR_ARGS);
-#define _OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) __OOODeclare(CLASS_NAME , ##CONSTRUCTOR_ARGS)
-#define OOODeclare(CONSTRUCTOR_ARGS...) _OOODeclare(OOOClass , ##CONSTRUCTOR_ARGS)
+#define _OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS)
+#define OOODeclare(CONSTRUCTOR_ARGS...) _OOODeclare(OOOClass, CONSTRUCTOR_ARGS)
 
 /*
  * Export Interfaces
  */
 
 /* Start the interfaces structure */
-#define __OOOImplements(CLASS_NAME) \
+#define OOOImplements \
 	typedef struct \
 	{
-#define _OOOImplements(CLASS_NAME) __OOOImplements(CLASS_NAME)
-#define OOOImplements _OOOImplements(OOOClass)
 
 /* Add an interface */
 #define _OOOImplement(INTERFACE_NAME) \
@@ -46,17 +44,17 @@
  */
 
 /* start the vtable structure */
-#define __OOOExports(CLASS_NAME) \
+#define OOOExports \
 	typedef struct \
 	{
-#define _OOOExports(CLASS_NAME) __OOOExports(CLASS_NAME)
-#define OOOExports _OOOExports(OOOClass)
 
 /* add an exported method */
-#define __OOOExport(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
-	RETURN_TYPE (* METHOD_NAME)(CLASS_NAME * OOOThis , ##ARGS)
-#define _OOOExport(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) __OOOExport(CLASS_NAME, RETURN_TYPE, METHOD_NAME , ##ARGS)
-#define OOOExport(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOExport(OOOClass, RETURN_TYPE, METHOD_NAME , ##ARGS)
+#define _OOOExport0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	RETURN_TYPE (* METHOD_NAME)(CLASS_NAME * OOOThis, ARGS)
+#define _OOOExport1(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	RETURN_TYPE (* METHOD_NAME)(CLASS_NAME * OOOThis)
+#define _OOOExport(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) PASTE(_OOOExport, ISEMPTY(ARGS))(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS)
+#define OOOExport(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOExport(OOOClass, RETURN_TYPE, METHOD_NAME, ARGS)
 
 /* end the vtable structure and declare the type name */
 #define __OOOExportsEnd(CLASS_NAME) \

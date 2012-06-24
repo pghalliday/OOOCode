@@ -4,66 +4,52 @@
 
 OOOPrivateData
 	UnitTestReporter * pReporter;
-	IUnitTest * iTest;
-	char * szName;
+	IUnitTest ** aTests;
 OOOPrivateDataEnd
 
 OOODestructor
-{
-	if (OOOF(szName))
-	{
-		O_free(OOOF(szName));
-	}
-}
 OOODestructorEnd
 
-OOOMethod(void, addTest, char * szName, IUnitTest * iTest)
-{
-	assert(szName);
-	assert(iTest);
-	OOOF(iTest) = iTest;
-	if (OOOF(szName))
-	{
-		O_free(OOOF(szName));
-	}
-	OOOF(szName) = O_strdup(szName);
-}
-OOOMethodEnd
-
-OOOMethod(void, runAll)
+OOOMethod(void, run)
 {
 	size_t uHeapAvailableBefore = 0;
 	size_t uHeapAvailableAfter = 0;
+	IUnitTest ** pTest = OOOF(aTests);
 
 	OOOCall(OOOF(pReporter), startReport);
-	OOOCall(OOOF(pReporter), startTestReport, OOOF(szName));
 
-	uHeapAvailableBefore = O_heap_available();
-	OOOICall(OOOF(iTest), run, OOOF(pReporter));
-	uHeapAvailableAfter = O_heap_available();
-
-	if (uHeapAvailableBefore > uHeapAvailableAfter)
+	while (*pTest)
 	{
-		OOOCall(OOOF(pReporter), memoryLeak, OOOF(szName), uHeapAvailableBefore - uHeapAvailableAfter);
-	}
-	else if (uHeapAvailableAfter > uHeapAvailableBefore)
-	{
-		OOOCall(OOOF(pReporter), memoryMagic, OOOF(szName), uHeapAvailableAfter - uHeapAvailableBefore);
-	}
+		OOOCall(OOOF(pReporter), startTestReport, OOOICall(*pTest, getName));
 
-	OOOCall(OOOF(pReporter), endTestReport);
+		uHeapAvailableBefore = O_heap_available();
+		OOOICall(*pTest, run, OOOF(pReporter));
+		uHeapAvailableAfter = O_heap_available();
+
+		if (uHeapAvailableBefore > uHeapAvailableAfter)
+		{
+			OOOCall(OOOF(pReporter), memoryLeak, OOOICall(*pTest, getName), uHeapAvailableBefore - uHeapAvailableAfter);
+		}
+		else if (uHeapAvailableAfter > uHeapAvailableBefore)
+		{
+			OOOCall(OOOF(pReporter), memoryMagic, OOOICall(*pTest, getName), uHeapAvailableAfter - uHeapAvailableBefore);
+		}
+
+		OOOCall(OOOF(pReporter), endTestReport);
+		pTest++;
+	}
 	OOOCall(OOOF(pReporter), endReport);
 }
 OOOMethodEnd
 
-OOOConstructor(UnitTestReporter * pReporter)
+OOOConstructor(UnitTestReporter * pReporter, IUnitTest ** aTests)
 {
 	OOOMapMethods
-		OOOMethodMapping(addTest),
-		OOOMethodMapping(runAll)
+		OOOMethodMapping(run)
 	OOOMapMethodsEnd
 
-	OOOField(OOOThis, pReporter) = pReporter;
+	OOOF(pReporter) = pReporter;
+	OOOF(aTests) = aTests;
 }
 OOOConstructorEnd
 

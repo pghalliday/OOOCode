@@ -63,8 +63,6 @@ OOOMethod(void, print, char * szMessage, ...)
 	assert(nMessageLength < OutputMock_TEMP_MAX_SIZE);
 
 	OOOC(append, OOOF(szTemp));
-	O_debug(OOOF(szTemp));
-	O_debug("OutputMock: Memory used: %u\n", OOOC(getMemoryUsed));
 }
 OOOMethodEnd
 

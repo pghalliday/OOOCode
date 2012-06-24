@@ -43,7 +43,8 @@
 
 /* begin the destructor */
 #define __OOODestructor(CLASS_NAME) \
-void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
+	typedef void (* OOOVirtual_##CLASS_NAME##_destroy)(void * OOOThis); \
+	static void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 	{ \
 		assert(OOOThis);
 #define _OOODestructor(CLASS_NAME) __OOODestructor(CLASS_NAME)
@@ -65,13 +66,18 @@ void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
  * the method prototype and can be used for safe casts when mapping
  * to virtuals in interface vtables
  */
-#define __OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
-	typedef RETURN_TYPE (* OOOVirtual_##CLASS_NAME##_##METHOD_NAME)(void * OOOThis , ##ARGS); \
-	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis , ##ARGS) \
+#define _OOOMethod0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	typedef RETURN_TYPE (* OOOVirtual_##CLASS_NAME##_##METHOD_NAME)(void * OOOThis, ARGS); \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis, ARGS) \
 	{ \
 		assert(OOOThis);
-#define _OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) __OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME , ##ARGS)
-#define OOOMethod(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOMethod(OOOClass, RETURN_TYPE, METHOD_NAME , ##ARGS)
+#define _OOOMethod1(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	typedef RETURN_TYPE (* OOOVirtual_##CLASS_NAME##_##METHOD_NAME)(void * OOOThis); \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis) \
+	{ \
+		assert(OOOThis);
+#define _OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) PASTE(_OOOMethod, ISEMPTY(ARGS))(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS)
+#define OOOMethod(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOMethod(OOOClass, RETURN_TYPE, METHOD_NAME, ARGS)
 
 /* end the method */
 #define OOOMethodEnd \
@@ -91,8 +97,8 @@ void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
 		assert(OOOThis); \
 		OOOThis->destroy = CLASS_NAME##_destroy;
-#define _OOOConstructor(CLASS_NAME, ARGS...) __OOOConstructor(CLASS_NAME , ##ARGS)
-#define OOOConstructor(ARGS...) _OOOConstructor(OOOClass , ##ARGS)
+#define _OOOConstructor(CLASS_NAME, ARGS...) __OOOConstructor(CLASS_NAME, ARGS)
+#define OOOConstructor(ARGS...) _OOOConstructor(OOOClass, ARGS)
 
 /*
  * Start the map of public methods to vtable entries. This is static
