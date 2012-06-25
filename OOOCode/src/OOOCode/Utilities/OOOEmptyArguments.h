@@ -8,7 +8,7 @@
  */
 
 /*
- * The following construct exposes the macro ISEMPTY that can be used to test
+ * The following construct exposes the macro OOOIsEmpty that can be used to test
  * if a variadic argument list is empty or not. If the list is empty then it
  * expands to 1, if it is not then it will expand to 0
  *
@@ -18,12 +18,12 @@
  *
  * The macro works by checking if the following construct expands to contain a comma...
  *
- *   _TRIGGER_PARENTHESIS_ ARGS ()
+ *   OOOTriggerParenthesis ARGS ()
  *
  * using the property that a function macro only expands if it is followed by
  * parentheses otherwise it is not expanded at all.
  *
- * When expanded _TRIGGER_PARENTHESIS_() results in a comma. Thus if ARGS expands
+ * When expanded OOOTriggerParenthesis() results in a comma. Thus if ARGS expands
  * to an empty argument list then this construct will expand to a comma.
  *
  * In order for the macro to work properly though it needs to discount a number
@@ -31,7 +31,7 @@
  *
  * 1) We need to check that ARGS does not already contain a comma
  *
- * 2) We need to check that _TRIGGER_PARENTHESIS_ ARGS does not expand to anything
+ * 2) We need to check that OOOTriggerParenthesis ARGS does not expand to anything
  * containing a comma
  *
  * 3) We need to check that ARGS() does not expand to anything containing a comma
@@ -85,7 +85,7 @@
 #define _OOOIsEmpty(_0, _1, _2, _3) OOOHasComma(OOOPaste5(OOOIsEmptyCase, _0, _1, _2, _3))
 
 /*
- * This is the clever bit
+ * This is the clever bit (actually some of the other bits are clever too, like the OOOHasComma stuff...)
  */
 #define OOOTriggerParenthesis(ARGS...) ,
 #define OOOIsEmpty(ARGS...)                                             \
