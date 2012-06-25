@@ -8,6 +8,9 @@
  * NB. Check MacroNotes.txt for guidelines
  */
 
+#include "OOOPastingAndQuoting.h"
+#include "OOOEmptyArguments.h"
+
 #include "opentv.h"
 #include "assert.h"
 

@@ -8,6 +8,9 @@
  * NB. Check MacroNotes.txt for guidelines
  */
 
+#include "OOOPastingAndQuoting.h"
+#include "OOOEmptyArguments.h"
+
 /*
  * Declare the type and constructor arguments
  */

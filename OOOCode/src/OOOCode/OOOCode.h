@@ -10,6 +10,9 @@
 
 #include "OOOPastingAndQuoting.h"
 #include "OOOEmptyArguments.h"
+#include "OOOCode_Interface.h"
+#include "OOOCode_ClassHeader.h"
+#include "OOOCode_ClassImplementation.h"
 
 /* Construct an instance of a class */
 #define _OOOConstruct(CLASS_NAME, ARGS...) \
@@ -61,9 +64,5 @@
 
 /* shortcut to call an instance method directly with the current OOOThis instance */
 #define OOOC(METHOD_NAME, ARGS...) OOOPCall(OOOThis, METHOD_NAME , ##ARGS)
-
-#include "OOOCode_Interface.h"
-#include "OOOCode_ClassHeader.h"
-#include "OOOCode_ClassImplementation.h"
 
 #endif

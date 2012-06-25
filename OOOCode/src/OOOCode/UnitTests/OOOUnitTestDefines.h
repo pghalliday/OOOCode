@@ -1,6 +1,9 @@
 #ifndef OOOUnitTestDefines_H
 #define OOOUnitTestDefines_H
 
+#include "OOOPastingAndQuoting.h"
+#include "OOOEmptyArguments.h"
+
 #include "OOOIUnitTest.h"
 
 /* Start the implementation of IUnitTest called NAME */
