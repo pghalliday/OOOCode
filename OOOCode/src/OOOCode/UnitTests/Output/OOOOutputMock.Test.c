@@ -2,19 +2,19 @@
 
 #include "OOOOutputMock.h"
 
-OOOTest(OOOOutputMock_Test)
+OOOTest(OOOOutputMock)
 {
 	OOOOutputMock * pOutput = OOOConstruct(OOOOutputMock);
 	OOOIOutput * iOutput = OOOCast(OOOIOutput, pOutput);
 
 	/* 1 print */
 	OOOICall(iOutput, print, "Hello, %s\n", "World");
-	OOOTestCheck(OOOCall(pOutput, check, "Hello, World\n"));
+	OOOCheck(OOOCall(pOutput, check, "Hello, World\n"));
 
 	/* 2 prints */
 	OOOICall(iOutput, print, "Goodbye, %s\n", "World");
 	OOOICall(iOutput, print, "Numbers, %d, %d, %d\n", 1, 2, 3);
-	OOOTestCheck(OOOCall(pOutput, check,
+	OOOCheck(OOOCall(pOutput, check,
 			"Goodbye, World\n"
 			"Numbers, 1, 2, 3\n"
 			));
@@ -22,7 +22,7 @@ OOOTest(OOOOutputMock_Test)
 	/* 1 argument substitution in check */
 	OOOICall(iOutput, print, "Hello, World\n");
 	OOOICall(iOutput, print, "Numbers, 1, 2, 3\n");
-	OOOTestCheck(OOOCall(pOutput, check,
+	OOOCheck(OOOCall(pOutput, check,
 			"Hello, %s\n"
 			"Numbers, 1, 2, 3\n",
 			"World"
@@ -31,7 +31,7 @@ OOOTest(OOOOutputMock_Test)
 	/* multiple argument substitutions in check */
 	OOOICall(iOutput, print, "Hello, World\n");
 	OOOICall(iOutput, print, "Numbers, 1, 2, 3\n");
-	OOOTestCheck(OOOCall(pOutput, check,
+	OOOCheck(OOOCall(pOutput, check,
 			"Hello, %s\n"
 			"Numbers, %d, %d, %d\n",
 			"World",
@@ -42,7 +42,7 @@ OOOTest(OOOOutputMock_Test)
 #define TEST_MACRO(X, Y) (X + Y)
 	OOOICall(iOutput, print, "Hello, World\n");
 	OOOICall(iOutput, print, "Numbers, 1, 2, 3\n");
-	OOOTestCheck(OOOCall(pOutput, check,
+	OOOCheck(OOOCall(pOutput, check,
 			"Hello, %s\n"
 			"Numbers, %d, %d, %d\n",
 			"World",

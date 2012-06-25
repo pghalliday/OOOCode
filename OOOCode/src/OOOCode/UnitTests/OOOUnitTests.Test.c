@@ -147,7 +147,7 @@ OOOConstructorEnd
 
 #undef OOOClass
 
-OOOTest(OOOUnitTests_Test)
+OOOTest(OOOUnitTests)
 {
 	OOOOutputMock * pOutputMock = OOOConstruct(OOOOutputMock);
 	OOOUnitTestReporter * pReporter = OOOConstruct(OOOUnitTestReporter, OOOCast(OOOIOutput, pOutputMock));

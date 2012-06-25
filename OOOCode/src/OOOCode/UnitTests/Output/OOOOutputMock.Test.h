@@ -1,1 +1,1 @@
-OOOTest(OOOOutputMock_Test)
+OOOTest(OOOOutputMock)

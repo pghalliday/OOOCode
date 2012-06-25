@@ -1,1 +1,1 @@
-OOOTest(OOOUnitTests_Test)
+OOOTest(OOOUnitTests)

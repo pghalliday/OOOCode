@@ -6,13 +6,13 @@
 
 /* Declare the test classes */
 #define OOOTest(NAME) \
-	_OOODeclare(NAME) \
+	_OOODeclare(OOOPaste(OOOUnitTest_,NAME)) \
 		OOOImplements \
 			OOOImplement(OOOIUnitTest); \
-		_OOOImplementsEnd(NAME) \
+		_OOOImplementsEnd(OOOPaste(OOOUnitTest_,NAME)) \
 		OOOExports \
-		_OOOExportsEnd(NAME) \
-	_OOODeclareEnd(NAME)
+		_OOOExportsEnd(OOOPaste(OOOUnitTest_,NAME)) \
+	_OOODeclareEnd(OOOPaste(OOOUnitTest_,NAME))
 #include "OOOTests.h"
 #undef OOOTest
 
@@ -21,7 +21,7 @@ static void OOOUnitTestsRun(void)
 	OOOIUnitTest * aTests[] =
 	{
 		/* add the test instances */
-#define OOOTest(NAME) OOOCast(OOOIUnitTest, OOOConstruct(NAME)),
+#define OOOTest(NAME) OOOCast(OOOIUnitTest, OOOConstruct(OOOPaste(OOOUnitTest_,NAME))),
 #include "OOOTests.h"
 #undef OOOTest
 		NULL
