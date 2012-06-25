@@ -1,11 +1,11 @@
 #include "OOOUnitTestDefines.h"
 
-#include "OOOOutputMock.h"
+#include "OOOMockDebug.h"
 
-OOOTest(OOOOutputMock)
+OOOTest(OOOMockDebug)
 {
-	OOOOutputMock * pOutput = OOOConstruct(OOOOutputMock);
-	OOOIOutput * iOutput = OOOCast(OOOIOutput, pOutput);
+	OOOMockDebug * pOutput = OOOConstruct(OOOMockDebug);
+	OOOIDebug * iOutput = OOOCast(OOOIDebug, pOutput);
 
 	/* 1 print */
 	OOOICall(iOutput, print, "Hello, %s\n", "World");

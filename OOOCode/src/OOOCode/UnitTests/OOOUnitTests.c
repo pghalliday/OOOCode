@@ -3,7 +3,7 @@
 #define OOOClass OOOUnitTests
 
 OOOPrivateData
-	OOOUnitTestReporter * pReporter;
+	OOOIReporter * iReporter;
 	OOOIUnitTest ** aTests;
 OOOPrivateDataEnd
 
@@ -16,39 +16,39 @@ OOOMethod(void, run)
 	size_t uHeapAvailableAfter = 0;
 	OOOIUnitTest ** pTest = OOOF(aTests);
 
-	OOOCall(OOOF(pReporter), startReport);
+	OOOICall(OOOF(iReporter), startReport);
 
 	while (*pTest)
 	{
-		OOOCall(OOOF(pReporter), startTestReport, OOOICall(*pTest, getName));
+		OOOICall(OOOF(iReporter), startTestReport, OOOICall(*pTest, getName));
 
 		uHeapAvailableBefore = O_heap_available();
-		OOOICall(*pTest, run, OOOF(pReporter));
+		OOOICall(*pTest, run, OOOF(iReporter));
 		uHeapAvailableAfter = O_heap_available();
 
 		if (uHeapAvailableBefore > uHeapAvailableAfter)
 		{
-			OOOCall(OOOF(pReporter), memoryLeak, OOOICall(*pTest, getName), uHeapAvailableBefore - uHeapAvailableAfter);
+			OOOICall(OOOF(iReporter), memoryLeak, OOOICall(*pTest, getName), uHeapAvailableBefore - uHeapAvailableAfter);
 		}
 		else if (uHeapAvailableAfter > uHeapAvailableBefore)
 		{
-			OOOCall(OOOF(pReporter), memoryMagic, OOOICall(*pTest, getName), uHeapAvailableAfter - uHeapAvailableBefore);
+			OOOICall(OOOF(iReporter), memoryMagic, OOOICall(*pTest, getName), uHeapAvailableAfter - uHeapAvailableBefore);
 		}
 
-		OOOCall(OOOF(pReporter), endTestReport);
+		OOOICall(OOOF(iReporter), endTestReport);
 		pTest++;
 	}
-	OOOCall(OOOF(pReporter), endReport);
+	OOOICall(OOOF(iReporter), endReport);
 }
 OOOMethodEnd
 
-OOOConstructor(OOOUnitTestReporter * pReporter, OOOIUnitTest ** aTests)
+OOOConstructor(OOOIReporter * iReporter, OOOIUnitTest ** aTests)
 {
 	OOOMapMethods
 		OOOMethodMapping(run)
 	OOOMapMethodsEnd
 
-	OOOF(pReporter) = pReporter;
+	OOOF(iReporter) = iReporter;
 	OOOF(aTests) = aTests;
 }
 OOOConstructorEnd

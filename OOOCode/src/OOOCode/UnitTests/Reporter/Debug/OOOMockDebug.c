@@ -1,13 +1,13 @@
-#include "OOOOutputMock.h"
+#include "OOOMockDebug.h"
 #include "OOOCode.h"
 #include "stdarg.h"
 
-#define OOOOutputMock_TEMP_MAX_SIZE	4095
+#define OOOMockDebug_TEMP_MAX_SIZE	4095
 
-#define OOOClass OOOOutputMock
+#define OOOClass OOOMockDebug
 
 OOOPrivateData
-	char szTemp[OOOOutputMock_TEMP_MAX_SIZE + 1];
+	char szTemp[OOOMockDebug_TEMP_MAX_SIZE + 1];
 	char * szBuffer;
 OOOPrivateDataEnd
 
@@ -49,7 +49,7 @@ OOOMethod(void, print, char * szMessage, ...)
 	/* There is a fixed size buffer for formatting the
 	 * message - must ensure we haven't overrun it (no
 	 * nicer way of doing this as far as i know) */
-	assert(nMessageLength < OOOOutputMock_TEMP_MAX_SIZE);
+	assert(nMessageLength < OOOMockDebug_TEMP_MAX_SIZE);
 
 	OOOC(append, OOOF(szTemp));
 }
@@ -72,7 +72,7 @@ OOOMethod(bool, check, char * szCompare, ...)
 			/* There is a fixed size buffer for formatting the
 			 * message - must ensure we haven't overrun it (no
 			 * nicer way of doing this as far as i know) */
-			assert(nLength < OOOOutputMock_TEMP_MAX_SIZE);
+			assert(nLength < OOOMockDebug_TEMP_MAX_SIZE);
 
 			bCorrect = (O_strcmp(OOOF(szTemp), OOOF(szBuffer)) == 0);
 		}
@@ -89,7 +89,7 @@ OOOMethodEnd
 
 OOOConstructor()
 {
-	#define OOOInterface OOOIOutput
+	#define OOOInterface OOOIDebug
 	OOOMapVirtuals
 		OOOVirtualMapping(print)
 	OOOMapVirtualsEnd

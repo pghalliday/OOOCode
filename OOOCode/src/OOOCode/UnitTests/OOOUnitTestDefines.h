@@ -22,9 +22,9 @@
 	_OOODestructor(OOOPaste(OOOUnitTest_,NAME)) \
 	_OOODestructorEnd(OOOPaste(OOOUnitTest_,NAME)) \
 	\
-	static void OOOPaste(OOOPaste(OOOUnitTest_,NAME), _actuallyRun)(OOOPaste(OOOUnitTest_,NAME) * OOOThis, OOOUnitTestReporter * OOOReporter); \
-	_OOOMethod(OOOPaste(OOOUnitTest_,NAME), void, run, OOOUnitTestReporter * OOOReporter) \
-		_OOOPCall(OOOPaste(OOOUnitTest_,NAME), OOOThis, actuallyRun, OOOReporter); \
+	static void OOOPaste(OOOPaste(OOOUnitTest_,NAME), _actuallyRun)(OOOPaste(OOOUnitTest_,NAME) * OOOThis, OOOIReporter * iOOOReporter); \
+	_OOOMethod(OOOPaste(OOOUnitTest_,NAME), void, run, OOOIReporter * iOOOReporter) \
+		_OOOPCall(OOOPaste(OOOUnitTest_,NAME), OOOThis, actuallyRun, iOOOReporter); \
 	OOOMethodEnd \
 	\
 	_OOOMethod(OOOPaste(OOOUnitTest_,NAME), char *, getName) \
@@ -39,20 +39,20 @@
 		_OOOMapVirtualsEnd(OOOIUnitTest) \
 	OOOConstructorEnd \
 	\
-	static void OOOPaste(OOOPaste(OOOUnitTest_,NAME), _actuallyRun)(OOOPaste(OOOUnitTest_,NAME) * OOOThis, OOOUnitTestReporter * OOOReporter)
+	static void OOOPaste(OOOPaste(OOOUnitTest_,NAME), _actuallyRun)(OOOPaste(OOOUnitTest_,NAME) * OOOThis, OOOIReporter * iOOOReporter)
 
-#define OOOInfo0(MESSAGE, ARGS...)	OOOCall(OOOReporter, log, OOOUnitTestReporter_LogLevel_Information, __FILE__, __LINE__, MESSAGE, ARGS)
-#define OOOInfo1(MESSAGE, ARGS...)	OOOCall(OOOReporter, log, OOOUnitTestReporter_LogLevel_Information, __FILE__, __LINE__, MESSAGE)
+#define OOOInfo0(MESSAGE, ARGS...)	OOOICall(iOOOReporter, log, OOOIReporter_LogLevel_Information, __FILE__, __LINE__, MESSAGE, ARGS)
+#define OOOInfo1(MESSAGE, ARGS...)	OOOICall(iOOOReporter, log, OOOIReporter_LogLevel_Information, __FILE__, __LINE__, MESSAGE)
 #define OOOInfo(MESSAGE, ARGS...)	OOOPaste(OOOInfo, OOOIsEmpty(ARGS))(MESSAGE, ARGS...)
 
-#define OOOWarning0(MESSAGE, ARGS...)	OOOCall(OOOReporter, log, OOOUnitTestReporter_LogLevel_Warning, __FILE__, __LINE__, MESSAGE, ARGS)
-#define OOOWarning1(MESSAGE, ARGS...)	OOOCall(OOOReporter, log, OOOUnitTestReporter_LogLevel_Warning, __FILE__, __LINE__, MESSAGE)
+#define OOOWarning0(MESSAGE, ARGS...)	OOOICall(iOOOReporter, log, OOOIReporter_LogLevel_Warning, __FILE__, __LINE__, MESSAGE, ARGS)
+#define OOOWarning1(MESSAGE, ARGS...)	OOOICall(iOOOReporter, log, OOOIReporter_LogLevel_Warning, __FILE__, __LINE__, MESSAGE)
 #define OOOWarning(MESSAGE, ARGS...)	OOOPaste(OOOWarning, OOOIsEmpty(ARGS))(MESSAGE, ARGS...)
 
-#define OOOError0(MESSAGE, ARGS...)	OOOCall(OOOReporter, log, OOOUnitTestReporter_LogLevel_Error, __FILE__, __LINE__, MESSAGE, ARGS)
-#define OOOError1(MESSAGE, ARGS...)	OOOCall(OOOReporter, log, OOOUnitTestReporter_LogLevel_Error, __FILE__, __LINE__, MESSAGE)
+#define OOOError0(MESSAGE, ARGS...)	OOOICall(iOOOReporter, log, OOOIReporter_LogLevel_Error, __FILE__, __LINE__, MESSAGE, ARGS)
+#define OOOError1(MESSAGE, ARGS...)	OOOICall(iOOOReporter, log, OOOIReporter_LogLevel_Error, __FILE__, __LINE__, MESSAGE)
 #define OOOError(MESSAGE, ARGS...)	OOOPaste(OOOError, OOOIsEmpty(ARGS))(MESSAGE, ARGS...)
 
-#define OOOCheck(CONDITION)	(OOOCall(OOOReporter, check, (CONDITION), __FILE__, __LINE__, OOOQuote(CONDITION)))
+#define OOOCheck(CONDITION)	(OOOICall(iOOOReporter, check, (CONDITION), __FILE__, __LINE__, OOOQuote(CONDITION)))
 
 #endif

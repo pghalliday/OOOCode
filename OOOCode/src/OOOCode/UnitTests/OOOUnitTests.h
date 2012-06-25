@@ -2,11 +2,11 @@
 #define OOOUnitTests_H
 
 #include "OOOCode.h"
-#include "OOOUnitTestReporter.h"
+#include "OOOIReporter.h"
 #include "OOOIUnitTest.h"
 
 #define OOOClass OOOUnitTests
-OOODeclare(OOOUnitTestReporter * pReporter, OOOIUnitTest ** aTests)
+OOODeclare(OOOIReporter * iReporter, OOOIUnitTest ** aTests)
 	OOOImplements
 	OOOImplementsEnd
 	OOOExports

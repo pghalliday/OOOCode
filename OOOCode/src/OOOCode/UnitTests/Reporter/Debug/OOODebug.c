@@ -1,13 +1,13 @@
-#include "OOOOutputDebug.h"
+#include "OOODebug.h"
 #include "OOOCode.h"
 #include "stdarg.h"
 
-#define OOOOutputDebug_LOG_MESSAGE_MAX_SIZE	4095
+#define OOODebug_LOG_MESSAGE_MAX_SIZE	4095
 
-#define OOOClass OOOOutputDebug
+#define OOOClass OOODebug
 
 OOOPrivateData
-	char szLogMessage[OOOOutputDebug_LOG_MESSAGE_MAX_SIZE + 1];
+	char szLogMessage[OOODebug_LOG_MESSAGE_MAX_SIZE + 1];
 OOOPrivateDataEnd
 
 OOODestructor
@@ -27,7 +27,7 @@ OOOMethod(void, print, char * szMessage, ...)
 	/* There is a fixed size buffer for formatting the
 	 * message - must ensure we haven't overrun it (no
 	 * nicer way of doing this as far as i know) */
-	assert(nMessageLength < OOOOutputDebug_LOG_MESSAGE_MAX_SIZE);
+	assert(nMessageLength < OOODebug_LOG_MESSAGE_MAX_SIZE);
 
 	O_debug(OOOF(szLogMessage));
 }
@@ -35,7 +35,7 @@ OOOMethodEnd
 
 OOOConstructor()
 {
-	#define OOOInterface OOOIOutput
+	#define OOOInterface OOOIDebug
 	OOOMapVirtuals
 		OOOVirtualMapping(print)
 	OOOMapVirtualsEnd

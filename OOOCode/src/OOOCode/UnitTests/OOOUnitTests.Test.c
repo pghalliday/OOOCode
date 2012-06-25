@@ -1,6 +1,7 @@
 #include "OOOUnitTestDefines.h"
 
-#include "OOOOutputMock.h"
+#include "OOOMockDebug.h"
+#include "OOODebugReporter.h"
 #include "OOOUnitTests.h"
 
 #define OOOClass ReportTest
@@ -21,13 +22,13 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(void, run, OOOUnitTestReporter * pReporter)
+OOOMethod(void, run, OOOIReporter * iReporter)
 {
-	OOOCall(pReporter, log, OOOUnitTestReporter_LogLevel_Information, "My File", 10, "Test Information: %s: %d", "Hello", 55);
-	OOOCall(pReporter, log, OOOUnitTestReporter_LogLevel_Warning, "My File", 10, "Test Information: %s: %d", "Hello", 55);
-	OOOCall(pReporter, log, OOOUnitTestReporter_LogLevel_Error, "My File", 10, "Test Information: %s: %d", "Hello", 55);
-	OOOCall(pReporter, check, TRUE, "My File", 10, "TRUE");
-	OOOCall(pReporter, check, FALSE, "My File", 10, "FALSE");
+	OOOICall(iReporter, log, OOOIReporter_LogLevel_Information, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	OOOICall(iReporter, log, OOOIReporter_LogLevel_Warning, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	OOOICall(iReporter, log, OOOIReporter_LogLevel_Error, "My File", 10, "Test Information: %s: %d", "Hello", 55);
+	OOOICall(iReporter, check, TRUE, "My File", 10, "TRUE");
+	OOOICall(iReporter, check, FALSE, "My File", 10, "FALSE");
 }
 OOOMethodEnd
 
@@ -74,7 +75,7 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(void, run, OOOUnitTestReporter * pReporter)
+OOOMethod(void, run, OOOIReporter * iReporter)
 {
 	OOOF(pMemoryLeak) = O_malloc(10000);
 }
@@ -119,7 +120,7 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(void, run, OOOUnitTestReporter * pReporter)
+OOOMethod(void, run, OOOIReporter * iReporter)
 {
 	O_free(OOOF(pMemoryMagic));
 }
@@ -149,8 +150,8 @@ OOOConstructorEnd
 
 OOOTest(OOOUnitTests)
 {
-	OOOOutputMock * pOutputMock = OOOConstruct(OOOOutputMock);
-	OOOUnitTestReporter * pReporter = OOOConstruct(OOOUnitTestReporter, OOOCast(OOOIOutput, pOutputMock));
+	OOOMockDebug * pMockDebug = OOOConstruct(OOOMockDebug);
+	OOODebugReporter * pReporter = OOOConstruct(OOODebugReporter, OOOCast(OOOIDebug, pMockDebug));
 	ReportTest * pReportTest = OOOConstruct(ReportTest);
 	MemoryLeakTest * pMemoryLeakTest = OOOConstruct(MemoryLeakTest);
 	void * pMemoryMagic = O_malloc(10000);
@@ -162,11 +163,11 @@ OOOTest(OOOUnitTests)
 		OOOCast(OOOIUnitTest, pMemoryMagicTest),
 		NULL
 	};
-	OOOUnitTests * pTests = OOOConstruct(OOOUnitTests, pReporter, aTests);
+	OOOUnitTests * pTests = OOOConstruct(OOOUnitTests, OOOCast(OOOIReporter, pReporter), aTests);
 
 	OOOCall(pTests, run);
 
-	assert(OOOCall(pOutputMock, check,
+	assert(OOOCall(pMockDebug, check,
 			"BEGIN_UNIT_TEST_OUTPUT\n<?xml version \"1.0\"?><REPORT>\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n<TEST name=\"My Test\">\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n<INFORMATION file=\"My File\" line=\"10\">Test Information: Hello: 55</INFORMATION>\nEND_UNIT_TEST_OUTPUT\n"
@@ -196,6 +197,6 @@ OOOTest(OOOUnitTests)
 	OOODestroy(pMemoryLeakTest);
 	OOODestroy(pMemoryMagicTest);
 	OOODestroy(pReporter);
-	OOODestroy(pOutputMock);
+	OOODestroy(pMockDebug);
 }
 

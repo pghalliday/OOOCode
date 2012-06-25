@@ -4,7 +4,8 @@
 #include "OOOPastingAndQuoting.h"
 
 #include "OOOUnitTests.h"
-#include "OOOOutputDebug.h"
+#include "OOODebug.h"
+#include "OOODebugReporter.h"
 
 /* Declare the test classes */
 #define OOOTest(NAME) \
@@ -29,13 +30,13 @@ static void OOOUnitTestsRun(void)
 		NULL
 	};
 	OOOIUnitTest ** pTest = aTests;
-	OOOOutputDebug * pOutput = OOOConstruct(OOOOutputDebug);
-	OOOUnitTestReporter * pReporter = OOOConstruct(OOOUnitTestReporter, OOOCast(OOOIOutput, pOutput));
-	OOOUnitTests * pTests = OOOConstruct(OOOUnitTests, pReporter, aTests);
+	OOODebug * pDebug = OOOConstruct(OOODebug);
+	OOODebugReporter * pReporter = OOOConstruct(OOODebugReporter, OOOCast(OOOIDebug, pDebug));
+	OOOUnitTests * pTests = OOOConstruct(OOOUnitTests, OOOCast(OOOIReporter, pReporter), aTests);
 	OOOCall(pTests, run);
 	OOODestroy(pTests);
 	OOODestroy(pReporter);
-	OOODestroy(pOutput);
+	OOODestroy(pDebug);
 
 	/* Destroy the test instances */
 	while (*pTest)

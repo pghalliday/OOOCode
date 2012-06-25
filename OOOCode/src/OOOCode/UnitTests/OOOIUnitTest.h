@@ -2,11 +2,11 @@
 #define OOOIUnitTest_H
 
 #include "OOOCode.h"
-#include "OOOUnitTestReporter.h"
+#include "OOOIReporter.h"
 
 #define OOOInterface OOOIUnitTest
 OOOVirtuals
-	OOOVirtual(void, run, OOOUnitTestReporter * pReporter);
+	OOOVirtual(void, run, OOOIReporter * iReporter);
 	OOOVirtual(char *, getName);
 	OOOVirtual(void, destroy);
 OOOVirtualsEnd
