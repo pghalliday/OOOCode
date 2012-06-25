@@ -1,50 +1,89 @@
-Notes on the safe implementation of macros
-========================================== 
+Macro pasting
+-------------
 
-NB. This is nonsense! Don't trust the information here
+The C preprocessor has a handy (if not essential) operator for pasting 2 tokens together, ##. I use it all over the place in my OOOCode project to generate class and function names, etc using macros. It can be used like this...
 
-Variadic macros
----------------
+  #define PASTE(ARG1, ARG2) ARG1 ## ARG2
 
-  #define MY_MACRO(FORMAT, ARGS...) O_debug(FORMAT , ##ARGS)
+  PASTE(Hello, World)();
 
-In the above code the ## is necessary so that if no extra arguments are supplied
-the preceding comma is removed.
+  /* expands to */
+  HelloWorld();
 
-Also note that there is a space before the comma, this is necessary or the ##
-does not work.
+Now consider the following...
 
-  #define MY_MACRO(FUNCTION_NAME, ARGS...) FUNCTION_NAME(ARGS)
+  #define PASTE(ARG1, ARG2) ARG1 ## ARG2
 
-In the above code we could still use the ## but it gives an annoying warning
-as there is no valid token before it for removal so we shouldn't use it
+  #define HELLO Hello
+  PASTE(HELLO, World)();
 
-Argument passing
-----------------
+  /* expands to */
+  HELLOWorld();
 
-In order to support #defined values being passed into macros the following
-construction is used:
+In this second example I have passed a macro in as an argument to the PASTE macro and as a result it does not get expanded. In order to fix this it is necessary to add a level of indirection...
 
-  #define _MY_MACRO(FORMAT, ARGS...) O_debug(FORMAT , ##ARGS)
-  #define MY_MACRO(FORMAT, ARGS...) _MY_MACRO(FORMAT , ##ARGS)
+  #define _PASTE(ARG1, ARG2) ARG1 ## ARG2
+  #define PASTE(ARG1, ARG2) PASTE(ARG1, ARG2)
 
-This extra level of indirection allows calls like this:
+  #define HELLO Hello
+  PASTE(HELLO, World)();
 
-  #define FORMAT	"Hello, %s!\n"
-  MY_MACRO(FORMAT, "world");
+  /* expands to */
+  HelloWorld();
+  
+As an aside, this same problem (and solution) occurs with the quoting operator, #, too.
 
-Without the indirection the above would not compile as FORMAT would be used
-in the O_debug call without expansion (and it is not a valid string or variable)
+Variadic macros and swallowing extra commas
+-------------------------------------------
 
-Sometimes we need another level of indirection as in the following example
+Now it gets interesting as the pasting operator can also be used in variadic macros to swallow commas when no arguments are provided...
 
-  #define __MY_MACRO(FORMAT, ARGS...) O_debug(FORMAT , ##ARGS)
-  #define _MY_MACRO(FORMAT, ARGS...) __MY_MACRO(FORMAT , ##ARGS)
-  #define MY_MACRO(ARGS...) _MY_MACRO(STANDARD_FORMAT , ##ARGS)
+  #define CALLONE(FUNCTION, ARGS...) FUNCTION(1 , ##ARGS)
+  CALLONE(myFunc);
 
-We may do this if we want to have a standard parameter defined that can then
-be used in multiple macros and/or macro calls as in the following example
+  /* expands to */
+  myFunc(1);
 
-  #define STANDARD_FORMAT	"Hello, %s!\n"
-  MY_MACRO("world");
-  MY_MACRO("other worlds");
+Handy, yeah? Well sort of. The problem is that this still exhibits the same problems as above when macros are used as arguments...
+
+Macro pasting variadic hell
+---------------------------
+
+  #define CALLONE(FUNCTION, ARGS...) FUNCTION(1 , ##ARGS)
+  CALLONE(add, CALLONE(addOne));
+
+  /* expands to */
+  add(1, CALLONE(addOne));
+
+The above code does not compile as the second macro call does not get expanded. So I tried this...
+
+  #define _CALLONE(FUNCTION, ARGS...) FUNCTION(1 , ##ARGS)
+  #define CALLONE(FUNCTION, ARGS...) _CALLONE(FUNCTION, ARGS)
+  CALLONE(add, CALLONE(addOne));
+
+  /* expands to */
+  add(1, addOne(1, ));
+
+I'm not sure if this would work in other environments but the C Preprocessor that comes with the OpenTV IDE doesn't swallow the comma in this case.
+
+This gave me a big problem. I can either support macros as arguments or zero length argument lists... but not both :(
+
+Believe me I tried a great many more constructions involving the ## operator and various indirections but to no avail. It just wasn't happening. Eventually I came across a different solution involving detecting empty argument lists. Doing this is not simple and definitely not something I want to get into here, but just know that in the following example the ISEMPTY macro expands to 1 if the argument list supplied is empty or 0 if not...
+
+  #define ISEMPTY(ARGS...) /* Too complicated to put here, see http://gustedt.wordpress.com/2010/06/08/detect-empty-macro-arguments/ */
+
+  #define _PASTE(ARG1, ARG2) ARG1 ## ARG2
+  #define PASTE(ARG1, ARG2) PASTE(ARG1, ARG2)
+
+  #define CALLONE0(FUNCTION, ARGS...) FUNCTION(1, ARGS)
+  #define CALLONE1(FUNCTION, ARGS...) FUNCTION(1)
+  #define CALLONE(FUNCTION, ARGS...) PASTE(CALLONE,ISEMPTY(ARGS))(FUNCTION, ARGS)
+
+  CALLONE(add, CALLONE(addOne));
+
+  /* expands to */
+  add(1, addOne(1));
+
+For the ISEMPTY macro stuff, special thanks have to go to Jens Gustedt and this article:
+
+http://gustedt.wordpress.com/2010/06/08/detect-empty-macro-arguments/
