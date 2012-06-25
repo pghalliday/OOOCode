@@ -1,8 +1,6 @@
 ToDo
 ----
 
-OOOEmptyArguments.Test
-OOOPastingAndQuoting.Test
 OOOCode.Test - Write lots of tests for calling conventions and macro use focusing on:
 - empty argument lists
 - using macros in macro arguments

@@ -51,5 +51,7 @@ OOOTest(OOOCode)
 	Test * pTest = OOOConstruct(Test, 5);
 	OOOCheck(OOOCall(pTest, getValue) == 5);
 	OOOCheck(OOOICall(OOOCast(ITest, pTest), addSome, 6) == 11);
+	/* let's see what happens when we pass a macro into a variadic macro's argument list */
+	OOOCheck(OOOICall(OOOCast(ITest, pTest), addSome, OOOICall(OOOCast(ITest, pTest), addSome, 6)) == 16);
 	OOODestroy(pTest);
 }
