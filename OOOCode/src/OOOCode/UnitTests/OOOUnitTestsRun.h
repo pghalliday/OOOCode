@@ -19,7 +19,7 @@
 #include "OOOTests.h"
 #undef OOOTest
 
-static void OOOUnitTestsRun(void)
+static void OOOUnitTestsRun(OOOIReporter * iReporter)
 {
 	OOOIUnitTest * aTests[] =
 	{
@@ -30,13 +30,9 @@ static void OOOUnitTestsRun(void)
 		NULL
 	};
 	OOOIUnitTest ** pTest = aTests;
-	OOODebug * pDebug = OOOConstruct(OOODebug);
-	OOODebugReporter * pReporter = OOOConstruct(OOODebugReporter, OOOCast(OOOIDebug, pDebug));
-	OOOUnitTests * pTests = OOOConstruct(OOOUnitTests, OOOCast(OOOIReporter, pReporter), aTests);
+	OOOUnitTests * pTests = OOOConstruct(OOOUnitTests, iReporter, aTests);
 	OOOCall(pTests, run);
 	OOODestroy(pTests);
-	OOODestroy(pReporter);
-	OOODestroy(pDebug);
 
 	/* Destroy the test instances */
 	while (*pTest)

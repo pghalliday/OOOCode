@@ -5,7 +5,11 @@
 void main(void)
 {
 	size_t uMemory = O_heap_available();
-	OOOUnitTestsRun();
+	OOODebug * pDebug = OOOConstruct(OOODebug);
+	OOODebugReporter * pReporter = OOOConstruct(OOODebugReporter, OOOCast(OOOIDebug, pDebug));
+	OOOUnitTestsRun(OOOCast(OOOIReporter, pReporter));
+	OOODestroy(pReporter);
+	OOODestroy(pDebug);
 	assert(O_heap_available() == uMemory);
 
 	/* Stick around so the VSTB does not exit and we know we ran everything */
