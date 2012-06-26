@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="OOOCode"
+            id="com.pghalliday.ooocode">
+      </category>
+      <wizard
+            name="Class"
+            icon="icons/sample.gif"
+            category="com.pghalliday.ooocode"
+            class="com.pghalliday.ooocode.wizards.ClassWizard"
+            id="com.pghalliday.ooocode.wizards.ClassWizard">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            id="com.pghalliday.ooocode.contribution1">
+         <menu
+               label="OOOCode"
+               path="additions"
+               id="com.pghalliday.ooocode.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="Generate Class"
+               class="com.pghalliday.ooocode.popup.actions.GenerateClass"
+               menubarPath="com.pghalliday.ooocode.menu1/group1"
+               enablesFor="1"
+               id="com.pghalliday.ooocode.newAction">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>
