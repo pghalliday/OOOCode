@@ -21,6 +21,18 @@ OOOMethod(int, getMyField)
 }
 OOOMethodEnd
 
+OOOMethod(MyClass *, copy)
+{
+	return OOOConstruct(MyClass, OOOF(nMyField));
+}
+OOOMethodEnd
+
+OOOMethod(bool, isEqual, MyClass * pCompare)
+{
+	return (OOOF(nMyField) == OOOPCall(pCompare, getMyField));
+}
+OOOMethodEnd
+
 /* another sample method */
 OOOMethod(int, getData)
 {
@@ -40,7 +52,9 @@ OOOConstructor(int nMyField)
 
 	/* export mapping */
 	OOOMapMethods
-		OOOMethodMapping(getMyField)
+		OOOMethodMapping(getMyField),
+		OOOMethodMapping(copy),
+		OOOMethodMapping(isEqual)
 	OOOMapMethodsEnd
 
 	/* initialise a private field */

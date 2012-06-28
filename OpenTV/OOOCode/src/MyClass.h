@@ -11,6 +11,8 @@ OOODeclare(int nMyField)
 	OOOImplementsEnd
 	OOOExports
 		OOOExport(int, getMyField);
+		OOOExport(MyClass *, copy);
+		OOOExport(bool, isEqual, MyClass * pCompare);
 	OOOExportsEnd
 OOODeclareEnd
 #undef OOOClass
