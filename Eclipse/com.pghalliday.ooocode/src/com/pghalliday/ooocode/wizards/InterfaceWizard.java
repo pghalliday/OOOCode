@@ -15,11 +15,8 @@ import java.io.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
 
-import com.pghalliday.ooocode.ClassHeader;
 import com.pghalliday.ooocode.CIdentifier;
-import com.pghalliday.ooocode.ClassSource;
-import com.pghalliday.ooocode.UnitTestHeader;
-import com.pghalliday.ooocode.UnitTestSource;
+import com.pghalliday.ooocode.InterfaceHeader;
 
 /**
  * This is a sample new wizard. Its role is to create a new file 
@@ -32,14 +29,14 @@ import com.pghalliday.ooocode.UnitTestSource;
  * be able to open it.
  */
 
-public class ClassWizard extends Wizard implements INewWizard {
-	private ClassWizardPage page;
+public class InterfaceWizard extends Wizard implements INewWizard {
+	private InterfaceWizardPage page;
 	private ISelection selection;
 
 	/**
 	 * Constructor for ClassWizard.
 	 */
-	public ClassWizard() {
+	public InterfaceWizard() {
 		super();
 		setNeedsProgressMonitor(true);
 	}
@@ -49,7 +46,7 @@ public class ClassWizard extends Wizard implements INewWizard {
 	 */
 
 	public void addPages() {
-		page = new ClassWizardPage(selection);
+		page = new InterfaceWizardPage(selection);
 		addPage(page);
 	}
 
@@ -60,11 +57,11 @@ public class ClassWizard extends Wizard implements INewWizard {
 	 */
 	public boolean performFinish() {
 		final String containerName = page.getContainerName();
-		final CIdentifier className = page.getClassName();
+		final CIdentifier interfaceName = page.getInterfaceName();
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				try {
-					doFinish(containerName, className.getName(), monitor);
+					doFinish(containerName, interfaceName.getName(), monitor);
 				} catch (CoreException e) {
 					throw new InvocationTargetException(e);
 				} finally {
@@ -92,28 +89,19 @@ public class ClassWizard extends Wizard implements INewWizard {
 
 	private void doFinish(
 		String containerName,
-		String className,
+		String interfaceName,
 		IProgressMonitor monitor)
 		throws CoreException {
 		// create a sample file
-		monitor.beginTask("Creating " + className, 2);
+		monitor.beginTask("Creating " + interfaceName, 2);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
 		if (!resource.exists() || !(resource instanceof IContainer)) {
 			throwCoreException("Container \"" + containerName + "\" does not exist.");
 		}
 		IContainer container = (IContainer) resource;
-		ClassHeader classHeader = new ClassHeader(className);
-		createFile(className.concat(".h"), classHeader.getContents(), monitor, container);
-		monitor.worked(1);
-		ClassSource classSource = new ClassSource(className);
-		createFile(className.concat(".c"), classSource.getContents(), monitor, container);
-		monitor.worked(1);
-		UnitTestHeader unitTestHeader = new UnitTestHeader(className);
-		createFile(className.concat(".Test.h"), unitTestHeader.getContents(), monitor, container);
-		monitor.worked(1);
-		UnitTestSource unitTestSource = new UnitTestSource(className);
-		final IFile unitTestSourceFile = createFile(className.concat(".Test.c"), unitTestSource.getContents(), monitor, container);
+		InterfaceHeader interfaceHeader = new InterfaceHeader(interfaceName);
+		final IFile interfaceHeaderFile = createFile(interfaceName.concat(".h"), interfaceHeader.getContents(), monitor, container);
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing...");
 		getShell().getDisplay().asyncExec(new Runnable() {
@@ -121,7 +109,7 @@ public class ClassWizard extends Wizard implements INewWizard {
 				IWorkbenchPage page =
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
-					IDE.openEditor(page, unitTestSourceFile, true);
+					IDE.openEditor(page, interfaceHeaderFile, true);
 				} catch (PartInitException e) {
 				}
 			}

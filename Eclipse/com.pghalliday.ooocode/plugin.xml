@@ -15,26 +15,41 @@
             class="com.pghalliday.ooocode.wizards.ClassWizard"
             id="com.pghalliday.ooocode.wizards.ClassWizard">
       </wizard>
+      <wizard
+            name="Interface"
+            icon="icons/sample.gif"
+            category="com.pghalliday.ooocode"
+            class="com.pghalliday.ooocode.wizards.InterfaceWizard"
+            id="com.pghalliday.ooocode.wizards.InterfaceWizard">
+      </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
-            objectClass="org.eclipse.core.resources.IFile"
-            id="com.pghalliday.ooocode.contribution1">
+            objectClass="org.eclipse.ui.IEditorInput"
+            id="com.pghalliday.ooocode.editorMenuContribution"
+            nameFilter="*.*">
          <menu
                label="OOOCode"
                path="additions"
-               id="com.pghalliday.ooocode.menu1">
+               id="com.pghalliday.ooocode.editorMenuContribution.menu">
             <separator
-                  name="group1">
+                  name="generators">
             </separator>
          </menu>
          <action
                label="Generate Class"
                class="com.pghalliday.ooocode.popup.actions.GenerateClass"
-               menubarPath="com.pghalliday.ooocode.menu1/group1"
+               menubarPath="com.pghalliday.ooocode.editorMenuContribution.menu/generators"
                enablesFor="1"
-               id="com.pghalliday.ooocode.newAction">
+               id="com.pghalliday.ooocode.popup.actions.GenerateClass">
+         </action>
+         <action
+               label="Generate Interface"
+               class="com.pghalliday.ooocode.popup.actions.GenerateInterface"
+               menubarPath="com.pghalliday.ooocode.editorMenuContribution.menu/generators"
+               enablesFor="1"
+               id="com.pghalliday.ooocode.popup.actions.GenerateInterface">
          </action>
       </objectContribution>
    </extension>

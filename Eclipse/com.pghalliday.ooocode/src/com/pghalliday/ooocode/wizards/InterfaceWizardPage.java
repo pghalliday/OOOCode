@@ -28,7 +28,7 @@ import com.pghalliday.ooocode.CIdentifier;
  * OR with the extension that matches the expected one (c).
  */
 
-public class ClassWizardPage extends WizardPage {
+public class InterfaceWizardPage extends WizardPage {
 	private Text containerText;
 
 	private Text nameText;
@@ -40,10 +40,10 @@ public class ClassWizardPage extends WizardPage {
 	 * 
 	 * @param pageName
 	 */
-	public ClassWizardPage(ISelection selection) {
+	public InterfaceWizardPage(ISelection selection) {
 		super("wizardPage");
-		setTitle("OOOCode Class");
-		setDescription("This wizard creates a new OOOCode class comprising of a header and source plus a stub unit test header and source");
+		setTitle("OOOCode Interface");
+		setDescription("This wizard creates a new OOOCode interface header");
 		this.selection = selection;
 	}
 
@@ -76,7 +76,7 @@ public class ClassWizardPage extends WizardPage {
 			}
 		});
 		label = new Label(container, SWT.NULL);
-		label.setText("&Class name:");
+		label.setText("&Interface name:");
 
 		nameText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -111,7 +111,7 @@ public class ClassWizardPage extends WizardPage {
 				containerText.setText(container.getFullPath().toString());
 			}
 		}
-		nameText.setText("NewClass");
+		nameText.setText("NewInterface");
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class ClassWizardPage extends WizardPage {
 	private void dialogChanged() {
 		IResource container = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(getContainerName()));
-		CIdentifier className = getClassName();
+		CIdentifier interfaceName = getInterfaceName();
 
 		if (getContainerName().length() == 0) {
 			updateStatus("File container must be specified");
@@ -153,8 +153,8 @@ public class ClassWizardPage extends WizardPage {
 			updateStatus("Project must be writable");
 			return;
 		}
-		if (!className.isValid()) {
-			updateStatus(className.getError());
+		if (!interfaceName.isValid()) {
+			updateStatus(interfaceName.getError());
 			return;
 		}
 		updateStatus(null);
@@ -169,7 +169,7 @@ public class ClassWizardPage extends WizardPage {
 		return containerText.getText();
 	}
 
-	public CIdentifier getClassName() {
+	public CIdentifier getInterfaceName() {
 		return new CIdentifier(nameText.getText());
 	}
 }
