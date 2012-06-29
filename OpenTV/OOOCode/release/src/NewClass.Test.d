@@ -7,4 +7,5 @@ src/NewClass.Test.d: ../src/NewClass.Test.c \
   ../src/OOOCode/OOOCode_ClassImplementation.h \
   C:/OpenTV/SDKSuiteC2.2/SDK/include/opentv.h \
   C:/OpenTV/SDKSuiteC2.2/SDK/include/assert.h \
-  ../src/OOOCode/UnitTests/Reporter/OOOIReporter.h ../src/NewClass.h
+  ../src/OOOCode/UnitTests/Reporter/OOOIReporter.h ../src/NewClass.h \
+  ../src/NewInterface.h

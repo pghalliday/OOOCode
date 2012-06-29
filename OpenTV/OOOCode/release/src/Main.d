@@ -16,4 +16,4 @@ src/Main.d: ../src/Main.c C:/OpenTV/SDKSuiteC2.2/SDK/include/opentv.h \
   ../src/OOOCode/UnitTests/Reporter/Debug/OOOMockDebug.Test.h \
   ../src/OOOCode/Utilities/OOOEmptyArguments.Test.h \
   ../src/OOOCode/Utilities/OOOPastingAndQuoting.Test.h \
-  ../src/OOOCode/OOOCode.Test.h ../src/NewClass.Test.h
+  ../src/OOOCode/OOOCode.Test.h

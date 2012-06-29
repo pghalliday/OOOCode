@@ -2,7 +2,7 @@ ToDo
 ----
 
 Implement an eclipse plugin to make TDD in OOOCode easy as pie :)
-- fix the container in class and inteface wizards
+- fix the container in class and interface wizards
 - add more options to wizards to define methods, constructor args and fields
 - split unit test wizard from class wizard to enable real test driven development
 - implement name refactoring popup
@@ -12,6 +12,7 @@ Implement an eclipse plugin to make TDD in OOOCode easy as pie :)
 - add method popup
 - add interface popup
 - add field popup
+- move templates into eclipse templates
 
 Update the README with usage notes
 
