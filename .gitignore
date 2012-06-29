@@ -3,7 +3,7 @@
 #################
 
 *.pydevproject
-# actually i do want the .project file in GIT otherwise people can't import the projects into the IDE
+# actually i do want the .project file in GIT otherwise people can't import the projects into the IDE!
 #.project
 .metadata
 bin/**
@@ -14,7 +14,8 @@ tmp/**/*
 *.swp
 *~.nib
 local.properties
-.classpath
+# actually i do want the classpath file too, otherwise when i import the project on another machine all the packages are wrong!
+#.classpath
 .settings/
 .loadpath
 
@@ -25,7 +26,7 @@ local.properties
 *.launch
 
 # CDT-specific
-# actually i do want the .cproject file in GIT otherwise people can't import the projects into the IDE
+# actually i do want the .cproject file in GIT otherwise people can't import the projects into the IDE!
 #.cproject
 
 # PDT-specific
