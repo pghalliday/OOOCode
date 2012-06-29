@@ -5,13 +5,13 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/Main.c \
-../src/OrlinsClass.Test.c \
-../src/OrlinsClass.c 
+../src/NewClass.Test.c \
+../src/NewClass.c 
 
 OBJS += \
 ./src/Main.o \
-./src/OrlinsClass.Test.o \
-./src/OrlinsClass.o 
+./src/NewClass.Test.o \
+./src/NewClass.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

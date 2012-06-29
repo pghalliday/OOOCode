@@ -4,5 +4,4 @@
 #include "OOOEmptyArguments.Test.h"
 #include "OOOPastingAndQuoting.Test.h"
 #include "OOOCode.Test.h"
-#include "OrlinsClass.Test.h"
 

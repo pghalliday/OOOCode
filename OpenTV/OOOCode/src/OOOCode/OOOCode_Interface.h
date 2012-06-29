@@ -26,7 +26,7 @@
 	}; \
 	struct _##INTERFACE_NAME##_VTable \
 	{ \
-		void (* destroy)(void * OOOThis);
+		void (* idestroy)(void * OOOThis);
 #define _OOOVirtuals(INTERFACE_NAME) __OOOVirtuals(INTERFACE_NAME)
 #define OOOVirtuals _OOOVirtuals(OOOInterface)
 
