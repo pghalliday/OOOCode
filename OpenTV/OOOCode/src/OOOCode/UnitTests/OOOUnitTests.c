@@ -23,7 +23,7 @@ OOOMethod(void, run)
 		OOOICall(OOOF(iReporter), startTestReport, OOOICall(*pTest, getName));
 
 		uHeapAvailableBefore = O_heap_available();
-		OOOICall(*pTest, run, OOOF(iReporter));
+		OOOICall(*pTest, run);
 		uHeapAvailableAfter = O_heap_available();
 
 		if (uHeapAvailableBefore > uHeapAvailableAfter)

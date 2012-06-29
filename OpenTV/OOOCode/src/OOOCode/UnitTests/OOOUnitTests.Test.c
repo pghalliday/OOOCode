@@ -22,13 +22,8 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(void, run, OOOIReporter * iReporter)
+OOOMethod(void, run)
 {
-	OOOICall(iReporter, log, OOOIReporter_LogLevel_Information, "My File", 10, "Test Information: %s: %d", "Hello", 55);
-	OOOICall(iReporter, log, OOOIReporter_LogLevel_Warning, "My File", 10, "Test Information: %s: %d", "Hello", 55);
-	OOOICall(iReporter, log, OOOIReporter_LogLevel_Error, "My File", 10, "Test Information: %s: %d", "Hello", 55);
-	OOOICall(iReporter, check, TRUE, "My File", 10, "TRUE");
-	OOOICall(iReporter, check, FALSE, "My File", 10, "FALSE");
 }
 OOOMethodEnd
 
@@ -77,7 +72,7 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(void, run, OOOIReporter * iReporter)
+OOOMethod(void, run)
 {
 	OOOF(pMemoryLeak) = O_malloc(10000);
 }
@@ -124,7 +119,7 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(void, run, OOOIReporter * iReporter)
+OOOMethod(void, run)
 {
 	O_free(OOOF(pMemoryMagic));
 }
@@ -176,11 +171,6 @@ OOOTest(OOOUnitTests)
 	assert(OOOCall(pMockDebug, check,
 			"BEGIN_UNIT_TEST_OUTPUT\n<?xml version \"1.0\"?><REPORT>\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n<TEST name=\"My Test\">\nEND_UNIT_TEST_OUTPUT\n"
-			"BEGIN_UNIT_TEST_OUTPUT\n<INFORMATION file=\"My File\" line=\"10\">Test Information: Hello: 55</INFORMATION>\nEND_UNIT_TEST_OUTPUT\n"
-			"BEGIN_UNIT_TEST_OUTPUT\n<WARNING file=\"My File\" line=\"10\">Test Information: Hello: 55</WARNING>\nEND_UNIT_TEST_OUTPUT\n"
-			"BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Test Information: Hello: 55</ERROR>\nEND_UNIT_TEST_OUTPUT\n"
-			"BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Failed check: FALSE</ERROR>\nEND_UNIT_TEST_OUTPUT\n"
-			"BEGIN_UNIT_TEST_OUTPUT\n<MEMORY_LEAK test=\"My Test\" bytes=\"%u\"/>\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n</TEST>\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n<TEST name=\"My Test\">\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n<MEMORY_LEAK test=\"My Test\" bytes=\"10004\"/>\nEND_UNIT_TEST_OUTPUT\n"
@@ -188,14 +178,7 @@ OOOTest(OOOUnitTests)
 			"BEGIN_UNIT_TEST_OUTPUT\n<TEST name=\"My Test\">\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n<MEMORY_MAGIC test=\"My Test\" bytes=\"10004\"/>\nEND_UNIT_TEST_OUTPUT\n"
 			"BEGIN_UNIT_TEST_OUTPUT\n</TEST>\nEND_UNIT_TEST_OUTPUT\n"
-			"BEGIN_UNIT_TEST_OUTPUT\n</REPORT>\nEND_UNIT_TEST_OUTPUT\n",
-			/* Memory lost in OutputMock while running the test (will be recovered after check method exits) */
-			O_strlen(
-					"BEGIN_UNIT_TEST_OUTPUT\n<INFORMATION file=\"My File\" line=\"10\">Test Information: Hello: 55</INFORMATION>\nEND_UNIT_TEST_OUTPUT\n"
-					"BEGIN_UNIT_TEST_OUTPUT\n<WARNING file=\"My File\" line=\"10\">Test Information: Hello: 55</WARNING>\nEND_UNIT_TEST_OUTPUT\n"
-					"BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Test Information: Hello: 55</ERROR>\nEND_UNIT_TEST_OUTPUT\n"
-					"BEGIN_UNIT_TEST_OUTPUT\n<ERROR file=\"My File\" line=\"10\">Failed check: FALSE</ERROR>\nEND_UNIT_TEST_OUTPUT\n"
-					)
+			"BEGIN_UNIT_TEST_OUTPUT\n</REPORT>\nEND_UNIT_TEST_OUTPUT\n"
 			));
 
 	OOODestroy(pTests);

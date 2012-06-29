@@ -6,7 +6,7 @@
 
 #define OOOInterface OOOIUnitTest
 OOOVirtuals
-	OOOVirtual(void, run, OOOIReporter * iReporter)
+	OOOVirtual(void, run)
 	OOOVirtual(char *, getName)
 OOOVirtualsEnd
 #undef OOOInterface

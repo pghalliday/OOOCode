@@ -1,5 +1,7 @@
 #include "opentv.h"
 #include "assert.h"
+#include "OOODebug.h"
+#include "OOODebugReporter.h"
 #include "OOOUnitTestsRun.h"
 
 void main(void)
