@@ -10,9 +10,9 @@
 #define OOOTest(NAME) \
 	_OOODeclare(OOOPaste(OOOUnitTest_,NAME)) \
 		OOOImplements \
-			OOOImplement(OOOIUnitTest); \
+			OOOImplement(OOOIUnitTest) \
 		_OOOImplementsEnd(OOOPaste(OOOUnitTest_,NAME)) \
-		OOOExports \
+		_OOOExports(OOOPaste(OOOUnitTest_,NAME)) \
 		_OOOExportsEnd(OOOPaste(OOOUnitTest_,NAME)) \
 	_OOODeclareEnd(OOOPaste(OOOUnitTest_,NAME)) \
 	\
@@ -32,11 +32,12 @@
 	OOOMethodEnd \
 	\
 	_OOOConstructor(OOOPaste(OOOUnitTest_,NAME)) \
-		_OOOMapVirtuals(OOOIUnitTest) \
-			_OOOVirtualMapping(OOOPaste(OOOUnitTest_,NAME), run), \
-			_OOOVirtualMapping(OOOPaste(OOOUnitTest_,NAME), getName), \
-			_OOOVirtualMapping(OOOPaste(OOOUnitTest_,NAME), destroy) \
+		_OOOMapVirtuals(OOOPaste(OOOUnitTest_,NAME), OOOIUnitTest) \
+			_OOOVirtualMapping(OOOPaste(OOOUnitTest_,NAME), run) \
+			_OOOVirtualMapping(OOOPaste(OOOUnitTest_,NAME), getName) \
 		_OOOMapVirtualsEnd(OOOIUnitTest) \
+		_OOOMapMethods(OOOPaste(OOOUnitTest_,NAME)) \
+		OOOMapMethodsEnd \
 	OOOConstructorEnd \
 	\
 	static void OOOPaste(OOOPaste(OOOUnitTest_,NAME), _actuallyRun)(OOOPaste(OOOUnitTest_,NAME) * OOOThis, OOOIReporter * iOOOReporter)

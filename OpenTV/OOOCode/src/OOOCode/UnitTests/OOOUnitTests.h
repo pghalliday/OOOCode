@@ -10,7 +10,7 @@ OOODeclare(OOOIReporter * iReporter, OOOIUnitTest ** aTests)
 	OOOImplements
 	OOOImplementsEnd
 	OOOExports
-		OOOExport(void, run);
+		OOOExport(void, run)
 	OOOExportsEnd
 OOODeclareEnd
 #undef OOOClass

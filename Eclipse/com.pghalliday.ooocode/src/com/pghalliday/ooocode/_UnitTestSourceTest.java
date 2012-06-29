@@ -19,7 +19,7 @@ public class _UnitTestSourceTest {
 				"\tMyClass * pMyClass = OOOConstruct(MyClass);\n" +
 				"\n" +
 				"\t/* Check stuff here */\n" +
-				"\tOOOCheck(pMyClass);\n" +
+				"\tOOOCheck(pMyClass != NULL);\n" +
 				"\n" +
 				"\tOOODestroy(pMyClass);\n" +
 				"}\n",

@@ -5,7 +5,7 @@
 
 #define OOOInterface IMyClass
 OOOVirtuals
-	OOOVirtual(int, getData);
+	OOOVirtual(int, getData)
 OOOVirtualsEnd
 #undef OOOInterface
 

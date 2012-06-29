@@ -11,7 +11,7 @@ public class UnitTestSource extends Template {
 			"\t%1$s * p%1$s = OOOConstruct(%1$s);\n" +
 			"\n" +
 			"\t/* Check stuff here */\n" +
-			"\tOOOCheck(p%1$s);\n" +
+			"\tOOOCheck(p%1$s != NULL);\n" +
 			"\n" +
 			"\tOOODestroy(p%1$s);\n" +
 			"}\n";

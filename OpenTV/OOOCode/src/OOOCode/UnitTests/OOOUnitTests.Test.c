@@ -8,7 +8,7 @@
 
 OOODeclare()
 	OOOImplements
-		OOOImplement(OOOIUnitTest);
+		OOOImplement(OOOIUnitTest)
 	OOOImplementsEnd
 	OOOExports
 	OOOExportsEnd
@@ -42,11 +42,13 @@ OOOConstructor()
 {
 	#define OOOInterface OOOIUnitTest
 	OOOMapVirtuals
-		OOOVirtualMapping(run),
-		OOOVirtualMapping(getName),
-		OOOVirtualMapping(destroy)
+		OOOVirtualMapping(run)
+		OOOVirtualMapping(getName)
 	OOOMapVirtualsEnd
 	#undef OOOInterface
+
+	OOOMapMethods
+	OOOMapMethodsEnd
 }
 OOOConstructorEnd
 
@@ -56,7 +58,7 @@ OOOConstructorEnd
 
 OOODeclare()
 	OOOImplements
-		OOOImplement(OOOIUnitTest);
+		OOOImplement(OOOIUnitTest)
 	OOOImplementsEnd
 	OOOExports
 	OOOExportsEnd
@@ -91,11 +93,13 @@ OOOConstructor()
 {
 	#define OOOInterface OOOIUnitTest
 	OOOMapVirtuals
-		OOOVirtualMapping(run),
-		OOOVirtualMapping(getName),
-		OOOVirtualMapping(destroy)
+		OOOVirtualMapping(run)
+		OOOVirtualMapping(getName)
 	OOOMapVirtualsEnd
 	#undef OOOInterface
+
+	OOOMapMethods
+	OOOMapMethodsEnd
 }
 OOOConstructorEnd
 
@@ -105,7 +109,7 @@ OOOConstructorEnd
 
 OOODeclare(void * szMemoryMagic)
 	OOOImplements
-		OOOImplement(OOOIUnitTest);
+		OOOImplement(OOOIUnitTest)
 	OOOImplementsEnd
 	OOOExports
 	OOOExportsEnd
@@ -136,11 +140,13 @@ OOOConstructor(void * pMemoryMagic)
 {
 	#define OOOInterface OOOIUnitTest
 	OOOMapVirtuals
-		OOOVirtualMapping(run),
-		OOOVirtualMapping(getName),
-		OOOVirtualMapping(destroy)
+		OOOVirtualMapping(run)
+		OOOVirtualMapping(getName)
 	OOOMapVirtualsEnd
 	#undef OOOInterface
+
+	OOOMapMethods
+	OOOMapMethodsEnd
 
 	OOOF(pMemoryMagic) = pMemoryMagic;
 }

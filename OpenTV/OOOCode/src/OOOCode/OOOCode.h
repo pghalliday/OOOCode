@@ -21,8 +21,13 @@
 
 /* destroy an instance of a class */
 #define _OOODestroy(INSTANCE) \
-	((INSTANCE)->destroy(INSTANCE))
+	((INSTANCE)->pVTable->destroy(INSTANCE))
 #define OOODestroy(INSTANCE) _OOODestroy(INSTANCE)
+
+/* destroy an instance of a class through an interface */
+#define _OOOIDestroy(INTERFACE) \
+	((INTERFACE)->pVTable->destroy((INTERFACE)->pInstance))
+#define OOOIDestroy(INTERFACE) _OOODestroy(INTERFACE)
 
 /* cast an instance to an interface */
 #define _OOOCast(INTERFACE_NAME, INSTANCE) \

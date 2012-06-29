@@ -1,6 +1,6 @@
-#include "NewClass.h"
+#include "OrlinsClass.h"
 
-#define OOOClass NewClass
+#define OOOClass OrlinsClass
 
 OOOPrivateData
 OOOPrivateDataEnd

@@ -9,12 +9,12 @@ RM := "C:/OpenTV/SDKSuiteC2.2/SDK/bin/perl"  "C:/OpenTV/SDKSuiteC2.2/SDK/bin/cle
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir.mk
+-include src/subdir.mk
 -include src/OOOCode/Utilities/subdir.mk
 -include src/OOOCode/UnitTests/Reporter/subdir.mk
 -include src/OOOCode/UnitTests/Reporter/Debug/subdir.mk
 -include src/OOOCode/UnitTests/subdir.mk
 -include src/OOOCode/subdir.mk
--include src/subdir.mk
 -include objects.mk
 
 BIGDATA :=1

@@ -98,8 +98,7 @@
 	CLASS_NAME * CLASS_NAME##_construct(ARGS) \
 	{ \
 		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
-		assert(OOOThis); \
-		OOOThis->destroy = CLASS_NAME##_destroy;
+		assert(OOOThis);
 #define _OOOConstructor(CLASS_NAME, ARGS...) __OOOConstructor(CLASS_NAME, ARGS)
 #define OOOConstructor(ARGS...) _OOOConstructor(OOOClass, ARGS)
 
@@ -111,13 +110,14 @@
 #define __OOOMapMethods(CLASS_NAME) \
 		{ \
 			static CLASS_NAME##_VTable OOOVTable = \
-			{
+			{ \
+				CLASS_NAME##_destroy
 #define _OOOMapMethods(CLASS_NAME) __OOOMapMethods(CLASS_NAME)
 #define OOOMapMethods _OOOMapMethods(OOOClass)
 
 /* add methods to the vtable in the same order as they are declared in the class declaration */
 #define __OOOMethodMapping(CLASS_NAME, METHOD_NAME) \
-				CLASS_NAME##_##METHOD_NAME
+				, CLASS_NAME##_##METHOD_NAME
 #define _OOOMethodMapping(CLASS_NAME, METHOD_NAME) __OOOMethodMapping(CLASS_NAME, METHOD_NAME)
 #define OOOMethodMapping(METHOD_NAME) _OOOMethodMapping(OOOClass, METHOD_NAME)
 
@@ -136,16 +136,17 @@
  * which interface is being mapped
  *
  */
-#define __OOOMapVirtuals(INTERFACE_NAME) \
+#define __OOOMapVirtuals(CLASS_NAME, INTERFACE_NAME) \
 		{ \
 			static INTERFACE_NAME##_VTable OOOVTable = \
-			{
-#define _OOOMapVirtuals(INTERFACE_NAME) __OOOMapVirtuals(INTERFACE_NAME)
-#define OOOMapVirtuals _OOOMapVirtuals(OOOInterface)
+			{ \
+				(OOOVirtual_##CLASS_NAME##_destroy) CLASS_NAME##_destroy
+#define _OOOMapVirtuals(CLASS_NAME, INTERFACE_NAME) __OOOMapVirtuals(CLASS_NAME, INTERFACE_NAME)
+#define OOOMapVirtuals _OOOMapVirtuals(OOOClass, OOOInterface)
 
 /* add methods to the vtable in the same order as they are declared in the interface declaration */
 #define __OOOVirtualMapping(CLASS_NAME, METHOD_NAME) \
-				(OOOVirtual_##CLASS_NAME##_##METHOD_NAME) CLASS_NAME##_##METHOD_NAME
+				, (OOOVirtual_##CLASS_NAME##_##METHOD_NAME) CLASS_NAME##_##METHOD_NAME
 #define _OOOVirtualMapping(CLASS_NAME, METHOD_NAME) __OOOVirtualMapping(CLASS_NAME, METHOD_NAME)
 #define OOOVirtualMapping(METHOD_NAME) _OOOVirtualMapping(OOOClass, METHOD_NAME)
 

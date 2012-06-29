@@ -11,9 +11,9 @@
 #define OOOTest(NAME) \
 	_OOODeclare(OOOPaste(OOOUnitTest_,NAME)) \
 		OOOImplements \
-			OOOImplement(OOOIUnitTest); \
+			OOOImplement(OOOIUnitTest) \
 		_OOOImplementsEnd(OOOPaste(OOOUnitTest_,NAME)) \
-		OOOExports \
+		_OOOExports(OOOPaste(OOOUnitTest_,NAME)) \
 		_OOOExportsEnd(OOOPaste(OOOUnitTest_,NAME)) \
 	_OOODeclareEnd(OOOPaste(OOOUnitTest_,NAME))
 #include "OOOTests.h"
@@ -37,7 +37,7 @@ static void OOOUnitTestsRun(OOOIReporter * iReporter)
 	/* Destroy the test instances */
 	while (*pTest)
 	{
-		OOOICall(*pTest, destroy);
+		OOOIDestroy(*pTest);
 		pTest++;
 	}
 }

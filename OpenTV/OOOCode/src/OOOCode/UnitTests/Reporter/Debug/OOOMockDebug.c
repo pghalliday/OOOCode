@@ -96,7 +96,7 @@ OOOConstructor()
 	#undef OOOInterface
 
 	OOOMapMethods
-		OOOMethodMapping(check),
+		OOOMethodMapping(check)
 	OOOMapMethodsEnd
 }
 OOOConstructorEnd

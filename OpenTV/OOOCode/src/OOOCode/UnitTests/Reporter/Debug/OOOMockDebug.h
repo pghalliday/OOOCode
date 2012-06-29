@@ -7,10 +7,10 @@
 #define OOOClass OOOMockDebug
 OOODeclare()
 	OOOImplements
-		OOOImplement(OOOIDebug);
+		OOOImplement(OOOIDebug)
 	OOOImplementsEnd
 	OOOExports
-		OOOExport(bool, check, char * szCompare, ...);
+		OOOExport(bool, check, char * szCompare, ...)
 	OOOExportsEnd
 OOODeclareEnd
 #undef OOOClass

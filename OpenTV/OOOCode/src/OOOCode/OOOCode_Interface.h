@@ -25,15 +25,16 @@
 		INTERFACE_NAME##_VTable * pVTable; \
 	}; \
 	struct _##INTERFACE_NAME##_VTable \
-	{
+	{ \
+		void (* destroy)(void * OOOThis);
 #define _OOOVirtuals(INTERFACE_NAME) __OOOVirtuals(INTERFACE_NAME)
 #define OOOVirtuals _OOOVirtuals(OOOInterface)
 
 /* Declare a vtable entry */
 #define _OOOVirtual0(RETURN_TYPE, METHOD_NAME, ARGS...) \
-	RETURN_TYPE (* METHOD_NAME)(void * OOOInstance, ARGS)
+	RETURN_TYPE (* METHOD_NAME)(void * OOOInstance, ARGS);
 #define _OOOVirtual1(RETURN_TYPE, METHOD_NAME, ARGS...) \
-	RETURN_TYPE (* METHOD_NAME)(void * OOOInstance)
+	RETURN_TYPE (* METHOD_NAME)(void * OOOInstance);
 #define OOOVirtual(RETURN_TYPE, METHOD_NAME, ARGS...) OOOPaste(_OOOVirtual, OOOIsEmpty(ARGS))(RETURN_TYPE, METHOD_NAME, ARGS)
 
 /* end the vtable structure */

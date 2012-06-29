@@ -1,9 +1,9 @@
-#ifndef NewClass_H
-#define NewClass_H
+#ifndef OrlinsClass_H
+#define OrlinsClass_H
 
 #include "OOOCode.h"
 
-#define OOOClass NewClass
+#define OOOClass OrlinsClass
 OOODeclare()
 	OOOImplements
 	OOOImplementsEnd

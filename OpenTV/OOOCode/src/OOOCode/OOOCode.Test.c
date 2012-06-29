@@ -3,17 +3,17 @@
 
 #define OOOInterface ITest
 OOOVirtuals
-	OOOVirtual(int, addSome, int nValue);
+	OOOVirtual(int, addSome, int nValue)
 OOOVirtualsEnd
 #undef OOOInterface
 
 #define OOOClass Test
 OOODeclare(int nValue)
 	OOOImplements
-		OOOImplement(ITest);
+		OOOImplement(ITest)
 	OOOImplementsEnd
 	OOOExports
-		OOOExport(int, getValue);
+		OOOExport(int, getValue)
 	OOOExportsEnd
 OOODeclareEnd
 

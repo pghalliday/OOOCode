@@ -32,7 +32,7 @@
 
 /* Add an interface */
 #define _OOOImplement(INTERFACE_NAME) \
-		INTERFACE_NAME t##INTERFACE_NAME
+		INTERFACE_NAME t##INTERFACE_NAME;
 #define OOOImplement(INTERFACE_NAME) _OOOImplement(INTERFACE_NAME)
 
 /* End the interfaces structure and declare the type name */
@@ -47,15 +47,18 @@
  */
 
 /* start the vtable structure */
-#define OOOExports \
+#define __OOOExports(CLASS_NAME) \
 	typedef struct \
-	{
+	{ \
+		void (* destroy)(CLASS_NAME * OOOThis);
+#define _OOOExports(CLASS_NAME) __OOOExports(CLASS_NAME)
+#define OOOExports _OOOExports(OOOClass)
 
 /* add an exported method */
 #define _OOOExport0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
-	RETURN_TYPE (* METHOD_NAME)(CLASS_NAME * OOOThis, ARGS)
+	RETURN_TYPE (* METHOD_NAME)(CLASS_NAME * OOOThis, ARGS);
 #define _OOOExport1(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
-	RETURN_TYPE (* METHOD_NAME)(CLASS_NAME * OOOThis)
+	RETURN_TYPE (* METHOD_NAME)(CLASS_NAME * OOOThis);
 #define _OOOExport(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) OOOPaste(_OOOExport, OOOIsEmpty(ARGS))(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS)
 #define OOOExport(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOExport(OOOClass, RETURN_TYPE, METHOD_NAME, ARGS)
 
@@ -73,7 +76,6 @@
 #define __OOODeclareEnd(CLASS_NAME) \
 	struct _##CLASS_NAME \
 	{ \
-		void (* destroy)(CLASS_NAME * OOOThis); \
 		CLASS_NAME##_VTable * pVTable; \
 		CLASS_NAME##_Interfaces tInterfaces; \
 	};

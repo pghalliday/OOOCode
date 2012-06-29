@@ -8,7 +8,7 @@
 #define OOOClass OOODebugReporter
 OOODeclare(OOOIDebug * iDebug)
 	OOOImplements
-		OOOImplement(OOOIReporter);
+		OOOImplement(OOOIReporter)
 	OOOImplementsEnd
 	OOOExports
 	OOOExportsEnd

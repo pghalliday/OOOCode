@@ -7,7 +7,7 @@
 #define OOOClass OOODebug
 OOODeclare()
 	OOOImplements
-		OOOImplement(OOOIDebug);
+		OOOImplement(OOOIDebug)
 	OOOImplementsEnd
 	OOOExports
 	OOOExportsEnd

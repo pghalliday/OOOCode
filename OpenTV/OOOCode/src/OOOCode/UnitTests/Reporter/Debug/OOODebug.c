@@ -40,6 +40,9 @@ OOOConstructor()
 		OOOVirtualMapping(print)
 	OOOMapVirtualsEnd
 	#undef OOOInterface
+
+	OOOMapMethods
+	OOOMapMethodsEnd
 }
 OOOConstructorEnd
 

@@ -5,7 +5,7 @@
 
 #define OOOInterface OOOIDebug
 OOOVirtuals
-	OOOVirtual(void, print, char * szMessage, ...);
+	OOOVirtual(void, print, char * szMessage, ...)
 OOOVirtualsEnd
 #undef OOOInterface
 
