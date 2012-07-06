@@ -1,0 +1,6 @@
+#define __MODULE_NAME "TestDll.exp"
+#include "_export.h"
+#define EXPORT_MODULE_ID 0
+#define EXPORT_NUMBER_START 0
+EXPORT_BEGIN
+EXPORT_END

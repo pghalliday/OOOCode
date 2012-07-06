@@ -1,0 +1,2 @@
+src/TestRunnerRes.dxd: src/TestRunnerRes.rcd \
+  C:/OpenTV/SDKSuiteC2.2/SDK/include/opentv.h
