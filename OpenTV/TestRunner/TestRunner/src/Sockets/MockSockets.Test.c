@@ -76,7 +76,7 @@ OOOTest(MockSockets)
 				}
 				if (O_msg_class(&tMessage) == MSG_CLASS_SOCKET && O_msg_type(&tMessage) == MSG_TYPE_SOCK_CONNECTED)
 				{
-					/* check the message contains the corrcet socket */
+					/* check the message contains the correct socket */
 					OOOCheck(tMessage.INFO_SOCK_HANDLE == hWaitingSocket);
 
 					/* should be connected now */
