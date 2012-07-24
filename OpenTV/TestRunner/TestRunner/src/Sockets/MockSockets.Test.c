@@ -82,6 +82,16 @@ OOOTest(MockSockets)
 					/* should be connected now */
 					OOOCheck(OOOCall(pMockSockets, isConnected, hWaitingSocket));
 
+					/* send some data to the socket */
+					OOOCheck(OOOCall(pMockSockets, send, hWaitingSocket, "This is a test", O_strlen("This is a test") + 1));
+				}
+				if (O_msg_class(&tMessage) == MSG_CLASS_SOCKET && O_msg_type(&tMessage) == MSG_TYPE_SOCK_READ_NFY)
+				{
+					/* read the data back in one go */
+					char szReceivedData[100];
+					OOOCheck(OOOICall(iSockets, read, hWaitingSocket, szReceivedData, 100) == O_strlen("This is a test") + 1);
+					OOOCheck(O_strcmp(szReceivedData, "This is a test") == 0);
+
 					break;
 				}
 			}

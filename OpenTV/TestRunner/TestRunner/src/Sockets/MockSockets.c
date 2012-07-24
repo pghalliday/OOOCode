@@ -9,6 +9,8 @@ OOOPrivateData
 	MockLink * pMockLink;
 	bool bIsBound;
 	bool bIsConnected;
+	unsigned char * pData;
+	size_t uLength;
 OOOPrivateDataEnd
 
 OOODestructor
@@ -95,6 +97,61 @@ OOOMethod(bool, connect, o_sock_handle hHandle)
 }
 OOOMethodEnd
 
+OOOMethod(bool, send, o_sock_handle hHandle, unsigned char * pData, size_t uLength)
+{
+	bool bIsWritten = FALSE;
+	if (OOOC(isConnected, hHandle))
+	{
+		o_message tMessage;
+
+		/* buffer the data */
+		if (OOOF(pData))
+		{
+			O_free(OOOF(pData));
+		}
+		OOOF(pData) = O_malloc(uLength);
+		O_memcpy(OOOF(pData), pData, uLength);
+		OOOF(uLength) = uLength;
+
+		/* post the read notify message */
+		tMessage.msg_class = MSG_CLASS_SOCKET;
+		tMessage.type = MSG_TYPE_SOCK_READ_NFY;
+		tMessage.INFO_SOCK_HANDLE = MockSockets_WAITING_SOCKET_HANDLE;
+		assert(O_post_message(&tMessage) == GOOD);
+		bIsWritten = TRUE;
+	}
+	return bIsWritten;
+}
+OOOMethodEnd
+
+OOOMethod(int, read, o_sock_handle hHandle, void * pBuffer, size_t uLength)
+{
+	int nBytesRead = 0;
+	if (OOOF(pData))
+	{
+		if (OOOF(uLength) > uLength)
+		{
+			unsigned char * pCurrentData = OOOF(pData);
+			O_memcpy(pBuffer, pCurrentData, uLength);
+			OOOF(uLength) -= uLength;
+			OOOF(pData) = O_malloc(OOOF(uLength));
+			O_memcpy(OOOF(pData), pCurrentData + uLength, OOOF(uLength));
+			O_free(pCurrentData);
+			nBytesRead = uLength;
+		}
+		else
+		{
+			O_memcpy(pBuffer, OOOF(pData), OOOF(uLength));
+			O_free(OOOF(pData));
+			OOOF(pData) = NULL;
+			OOOF(uLength) = 0;
+			nBytesRead = OOOF(uLength);
+		}
+	}
+	return nBytesRead;
+}
+OOOMethodEnd
+
 OOOConstructor(MockLink * pMockLink)
 {
 #define OOOInterface ISockets
@@ -102,6 +159,7 @@ OOOConstructor(MockLink * pMockLink)
 		OOOVirtualMapping(create)
 		OOOVirtualMapping(bind)
 		OOOVirtualMapping(accept)
+		OOOVirtualMapping(read)
 	OOOMapVirtualsEnd
 #undef OOOInterface
 
@@ -109,6 +167,7 @@ OOOConstructor(MockLink * pMockLink)
 		OOOMethodMapping(isBound)
 		OOOMethodMapping(isConnected)
 		OOOMethodMapping(connect)
+		OOOMethodMapping(send)
 	OOOMapMethodsEnd
 
 	OOOF(pMockLink) = pMockLink;
