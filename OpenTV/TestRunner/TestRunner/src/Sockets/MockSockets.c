@@ -9,8 +9,10 @@ OOOPrivateData
 	MockLink * pMockLink;
 	bool bIsBound;
 	bool bIsConnected;
-	unsigned char * pData;
-	size_t uLength;
+	unsigned char * pReceivedData;
+	size_t uReceivedDataLength;
+	unsigned char * pSentData;
+	size_t uSentDataLength;
 OOOPrivateDataEnd
 
 OOODestructor
@@ -97,7 +99,7 @@ OOOMethod(bool, connect, o_sock_handle hHandle)
 }
 OOOMethodEnd
 
-OOOMethod(bool, send, o_sock_handle hHandle, unsigned char * pData, size_t uLength)
+OOOMethod(bool, send, o_sock_handle hHandle, unsigned char * pBuffer, size_t uLength)
 {
 	bool bIsWritten = FALSE;
 	if (OOOC(isConnected, hHandle))
@@ -105,13 +107,13 @@ OOOMethod(bool, send, o_sock_handle hHandle, unsigned char * pData, size_t uLeng
 		o_message tMessage;
 
 		/* buffer the data */
-		if (OOOF(pData))
+		if (OOOF(pReceivedData))
 		{
-			O_free(OOOF(pData));
+			O_free(OOOF(pReceivedData));
 		}
-		OOOF(pData) = O_malloc(uLength);
-		O_memcpy(OOOF(pData), pData, uLength);
-		OOOF(uLength) = uLength;
+		OOOF(pReceivedData) = O_malloc(uLength);
+		O_memcpy(OOOF(pReceivedData), pBuffer, uLength);
+		OOOF(uReceivedDataLength) = uLength;
 
 		/* post the read notify message */
 		tMessage.msg_class = MSG_CLASS_SOCKET;
@@ -127,25 +129,80 @@ OOOMethodEnd
 OOOMethod(int, read, o_sock_handle hHandle, void * pBuffer, size_t uLength)
 {
 	int nBytesRead = 0;
-	if (OOOF(pData))
+	if (OOOF(pReceivedData))
 	{
-		if (OOOF(uLength) > uLength)
+		if (OOOF(uReceivedDataLength) > uLength)
 		{
-			unsigned char * pCurrentData = OOOF(pData);
+			unsigned char * pCurrentData = OOOF(pReceivedData);
 			O_memcpy(pBuffer, pCurrentData, uLength);
-			OOOF(uLength) -= uLength;
-			OOOF(pData) = O_malloc(OOOF(uLength));
-			O_memcpy(OOOF(pData), pCurrentData + uLength, OOOF(uLength));
+			OOOF(uReceivedDataLength) -= uLength;
+			OOOF(pReceivedData) = O_malloc(OOOF(uReceivedDataLength));
+			O_memcpy(OOOF(pReceivedData), pCurrentData + uLength, OOOF(uReceivedDataLength));
 			O_free(pCurrentData);
 			nBytesRead = uLength;
 		}
 		else
 		{
-			O_memcpy(pBuffer, OOOF(pData), OOOF(uLength));
-			O_free(OOOF(pData));
-			OOOF(pData) = NULL;
-			OOOF(uLength) = 0;
-			nBytesRead = OOOF(uLength);
+			O_memcpy(pBuffer, OOOF(pReceivedData), OOOF(uReceivedDataLength));
+			O_free(OOOF(pReceivedData));
+			OOOF(pReceivedData) = NULL;
+			nBytesRead = OOOF(uReceivedDataLength);
+			OOOF(uReceivedDataLength) = 0;
+		}
+	}
+	return nBytesRead;
+}
+OOOMethodEnd
+
+OOOMethod(o_sock_error, write, o_sock_handle hHandle, void * pBuffer, size_t uLength)
+{
+	o_sock_error nError = O_ERR_SOCK_WRONG_STATE;
+	if (OOOC(isConnected, hHandle))
+	{
+		o_message tMessage;
+
+		/* buffer the data */
+		if (OOOF(pSentData))
+		{
+			O_free(OOOF(pSentData));
+		}
+		OOOF(pSentData) = O_malloc(uLength);
+		O_memcpy(OOOF(pSentData), pBuffer, uLength);
+		OOOF(uSentDataLength) = uLength;
+
+		/* post the read notify message */
+		tMessage.msg_class = MSG_CLASS_SOCKET;
+		tMessage.type = MSG_TYPE_SOCK_WRITE_NFY;
+		tMessage.INFO_SOCK_HANDLE = MockSockets_WAITING_SOCKET_HANDLE;
+		assert(O_post_message(&tMessage) == GOOD);
+		nError = O_ERR_SOCK_NO_ERROR;
+	}
+	return nError;
+}
+OOOMethodEnd
+
+OOOMethod(int, receive, o_sock_handle hHandle, unsigned char * pBuffer, size_t uLength)
+{
+	int nBytesRead = 0;
+	if (OOOF(pSentData))
+	{
+		if (OOOF(uSentDataLength) > uLength)
+		{
+			unsigned char * pCurrentData = OOOF(pSentData);
+			O_memcpy(pBuffer, pCurrentData, uLength);
+			OOOF(uSentDataLength) -= uLength;
+			OOOF(pSentData) = O_malloc(OOOF(uSentDataLength));
+			O_memcpy(OOOF(pSentData), pCurrentData + uLength, OOOF(uSentDataLength));
+			O_free(pCurrentData);
+			nBytesRead = uLength;
+		}
+		else
+		{
+			O_memcpy(pBuffer, OOOF(pSentData), OOOF(uSentDataLength));
+			O_free(OOOF(pSentData));
+			OOOF(pSentData) = NULL;
+			nBytesRead = OOOF(uSentDataLength);
+			OOOF(uSentDataLength) = 0;
 		}
 	}
 	return nBytesRead;
@@ -160,6 +217,7 @@ OOOConstructor(MockLink * pMockLink)
 		OOOVirtualMapping(bind)
 		OOOVirtualMapping(accept)
 		OOOVirtualMapping(read)
+		OOOVirtualMapping(write)
 	OOOMapVirtualsEnd
 #undef OOOInterface
 
@@ -168,6 +226,7 @@ OOOConstructor(MockLink * pMockLink)
 		OOOMethodMapping(isConnected)
 		OOOMethodMapping(connect)
 		OOOMethodMapping(send)
+		OOOMethodMapping(receive)
 	OOOMapMethodsEnd
 
 	OOOF(pMockLink) = pMockLink;

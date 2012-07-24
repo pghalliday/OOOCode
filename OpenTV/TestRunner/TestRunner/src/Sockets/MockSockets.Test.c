@@ -5,7 +5,7 @@
 OOOTest(MockSockets)
 {
 	o_sock_handle hSocket;
-	o_sock_handle hWaitingSocket;
+	o_sock_handle hWaitingSocket = ILLEGAL_HANDLE;
 	o_ip_addr tAddress =
 			{
 				AF_INET,
@@ -57,7 +57,7 @@ OOOTest(MockSockets)
 
 						/* should be able to accept connections now */
 						hWaitingSocket = OOOICall(iSockets, accept, hSocket);
-						if (!OOOCheck(hWaitingSocket != ILLEGAL_HANDLE))
+						if (OOOCheck(hWaitingSocket != ILLEGAL_HANDLE))
 						{
 							/* should not be connected yet */
 							OOOCheck(!OOOCall(pMockSockets, isConnected, hWaitingSocket));
@@ -87,11 +87,22 @@ OOOTest(MockSockets)
 				}
 				if (O_msg_class(&tMessage) == MSG_CLASS_SOCKET && O_msg_type(&tMessage) == MSG_TYPE_SOCK_READ_NFY)
 				{
-					/* read the data back in one go */
-					char szReceivedData[100];
-					OOOCheck(OOOICall(iSockets, read, hWaitingSocket, szReceivedData, 100) == O_strlen("This is a test") + 1);
-					OOOCheck(O_strcmp(szReceivedData, "This is a test") == 0);
+					o_sock_error nError;
+					char szReadData[100];
 
+					/* read the data back in one go */
+					OOOCheck(OOOICall(iSockets, read, hWaitingSocket, szReadData, 100) == O_strlen("This is a test") + 1);
+					OOOCheck(O_strcmp(szReadData, "This is a test") == 0);
+
+					/* write a response */
+					nError = OOOICall(iSockets, write, hWaitingSocket, "This is a test too", O_strlen("This is a test too") + 1);
+					OOOCheck(O_ERR_SOCK_NO_ERROR == nError);
+				}
+				if (O_msg_class(&tMessage) == MSG_CLASS_SOCKET && O_msg_type(&tMessage) == MSG_TYPE_SOCK_WRITE_NFY)
+				{
+					char szWrittenData[100];
+					OOOCheck(OOOCall(pMockSockets, receive, hWaitingSocket, szWrittenData, 100) == O_strlen("This is a test too") + 1);
+					OOOCheck(O_strcmp(szWrittenData, "This is a test too") == 0);
 					break;
 				}
 			}
