@@ -3,6 +3,7 @@
 
 #include "OOOCode.h"
 #include "IMessagePumpController.h"
+#include "IMessageHandler.h"
 
 #define OOOClass MessagePump
 OOODeclare()
@@ -11,6 +12,8 @@ OOODeclare()
 	OOOExports
 		OOOExport(void, start, IMessagePumpController * iMessagePumpController)
 		OOOExport(void, stop)
+		OOOExport(void, addHandler, IMessageHandler * iMessageHandler)
+		OOOExport(void, removeHandler, IMessageHandler * iMessageHandler)
 	OOOExportsEnd
 OOODeclareEnd
 #undef OOOClass

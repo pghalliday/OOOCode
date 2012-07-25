@@ -9,4 +9,5 @@ src/MessagePump/MessagePump.Test.d: ../src/MessagePump/MessagePump.Test.c \
   C:/OpenTV/SDKSuiteC2.2/SDK/include/assert.h \
   ../src/OOOCode/UnitTests/Reporter/OOOIReporter.h \
   ../src/MessagePump/MessagePump.h \
-  ../src/MessagePump/IMessagePumpController.h
+  ../src/MessagePump/IMessagePumpController.h \
+  ../src/MessagePump/IMessageHandler.h
