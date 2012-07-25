@@ -12,6 +12,7 @@ src/Main.d: ../src/Main.c C:/OpenTV/SDKSuiteC2.2/SDK/include/opentv.h \
   ../src/OOOCode/UnitTests/OOOUnitTests.h \
   ../src/OOOCode/UnitTests/OOOIUnitTest.h ../src/OOOTests.h \
   ../src/Link/MockLink.Test.h ../src/Sockets/MockSockets.Test.h \
-  ../src/Listener.Test.h ../src/Link/Link.h ../src/Link/ILink.h \
+  ../src/Listener/Listener.Test.h ../src/MessagePump/MessagePump.Test.h \
+  ../src/Link/Link.h ../src/Link/ILink.h \
   C:/OpenTV/SDKSuiteC2.2/SDK/include/optvxsocket.h ../src/Sockets/Sockets.h \
-  ../src/Sockets/ISockets.h ../src/Listener.h
+  ../src/Sockets/ISockets.h ../src/Listener/Listener.h

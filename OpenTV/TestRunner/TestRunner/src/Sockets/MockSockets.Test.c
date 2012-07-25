@@ -55,10 +55,16 @@ OOOTest(MockSockets)
 						/* Should be bound */
 						OOOCheck(OOOCall(pMockSockets, isBound, hSocket));
 
+						/* should not be be accepting connection on port 80 yet */
+						/*OOOCheck(!OOOCall(pMockSockets, isAcceptingConnections, 80));*/
+
 						/* should be able to accept connections now */
 						hWaitingSocket = OOOICall(iSockets, accept, hSocket);
 						if (OOOCheck(hWaitingSocket != ILLEGAL_HANDLE))
 						{
+							/* should be accepting connection on port 80 now */
+							/*OOOCheck(OOOCall(pMockSockets, isAcceptingConnections, 80));*/
+
 							/* should not be connected yet */
 							OOOCheck(!OOOCall(pMockSockets, isConnected, hWaitingSocket));
 

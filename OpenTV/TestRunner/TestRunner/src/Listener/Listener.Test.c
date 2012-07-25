@@ -8,10 +8,9 @@ OOOTest(Listener)
 {
 	MockLink * pLink = OOOConstruct(MockLink, 10000, 1);
 	MockSockets * pSockets = OOOConstruct(MockSockets, pLink);
-	Listener * pListener = OOOConstruct(Listener, OOOCast(ILink, pLink), OOOCast(ISockets, pSockets));
+	Listener * pListener = OOOConstruct(Listener, OOOCast(ILink, pLink), OOOCast(ISockets, pSockets), 8080);
 
-	/* Check stuff here */
-	OOOCheck(OOOCall(pListener, start));
+
 
 	OOODestroy(pListener);
 	OOODestroy(pSockets);

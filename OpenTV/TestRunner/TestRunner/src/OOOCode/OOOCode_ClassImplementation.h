@@ -27,7 +27,6 @@
 #define __OOOPrivateData(CLASS_NAME) \
 	typedef struct \
 	{ \
-		void (* destroy)(CLASS_NAME * OOOThis); \
 		CLASS_NAME##_VTable * pVTable; \
 		CLASS_NAME##_Interfaces tInterfaces;
 #define _OOOPrivateData(CLASS_NAME) __OOOPrivateData(CLASS_NAME)

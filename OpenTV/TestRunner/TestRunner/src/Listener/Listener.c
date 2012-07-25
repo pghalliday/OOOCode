@@ -5,6 +5,7 @@
 OOOPrivateData
 	ILink * iLink;
 	ISockets * iSockets;
+	unsigned short uPort;
 OOOPrivateDataEnd
 
 OOODestructor
@@ -12,20 +13,15 @@ OOODestructor
 }
 OOODestructorEnd
 
-OOOMethod(bool, start)
-{
-	return TRUE;
-}
-OOOMethodEnd
 
-OOOConstructor(ILink * iLink, ISockets * iSockets)
+OOOConstructor(ILink * iLink, ISockets * iSockets, unsigned short uPort)
 {
 	OOOMapMethods
-		OOOMethodMapping(start)
 	OOOMapMethodsEnd
 
 	OOOF(iLink) = iLink;
 	OOOF(iSockets) = iSockets;
+	OOOF(uPort) = uPort;
 }
 OOOConstructorEnd
 

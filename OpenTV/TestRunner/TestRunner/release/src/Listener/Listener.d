@@ -1,4 +1,5 @@
-src/Listener.d: ../src/Listener.c ../src/Listener.h ../src/OOOCode/OOOCode.h \
+src/Listener/Listener.d: ../src/Listener/Listener.c \
+  ../src/Listener/Listener.h ../src/OOOCode/OOOCode.h \
   ../src/OOOCode/Utilities/OOOPastingAndQuoting.h \
   ../src/OOOCode/Utilities/OOOEmptyArguments.h \
   ../src/OOOCode/OOOCode_Interface.h ../src/OOOCode/OOOCode_ClassHeader.h \

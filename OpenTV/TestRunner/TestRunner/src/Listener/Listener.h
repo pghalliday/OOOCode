@@ -6,11 +6,10 @@
 #include "ISockets.h"
 
 #define OOOClass Listener
-OOODeclare(ILink * iLink, ISockets * iSockets)
+OOODeclare(ILink * iLink, ISockets * iSockets, unsigned short uPort)
 	OOOImplements
 	OOOImplementsEnd
 	OOOExports
-		OOOExport(bool, start)
 	OOOExportsEnd
 OOODeclareEnd
 #undef OOOClass
