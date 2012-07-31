@@ -23,6 +23,7 @@ OOODestructorEnd
 OOOMethod(void, stop)
 {
 	/* TODO: clean up sockets and stuff */
+	OOOICall(OOOF(iListenerController), stopped);
 }
 OOOMethodEnd
 
@@ -78,7 +79,13 @@ OOOMethod(bool, doMessage, o_message * pMessage)
 			int nBytesRead = OOOICall(OOOF(iSockets), read, OOOF(hWaitingSocket), pData, Listener_MAX_DATA_SIZE + 1);
 			if (nBytesRead == Listener_MAX_DATA_SIZE + 1)
 			{
-				/* data is too big */
+				/* data is too big - flush the read buffer and respond with an error */
+				do
+				{
+					nBytesRead = OOOICall(OOOF(iSockets), read, OOOF(hWaitingSocket), pData, Listener_MAX_DATA_SIZE + 1);
+				}
+				while (nBytesRead == Listener_MAX_DATA_SIZE + 1);
+
 				/* TODO: write a response, close the connection and start accepting new connections */
 			}
 			else
