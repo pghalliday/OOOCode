@@ -15,6 +15,7 @@ src/Main.d: ../src/Main.c C:/OpenTV/SDKSuiteC2.2/SDK/include/opentv.h \
   ../src/TestRunnerApplication/Listener/Link/MockLink.Test.h \
   ../src/TestRunnerApplication/Listener/Sockets/MockSocket/MockSocket.Test.h \
   ../src/TestRunnerApplication/Listener/Sockets/MockSockets.Test.h \
+  ../src/TestRunnerApplication/Listener/Listener.Test.h \
   ../src/TestRunnerApplication/TestRunnerApplication.Test.h \
   ../src/TestRunnerApplication/TestRunnerApplication.h \
   ../src/TestRunnerApplication/Message/IMessagePumpController.h \

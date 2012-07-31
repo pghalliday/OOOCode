@@ -3,6 +3,8 @@
 #include "MockLink.h"
 #include "MockSockets.h"
 
+#define TEST_STRING	"This is a test"
+
 #define OOOClass ListenerTest
 OOODeclare()
 	OOOImplements
@@ -46,11 +48,18 @@ OOOMethodEnd
 OOOMethod(void, run, unsigned char * pData, size_t uSize)
 {
 	// verify the submitted data
-	OOOCheck(O_strcmp(pData, "This is a test") == 0);
-	OOOCheck(uSize == (O_strlen("This is a test") + 1));
+	OOOCheck(O_strcmp(pData, TEST_STRING) == 0);
+	OOOCheck(uSize == (O_strlen(TEST_STRING) + 1));
 
 	// stop the listener
 	OOOCall(OOOF(pListener), stop);
+}
+OOOMethodEnd
+
+OOOMethod(void, listenerError)
+{
+	// Stop the message pump
+	OOOCall(OOOF(pMessagePump), stop);
 }
 OOOMethodEnd
 
@@ -58,13 +67,13 @@ OOOMethod(void, listenerStarted)
 {
 	// start submitting test data for the runner to verify
 	MockSocket * pSocket = OOOCall(OOOF(pSockets), connect, 8080);
-	OOOCall(pSocket, send, "This is a test", O_strlen("This is a test") + 1);
+	OOOCall(pSocket, send, TEST_STRING, O_strlen(TEST_STRING) + 1);
 }
 OOOMethodEnd
 
 OOOMethod(void, messagePumpStarted)
 {
-	OOOF(pLink) = OOOConstruct(MockLink, 10000, 1);
+	OOOF(pLink) = OOOConstruct(MockLink, OOOF(pMessagePump), 10000);
 	OOOF(pSockets) = OOOConstruct(MockSockets, OOOF(pLink), 10001);
 	OOOF(pListener) = OOOConstruct
 			(
@@ -97,6 +106,7 @@ OOOConstructor()
 #define OOOInterface IListenerController
 	OOOMapVirtuals
 		OOOVirtualMapping(listenerStarted)
+		OOOVirtualMapping(listenerError)
 		OOOVirtualMapping(listenerStopped)
 	OOOMapVirtualsEnd
 #undef OOOInterface

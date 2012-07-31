@@ -6,6 +6,7 @@
 #define OOOInterface IListenerController
 OOOVirtuals
 	OOOVirtual(void, started)
+	OOOVirtual(void, error)
 	OOOVirtual(void, stopped)
 OOOVirtualsEnd
 #undef OOOInterface

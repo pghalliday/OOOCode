@@ -11,6 +11,7 @@
 #define OOOClass Listener
 OOODeclare(MessagePump * pMessagePump, ILink * iLink, ISockets * iSockets, unsigned short uPort, IRunner * iRunner)
 	OOOImplements
+		OOOImplement(IMessageHandler)
 	OOOImplementsEnd
 	OOOExports
 		OOOExport(void, start, IListenerController * iListenerController)
