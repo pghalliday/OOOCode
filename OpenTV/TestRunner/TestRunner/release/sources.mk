@@ -28,14 +28,16 @@ OOOS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-src/Sockets \
+src/TestRunnerApplication \
+src/TestRunnerApplication/Message \
+src/TestRunnerApplication/Listener/Sockets \
+src/TestRunnerApplication/Listener/Sockets/MockSocket \
+src/TestRunnerApplication/Listener \
+src/TestRunnerApplication/Listener/Link \
 src/OOOCode/Utilities \
 src/OOOCode/UnitTests/Reporter \
 src/OOOCode/UnitTests/Reporter/Debug \
 src/OOOCode/UnitTests \
 src/OOOCode \
-src/MessagePump \
 src \
-src/Listener \
-src/Link \
 

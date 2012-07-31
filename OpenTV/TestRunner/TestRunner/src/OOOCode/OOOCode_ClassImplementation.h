@@ -27,8 +27,7 @@
 #define __OOOPrivateData(CLASS_NAME) \
 	typedef struct \
 	{ \
-		CLASS_NAME##_VTable * pVTable; \
-		CLASS_NAME##_Interfaces tInterfaces;
+		CLASS_NAME OOOVTables;
 #define _OOOPrivateData(CLASS_NAME) __OOOPrivateData(CLASS_NAME)
 #define OOOPrivateData _OOOPrivateData(OOOClass)
 
@@ -93,12 +92,17 @@
  */
 
 /* begin the constructor, allocating memory */
-#define __OOOConstructor(CLASS_NAME , ARGS...) \
+#define __OOOConstructor0(CLASS_NAME , ARGS...) \
 	CLASS_NAME * CLASS_NAME##_construct(ARGS) \
 	{ \
 		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
 		assert(OOOThis);
-#define _OOOConstructor(CLASS_NAME, ARGS...) __OOOConstructor(CLASS_NAME, ARGS)
+#define __OOOConstructor1(CLASS_NAME , ARGS...) \
+	CLASS_NAME * CLASS_NAME##_construct(void) \
+	{ \
+		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
+		assert(OOOThis);
+#define _OOOConstructor(CLASS_NAME, ARGS...) OOOPaste(__OOOConstructor, OOOIsEmpty(ARGS))(CLASS_NAME, ARGS)
 #define OOOConstructor(ARGS...) _OOOConstructor(OOOClass, ARGS)
 
 /*

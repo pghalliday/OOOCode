@@ -9,16 +9,18 @@ RM := "C:/OpenTV/SDKSuiteC2.2/SDK/bin/perl"  "C:/OpenTV/SDKSuiteC2.2/SDK/bin/cle
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir.mk
--include src/Sockets/subdir.mk
+-include src/TestRunnerApplication/subdir.mk
+-include src/TestRunnerApplication/Message/subdir.mk
+-include src/TestRunnerApplication/Listener/Sockets/subdir.mk
+-include src/TestRunnerApplication/Listener/Sockets/MockSocket/subdir.mk
+-include src/TestRunnerApplication/Listener/subdir.mk
+-include src/TestRunnerApplication/Listener/Link/subdir.mk
 -include src/OOOCode/Utilities/subdir.mk
 -include src/OOOCode/UnitTests/Reporter/subdir.mk
 -include src/OOOCode/UnitTests/Reporter/Debug/subdir.mk
 -include src/OOOCode/UnitTests/subdir.mk
 -include src/OOOCode/subdir.mk
--include src/MessagePump/subdir.mk
 -include src/subdir.mk
--include src/Listener/subdir.mk
--include src/Link/subdir.mk
 -include objects.mk
 
 BIGDATA :=1
@@ -37,10 +39,10 @@ EXP_OPTIONS = -MMD  -MT$@ -MF$*.dx
 VPATH := ../
 include $(OPENTV)/kit.mak
 RC_FLAGS :=$(RC_FLAGS) -vv -ec
-COMPILER_INCLUDES2 +=  -I"../src" -I"../src/OOOCode" -I"../src/OOOCode/UnitTests" -I"../src/OOOCode/UnitTests/Reporter" -I"../src/OOOCode/UnitTests/Reporter/Debug" -I"../src/OOOCode/Utilities" -I"../src/Link" -I"../src/Sockets" -I"../src/MessagePump" -I"../src/Listener" -I"../src/TestRunnerApplication"   -O1 $(WARNINGS)
+COMPILER_INCLUDES2 +=  -I"../src" -I"../src/OOOCode" -I"../src/OOOCode/UnitTests" -I"../src/OOOCode/UnitTests/Reporter" -I"../src/OOOCode/UnitTests/Reporter/Debug" -I"../src/OOOCode/Utilities" -I"../src/TestRunnerApplication/Listener/Link" -I"../src/TestRunnerApplication/Listener/Sockets" -I"../src/TestRunnerApplication/Listener/Sockets/MockSocket" -I"../src/TestRunnerApplication/Message" -I"../src/TestRunnerApplication/Listener" -I"../src/TestRunnerApplication/Runner" -I"../src/TestRunnerApplication"   -O1 $(WARNINGS)
 COMPILE+=${COMPILER_INCLUDES2}
 POSTLINK_OPTIONS=stacksize=1024
-RC_INCLUDES2 +=  -I"../src" -I"../src/OOOCode" -I"../src/OOOCode/UnitTests" -I"../src/OOOCode/UnitTests/Reporter" -I"../src/OOOCode/UnitTests/Reporter/Debug" -I"../src/OOOCode/Utilities" -I"../src/Link" -I"../src/Sockets" -I"../src/MessagePump" -I"../src/Listener" -I"../src/TestRunnerApplication" 
+RC_INCLUDES2 +=  -I"../src" -I"../src/OOOCode" -I"../src/OOOCode/UnitTests" -I"../src/OOOCode/UnitTests/Reporter" -I"../src/OOOCode/UnitTests/Reporter/Debug" -I"../src/OOOCode/Utilities" -I"../src/TestRunnerApplication/Listener/Link" -I"../src/TestRunnerApplication/Listener/Sockets" -I"../src/TestRunnerApplication/Listener/Sockets/MockSocket" -I"../src/TestRunnerApplication/Message" -I"../src/TestRunnerApplication/Listener" -I"../src/TestRunnerApplication/Runner" -I"../src/TestRunnerApplication" 
 GCCO_FLAGS +=  -O1 $(WARNINGS)
 EXP_OPTIONS +=  -I..
 -include ../makefile.defs

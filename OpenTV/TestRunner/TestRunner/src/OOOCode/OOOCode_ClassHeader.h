@@ -15,10 +15,13 @@
  * Declare the type and constructor arguments
  */
 
-#define __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) \
+#define __OOODeclare0(CLASS_NAME, CONSTRUCTOR_ARGS...) \
 	typedef struct _##CLASS_NAME CLASS_NAME; \
 	extern CLASS_NAME * CLASS_NAME##_construct(CONSTRUCTOR_ARGS);
-#define _OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS)
+#define __OOODeclare1(CLASS_NAME, CONSTRUCTOR_ARGS...) \
+	typedef struct _##CLASS_NAME CLASS_NAME; \
+	extern CLASS_NAME * CLASS_NAME##_construct(void);
+#define _OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) OOOPaste(__OOODeclare, OOOIsEmpty(CONSTRUCTOR_ARGS))(CLASS_NAME, CONSTRUCTOR_ARGS)
 #define OOODeclare(CONSTRUCTOR_ARGS...) _OOODeclare(OOOClass, CONSTRUCTOR_ARGS)
 
 /*

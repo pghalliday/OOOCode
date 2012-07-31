@@ -4,45 +4,22 @@
 #include "OOODebugReporter.h"
 #include "OOOUnitTestsRun.h"
 
-#include "Link.h"
-#include "Sockets.h"
-#include "Listener.h"
+#include "TestRunnerApplication.h"
 
 void main(void)
 {
 	/* run the tests first */
-	size_t uMemory = O_heap_available();
 	OOODebug * pDebug = OOOConstruct(OOODebug);
 	OOODebugReporter * pReporter = OOOConstruct(OOODebugReporter, OOOCast(OOOIDebug, pDebug));
 	OOOUnitTestsRun(OOOCast(OOOIReporter, pReporter));
 	OOODestroy(pReporter);
 	OOODestroy(pDebug);
 
-	/* Start listening for test requests */
+	/* Start the application */
 	{
-		Link * pLink = OOOConstruct(Link);
-		Sockets * pSockets = OOOConstruct(Sockets);
-		Listener * pListener = OOOConstruct(Listener, OOOCast(ILink, pLink), OOOCast(ISockets, pSockets), 8080);
-
-		/* TODO */
-
-		OOODestroy(pListener);
-		OOODestroy(pSockets);
-		OOODestroy(pLink);
-	}
-	assert(O_heap_available() == uMemory);
-
-	/* Stick around so the VSTB does not exit and we know we ran everything */
-	while (TRUE)
-	{
-		o_message tMessage;
-		O_ui_get_event_wait(&tMessage);
-		if (O_msg_class(&tMessage) == MSG_CLASS_CONTROL)
-		{
-			if (O_msg_type(&tMessage) == MSG_TYPE_QUIT)
-			{
-				O_exit();
-			}
-		}
+		size_t uMemory = O_heap_available();
+		OOODestroy(OOOConstruct(TestRunnerApplication));
+		O_debug("Memory leaked: %d bytes\n", uMemory - O_heap_available());
+		assert(O_heap_available() == uMemory);
 	}
 }
