@@ -2,14 +2,17 @@
 
 #define OOOClass MockLink
 
+#define MockLink_MSG_TYPE_LINK_UP	1
+
 OOOPrivateData
+	MessagePump * pMessagePump;
 	unsigned short uMessageClass;
-	unsigned short uMessageType;
 	bool bIsOpen;
 OOOPrivateDataEnd
 
 OOODestructor
 {
+	OOOCall(OOOF(pMessagePump), removeHandler, OOOCast(IMessageHandler, OOOThis));
 }
 OOODestructorEnd
 
@@ -18,7 +21,7 @@ OOOMethod(o_link_error, open, o_link_type nLinkType, char * szModuleName, char *
 	/* post the internal message */
 	o_message tMessage;
 	tMessage.msg_class = OOOF(uMessageClass);
-	tMessage.type = OOOF(uMessageType);
+	tMessage.type = MockLink_MSG_TYPE_LINK_UP;
 	assert(O_post_message(&tMessage) == GOOD);
 
 	/* return no error */
@@ -29,7 +32,7 @@ OOOMethodEnd
 OOOMethod(bool, doMessage, o_message * pMessage)
 {
 	bool bHandled = FALSE;
-	if (O_msg_class(pMessage) == OOOF(uMessageClass) && O_msg_type(pMessage) == OOOF(uMessageType))
+	if (O_msg_class(pMessage) == OOOF(uMessageClass) && O_msg_type(pMessage) == MockLink_MSG_TYPE_LINK_UP)
 	{
 		/* post the link up message */
 		o_message tMessage;
@@ -52,7 +55,7 @@ OOOMethod(bool, isOpen)
 OOOMethodEnd
 
 
-OOOConstructor(unsigned short uMessageClass, unsigned short uMessageType)
+OOOConstructor(MessagePump * pMessagePump, unsigned short uMessageClass)
 {
 #define OOOInterface ILink
 	OOOMapVirtuals
@@ -60,13 +63,20 @@ OOOConstructor(unsigned short uMessageClass, unsigned short uMessageType)
 	OOOMapVirtualsEnd
 #undef OOOInterface
 
+#define OOOInterface IMessageHandler
+	OOOMapVirtuals
+		OOOVirtualMapping(doMessage)
+	OOOMapVirtualsEnd
+#undef OOOInterface
+
 	OOOMapMethods
-		OOOMethodMapping(doMessage)
 		OOOMethodMapping(isOpen)
 	OOOMapMethodsEnd
 
+	OOOF(pMessagePump) = pMessagePump;
 	OOOF(uMessageClass) = uMessageClass;
-	OOOF(uMessageType) = uMessageType;
+
+	OOOCall(pMessagePump, addHandler, OOOCast(IMessageHandler, OOOThis));
 }
 OOOConstructorEnd
 

@@ -11,4 +11,7 @@ src/TestRunnerApplication/Listener/Link/MockLink.Test.d: \
   ../src/OOOCode/UnitTests/Reporter/OOOIReporter.h \
   ../src/TestRunnerApplication/Listener/Link/MockLink.h \
   ../src/TestRunnerApplication/Listener/Link/ILink.h \
-  C:/OpenTV/SDKSuiteC2.2/SDK/include/optvxsocket.h
+  C:/OpenTV/SDKSuiteC2.2/SDK/include/optvxsocket.h \
+  ../src/TestRunnerApplication/Message/MessagePump.h \
+  ../src/TestRunnerApplication/Message/IMessagePumpController.h \
+  ../src/TestRunnerApplication/Message/IMessageHandler.h

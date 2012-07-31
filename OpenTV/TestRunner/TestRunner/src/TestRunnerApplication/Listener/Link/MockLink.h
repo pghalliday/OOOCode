@@ -3,14 +3,15 @@
 
 #include "OOOCode.h"
 #include "ILink.h"
+#include "MessagePump.h"
 
 #define OOOClass MockLink
-OOODeclare(unsigned short uMessageClass, unsigned short uMessageType)
+OOODeclare(MessagePump * pMessagePump, unsigned short uMessageClass)
 	OOOImplements
 		OOOImplement(ILink)
+		OOOImplement(IMessageHandler)
 	OOOImplementsEnd
 	OOOExports
-		OOOExport(bool, doMessage, o_message * pMessage)
 		OOOExport(bool, isOpen)
 	OOOExportsEnd
 OOODeclareEnd

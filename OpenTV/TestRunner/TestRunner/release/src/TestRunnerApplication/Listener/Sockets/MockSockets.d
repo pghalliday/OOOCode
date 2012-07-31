@@ -11,4 +11,7 @@ src/TestRunnerApplication/Listener/Sockets/MockSockets.d: \
   C:/OpenTV/SDKSuiteC2.2/SDK/include/optvxsocket.h \
   ../src/TestRunnerApplication/Listener/Link/MockLink.h \
   ../src/TestRunnerApplication/Listener/Link/ILink.h \
+  ../src/TestRunnerApplication/Message/MessagePump.h \
+  ../src/TestRunnerApplication/Message/IMessagePumpController.h \
+  ../src/TestRunnerApplication/Message/IMessageHandler.h \
   ../src/TestRunnerApplication/Listener/Sockets/MockSocket/MockSocket.h
