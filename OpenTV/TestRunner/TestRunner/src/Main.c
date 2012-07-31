@@ -18,7 +18,9 @@ void main(void)
 	/* Start the application */
 	{
 		size_t uMemory = O_heap_available();
-		OOODestroy(OOOConstruct(TestRunnerApplication));
+		TestRunnerApplication * pTestRunnerApplication = OOOConstruct(TestRunnerApplication);
+		OOOCall(pTestRunnerApplication, start);
+		OOODestroy(pTestRunnerApplication);
 		O_debug("Memory leaked: %d bytes\n", uMemory - O_heap_available());
 		assert(O_heap_available() == uMemory);
 	}

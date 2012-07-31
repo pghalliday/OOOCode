@@ -1,4 +1,4 @@
-src/TestRunnerApplication/Listener/Listener.d: \
+src/TestRunnerApplication/Listener/Listener.o: \
   ../src/TestRunnerApplication/Listener/Listener.c \
   ../src/TestRunnerApplication/Listener/Listener.h ../src/OOOCode/OOOCode.h \
   ../src/OOOCode/Utilities/OOOPastingAndQuoting.h \

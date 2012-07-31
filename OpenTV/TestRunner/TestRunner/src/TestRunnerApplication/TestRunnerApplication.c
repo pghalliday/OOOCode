@@ -44,6 +44,12 @@ OOOMethod(void, started)
 }
 OOOMethodEnd
 
+OOOMethod(void, start)
+{
+	OOOCall(OOOF(pMessagePump), start, OOOCast(IMessagePumpController, OOOThis));
+}
+OOOMethodEnd
+
 OOOConstructor()
 {
 #define OOOInterface IMessagePumpController
@@ -60,9 +66,10 @@ OOOConstructor()
 #undef OOOInterface
 
 	OOOMapMethods
+		OOOMethodMapping(start)
 	OOOMapMethodsEnd
 
-	OOOF(pMessagePump) = OOOConstruct(MessagePump, OOOCast(IMessagePumpController, OOOThis));
+	OOOF(pMessagePump) = OOOConstruct(MessagePump);
 }
 OOOConstructorEnd
 

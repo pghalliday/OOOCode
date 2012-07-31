@@ -12,6 +12,7 @@ OOODeclare()
 		OOOImplement(IMessagePumpController)
 	OOOImplementsEnd
 	OOOExports
+		OOOExport(void, start)
 	OOOExportsEnd
 OOODeclareEnd
 #undef OOOClass

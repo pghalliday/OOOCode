@@ -74,15 +74,9 @@ OOOMethod(void, removeHandler, IMessageHandler * iMessageHandler)
 }
 OOOMethodEnd
 
-OOOConstructor(IMessagePumpController * iMessagePumpController)
+OOOMethod(void, start, IMessagePumpController * iMessagePumpController)
 {
 	o_message tMessage;
-
-	OOOMapMethods
-		OOOMethodMapping(stop)
-		OOOMethodMapping(addHandler)
-		OOOMethodMapping(removeHandler)
-	OOOMapMethodsEnd
 
 	OOOF(bCanContinue) = TRUE;
 
@@ -108,6 +102,17 @@ OOOConstructor(IMessagePumpController * iMessagePumpController)
 
 	/* Notify controller that we stopped */
 	OOOICall(iMessagePumpController, stopped);
+}
+OOOMethodEnd
+
+OOOConstructor()
+{
+	OOOMapMethods
+		OOOMethodMapping(start)
+		OOOMethodMapping(stop)
+		OOOMethodMapping(addHandler)
+		OOOMethodMapping(removeHandler)
+	OOOMapMethodsEnd
 }
 OOOConstructorEnd
 

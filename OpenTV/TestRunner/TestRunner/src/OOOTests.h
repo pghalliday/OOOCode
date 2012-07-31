@@ -1,4 +1,4 @@
-/*#include "MessagePump.Test.h"*/
+#include "MessagePump.Test.h"
 #include "MockLink.Test.h"
 #include "MockSocket.Test.h"
 #include "MockSockets.Test.h"

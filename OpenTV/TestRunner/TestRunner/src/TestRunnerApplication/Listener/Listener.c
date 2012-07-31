@@ -22,9 +22,16 @@ OOOMethod(void, stop)
 }
 OOOMethodEnd
 
-OOOConstructor(MessagePump * pMessagePump, ILink * iLink, ISockets * iSockets, unsigned short uPort, IRunner * iRunner, IListenerController * iListenerController)
+OOOMethod(void, start, IListenerController * iListenerController)
+{
+	OOOF(iListenerController) = iListenerController;
+}
+OOOMethodEnd
+
+OOOConstructor(MessagePump * pMessagePump, ILink * iLink, ISockets * iSockets, unsigned short uPort, IRunner * iRunner)
 {
 	OOOMapMethods
+		OOOMethodMapping(start)
 		OOOMethodMapping(stop)
 	OOOMapMethodsEnd
 
@@ -33,7 +40,6 @@ OOOConstructor(MessagePump * pMessagePump, ILink * iLink, ISockets * iSockets, u
 	OOOF(iSockets) = iSockets;
 	OOOF(uPort) = uPort;
 	OOOF(iRunner) = iRunner;
-	OOOF(iListenerController) = iListenerController;
 }
 OOOConstructorEnd
 

@@ -73,9 +73,15 @@ OOOMethod(void, messagePumpStarted)
 					OOOCast(ILink, OOOF(pLink)),
 					OOOCast(ISockets, OOOF(pSockets)),
 					8080,
-					OOOCast(IRunner, OOOThis),
-					OOOCast(IListenerController, OOOThis)
+					OOOCast(IRunner, OOOThis)
 			);
+	OOOCall(OOOF(pListener), start, OOOCast(IListenerController, OOOThis));
+}
+OOOMethodEnd
+
+OOOMethod(void, start)
+{
+	OOOCall(OOOF(pMessagePump), start, OOOCast(IMessagePumpController, OOOThis));
 }
 OOOMethodEnd
 
@@ -102,14 +108,17 @@ OOOConstructor()
 #undef OOOInterface
 
 	OOOMapMethods
+		OOOMethodMapping(start)
 	OOOMapMethodsEnd
 
-	OOOF(pMessagePump) = OOOConstruct(MessagePump, OOOCast(IMessagePumpController, OOOThis));
+	OOOF(pMessagePump) = OOOConstruct(MessagePump);
 }
 OOOConstructorEnd
 #undef OOOClass
 
 OOOTest(Listener)
 {
-	OOODestroy(OOOConstruct(ListenerTest));
+	ListenerTest * pListenerTest = OOOConstruct(ListenerTest);
+	OOOCall(pListenerTest, start);
+	OOODestroy(pListenerTest);
 }

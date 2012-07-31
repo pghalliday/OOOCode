@@ -9,5 +9,9 @@ OOOTest(TestRunnerApplication)
 	tMessage.type = MSG_TYPE_QUIT;
 	assert(O_post_message(&tMessage) == GOOD);
 
-	OOODestroy(OOOConstruct(TestRunnerApplication));
+	{
+		TestRunnerApplication * pTestRunnerApplication = OOOConstruct(TestRunnerApplication);
+		OOOCall(pTestRunnerApplication, start);
+		OOODestroy(pTestRunnerApplication);
+	}
 }

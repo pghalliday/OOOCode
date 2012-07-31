@@ -9,10 +9,11 @@
 #include "MessagePump.h"
 
 #define OOOClass Listener
-OOODeclare(MessagePump * pMessagePump, ILink * iLink, ISockets * iSockets, unsigned short uPort, IRunner * iRunner, IListenerController * iListenerController)
+OOODeclare(MessagePump * pMessagePump, ILink * iLink, ISockets * iSockets, unsigned short uPort, IRunner * iRunner)
 	OOOImplements
 	OOOImplementsEnd
 	OOOExports
+		OOOExport(void, start, IListenerController * iListenerController)
 		OOOExport(void, stop)
 	OOOExportsEnd
 OOODeclareEnd
