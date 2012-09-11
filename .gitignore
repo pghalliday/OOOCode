@@ -7,6 +7,9 @@ release/
 ## Eclipse
 #################
 
+# test workspace generated when testing plugins
+runtime-EclipseApplication/
+
 *.pydevproject
 # actually i do want the .project file in GIT otherwise people can't import the projects into the IDE!
 #.project
