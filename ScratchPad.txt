@@ -1,8 +1,12 @@
 ToDo
 ----
 
+Generate a Unit Test DLL and implement a server application in the VSTB to receive the DLL and run tests
+- implement a TCP Server class for use by the listener
+-- improve the mock sockets
+
 Implement an eclipse plugin to make TDD in OOOCode easy as pie :)
-- fix the container in class and interface wizards
+- fix the container in class and interface wizards (seems to be only broken in OpenTV IDE though)
 - add more options to wizards to define methods, constructor args and fields
 - split unit test wizard from class wizard to enable real test driven development
 - implement name refactoring popup
@@ -17,8 +21,6 @@ Implement an eclipse plugin to make TDD in OOOCode easy as pie :)
 Update the README with usage notes
 
 Automate OOOTests.h generation / Integrate advanced build scripts
-
-Generate a Unit Test DLL and implement a server application in the VSTB to receive the DLL and run tests
 
 Concerns
 --------
