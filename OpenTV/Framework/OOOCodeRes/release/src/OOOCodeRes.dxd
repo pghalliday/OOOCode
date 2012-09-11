@@ -1,2 +1,0 @@
-src/OOOCodeRes.dxd: src/OOOCodeRes.rcd \
-  C:/OpenTV/SDKSuiteC2.2/SDK/include/opentv.h
