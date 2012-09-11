@@ -1,2 +1,0 @@
-TestRunner.dx: ../TestRunner.exp \
-  C:/OpenTV/SDKSuiteC2.2/SDK/include/_export.h ../TestRunner.exp
