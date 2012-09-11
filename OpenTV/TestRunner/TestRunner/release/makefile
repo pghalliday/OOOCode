@@ -11,6 +11,7 @@ RM := "C:/OpenTV/SDKSuiteC2.2/SDK/bin/perl"  "C:/OpenTV/SDKSuiteC2.2/SDK/bin/cle
 -include subdir.mk
 -include src/TestRunnerApplication/subdir.mk
 -include src/TestRunnerApplication/Message/subdir.mk
+-include src/TestRunnerApplication/Listener/TcpServer/subdir.mk
 -include src/TestRunnerApplication/Listener/Sockets/subdir.mk
 -include src/TestRunnerApplication/Listener/Sockets/MockSocket/subdir.mk
 -include src/TestRunnerApplication/Listener/subdir.mk

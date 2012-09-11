@@ -40,6 +40,7 @@ OOOMethodEnd
 
 OOOMethod(void, listenerStopped)
 {
+	// TODO: check for leaky sockets and stuff
 	// Stop the message pump
 	OOOCall(OOOF(pMessagePump), stop);
 }

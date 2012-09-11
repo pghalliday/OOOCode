@@ -23,6 +23,7 @@ OOODestructorEnd
 OOOMethod(void, stop)
 {
 	/* TODO: clean up sockets and stuff */
+	OOOICall(OOOF(iListenerController), stopped);
 }
 OOOMethodEnd
 

@@ -30,6 +30,7 @@ OOOS :=
 SUBDIRS := \
 src/TestRunnerApplication \
 src/TestRunnerApplication/Message \
+src/TestRunnerApplication/Listener/TcpServer \
 src/TestRunnerApplication/Listener/Sockets \
 src/TestRunnerApplication/Listener/Sockets/MockSocket \
 src/TestRunnerApplication/Listener \
