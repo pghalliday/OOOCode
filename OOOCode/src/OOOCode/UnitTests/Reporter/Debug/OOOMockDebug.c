@@ -91,12 +91,12 @@ OOOConstructor()
 {
 	#define OOOInterface OOOIDebug
 	OOOMapVirtuals
-		OOOVirtualMapping(print)
+		OOOMapVirtual(print)
 	OOOMapVirtualsEnd
 	#undef OOOInterface
 
 	OOOMapMethods
-		OOOMethodMapping(check)
+		OOOMapMethod(check)
 	OOOMapMethodsEnd
 }
 OOOConstructorEnd
