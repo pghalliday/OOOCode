@@ -115,10 +115,10 @@
 #define OOOMapMethods _OOOMapMethods(OOOClass)
 
 /* add methods to the vtable in the same order as they are declared in the class declaration */
-#define __OOOMethodMapping(CLASS_NAME, METHOD_NAME) \
+#define __OOOMapMethod(CLASS_NAME, METHOD_NAME) \
 				, CLASS_NAME##_##METHOD_NAME
-#define _OOOMethodMapping(CLASS_NAME, METHOD_NAME) __OOOMethodMapping(CLASS_NAME, METHOD_NAME)
-#define OOOMethodMapping(METHOD_NAME) _OOOMethodMapping(OOOClass, METHOD_NAME)
+#define _OOOMapMethod(CLASS_NAME, METHOD_NAME) __OOOMapMethod(CLASS_NAME, METHOD_NAME)
+#define OOOMapMethod(METHOD_NAME) _OOOMapMethod(OOOClass, METHOD_NAME)
 
 /* end the vtable mapping and assign to the instance */
 #define OOOMapMethodsEnd \
@@ -144,10 +144,10 @@
 #define OOOMapVirtuals _OOOMapVirtuals(OOOClass, OOOInterface)
 
 /* add methods to the vtable in the same order as they are declared in the interface declaration */
-#define __OOOVirtualMapping(CLASS_NAME, METHOD_NAME) \
+#define __OOOMapVirtual(CLASS_NAME, METHOD_NAME) \
 				, (OOOVirtual_##CLASS_NAME##_##METHOD_NAME) CLASS_NAME##_##METHOD_NAME
-#define _OOOVirtualMapping(CLASS_NAME, METHOD_NAME) __OOOVirtualMapping(CLASS_NAME, METHOD_NAME)
-#define OOOVirtualMapping(METHOD_NAME) _OOOVirtualMapping(OOOClass, METHOD_NAME)
+#define _OOOMapVirtual(CLASS_NAME, METHOD_NAME) __OOOMapVirtual(CLASS_NAME, METHOD_NAME)
+#define OOOMapVirtual(METHOD_NAME) _OOOMapVirtual(OOOClass, METHOD_NAME)
 
 /*
  * end the vtable mapping and assign to the instance

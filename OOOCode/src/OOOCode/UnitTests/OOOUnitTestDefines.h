@@ -35,8 +35,8 @@ extern OOOIReporter * iOOOReporter;
 	\
 	_OOOConstructor(OOOPaste(OOOUnitTest_,NAME)) \
 		_OOOMapVirtuals(OOOPaste(OOOUnitTest_,NAME), OOOIUnitTest) \
-			_OOOVirtualMapping(OOOPaste(OOOUnitTest_,NAME), run) \
-			_OOOVirtualMapping(OOOPaste(OOOUnitTest_,NAME), getName) \
+			_OOOMapVirtual(OOOPaste(OOOUnitTest_,NAME), run) \
+			_OOOMapVirtual(OOOPaste(OOOUnitTest_,NAME), getName) \
 		_OOOMapVirtualsEnd(OOOIUnitTest) \
 		_OOOMapMethods(OOOPaste(OOOUnitTest_,NAME)) \
 		OOOMapMethodsEnd \

@@ -37,7 +37,7 @@ OOOConstructor()
 {
 	#define OOOInterface OOOIDebug
 	OOOMapVirtuals
-		OOOVirtualMapping(print)
+		OOOMapVirtual(print)
 	OOOMapVirtualsEnd
 	#undef OOOInterface
 

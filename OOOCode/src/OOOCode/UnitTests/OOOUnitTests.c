@@ -45,7 +45,7 @@ OOOMethodEnd
 OOOConstructor(OOOIReporter * iReporter, OOOIUnitTest ** aTests)
 {
 	OOOMapMethods
-		OOOMethodMapping(run)
+		OOOMapMethod(run)
 	OOOMapMethodsEnd
 
 	OOOF(iReporter) = iReporter;

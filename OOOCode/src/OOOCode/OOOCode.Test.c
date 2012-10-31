@@ -35,11 +35,11 @@ OOOMethodEnd
 OOOConstructor(int nValue)
 #define OOOInterface ITest
 	OOOMapVirtuals
-		OOOVirtualMapping(addSome)
+		OOOMapVirtual(addSome)
 	OOOMapVirtualsEnd
 #undef OOOInterface
 	OOOMapMethods
-		OOOMethodMapping(getValue)
+		OOOMapMethod(getValue)
 	OOOMapMethodsEnd
 	OOOF(nValue) = nValue;
 OOOConstructorEnd

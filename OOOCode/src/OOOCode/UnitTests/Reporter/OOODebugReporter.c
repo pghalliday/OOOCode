@@ -126,14 +126,14 @@ OOOConstructor(OOOIDebug * iDebug)
 {
 	#define OOOInterface OOOIReporter
 	OOOMapVirtuals
-		OOOVirtualMapping(startReport)
-		OOOVirtualMapping(startTestReport)
-		OOOVirtualMapping(log)
-		OOOVirtualMapping(check)
-		OOOVirtualMapping(memoryLeak)
-		OOOVirtualMapping(memoryMagic)
-		OOOVirtualMapping(endTestReport)
-		OOOVirtualMapping(endReport)
+		OOOMapVirtual(startReport)
+		OOOMapVirtual(startTestReport)
+		OOOMapVirtual(log)
+		OOOMapVirtual(check)
+		OOOMapVirtual(memoryLeak)
+		OOOMapVirtual(memoryMagic)
+		OOOMapVirtual(endTestReport)
+		OOOMapVirtual(endReport)
 	OOOMapVirtualsEnd
 	#undef OOOInterface
 
