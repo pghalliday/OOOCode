@@ -46,6 +46,7 @@
 /* begin the destructor */
 #define __OOODestructor(CLASS_NAME) \
 	typedef void (* OOOVirtual_##CLASS_NAME##_destroy)(void * OOOThis); \
+	static void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) GCCO_SAFE_DS; \
 	static void CLASS_NAME##_destroy(CLASS_NAME * OOOThis) \
 	{ \
 		assert(OOOThis);
@@ -70,6 +71,7 @@
  */
 #define _OOOMethod0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
 	typedef RETURN_TYPE (* OOOVirtual_##CLASS_NAME##_##METHOD_NAME)(void * OOOThis, ARGS); \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis, ARGS) GCCO_SAFE_DS; \
 	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis, ARGS) \
 	{ \
 		assert(OOOThis);
@@ -94,7 +96,7 @@
 
 /* begin the constructor, allocating memory and set the moduleConstruct method to NULL when statically linking */
 #define __OOOConstructor(CLASS_NAME , ARGS...) \
-	CLASS_NAME * _##CLASS_NAME##_construct(ARGS); \
+	CLASS_NAME * _##CLASS_NAME##_construct(ARGS) GCCO_SAFE_DS; \
 	CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct; \
 	CLASS_NAME * _##CLASS_NAME##_construct(ARGS) \
 	{ \
