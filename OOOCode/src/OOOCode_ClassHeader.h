@@ -12,20 +12,14 @@
 #include "OOOEmptyArguments.h"
 
 /*
- * Declare the type and constructor arguments. NB. the constructor is
- * assigned to a static variable to enable dynamic linking of modules
+ * Declare the type and constructor arguments. NB. a constructor is
+ * defined as an extern variable to enable dynamic linking of modules
  */
 
-#ifdef OOORequired
 #define __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) \
 	typedef struct _##CLASS_NAME CLASS_NAME; \
 	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(CONSTRUCTOR_ARGS); \
-	static CLASS_NAME##_constructor CLASS_NAME##_construct = NULL;
-#else
-#define __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) \
-	typedef struct _##CLASS_NAME CLASS_NAME; \
-	extern CLASS_NAME * CLASS_NAME##_construct(CONSTRUCTOR_ARGS);
-#endif
+	extern CLASS_NAME##_constructor CLASS_NAME##_construct;
 #define _OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS)
 #define OOODeclare(CONSTRUCTOR_ARGS...) _OOODeclare(OOOClass, CONSTRUCTOR_ARGS)
 

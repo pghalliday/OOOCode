@@ -14,7 +14,7 @@
 #include "OOOCode_ClassHeader.h"
 #include "OOOCode_ClassImplementation.h"
 
-/* Construct an instance of a class */
+/* Construct an instance of a class (use the dynamic constructor if defined) */
 #define _OOOConstruct(CLASS_NAME, ARGS...) \
 	CLASS_NAME##_construct(ARGS)
 #define OOOConstruct(CLASS_NAME, ARGS...) _OOOConstruct(CLASS_NAME, ARGS)
