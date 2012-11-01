@@ -77,6 +77,7 @@
 		assert(OOOThis);
 #define _OOOMethod1(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
 	typedef RETURN_TYPE (* OOOVirtual_##CLASS_NAME##_##METHOD_NAME)(void * OOOThis); \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis) GCCO_SAFE_DS; \
 	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis) \
 	{ \
 		assert(OOOThis);
