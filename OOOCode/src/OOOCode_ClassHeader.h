@@ -16,11 +16,16 @@
  * assigned to a static variable to enable dynamic linking of modules
  */
 
+#ifdef OOORequired
 #define __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) \
 	typedef struct _##CLASS_NAME CLASS_NAME; \
-	extern CLASS_NAME * _##CLASS_NAME##_construct(CONSTRUCTOR_ARGS); \
 	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(CONSTRUCTOR_ARGS); \
-	static CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct;
+	static CLASS_NAME##_constructor CLASS_NAME##_construct = NULL;
+#else
+#define __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) \
+	typedef struct _##CLASS_NAME CLASS_NAME; \
+	extern CLASS_NAME * CLASS_NAME##_construct(CONSTRUCTOR_ARGS);
+#endif
 #define _OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS)
 #define OOODeclare(CONSTRUCTOR_ARGS...) _OOODeclare(OOOClass, CONSTRUCTOR_ARGS)
 

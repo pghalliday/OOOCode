@@ -94,7 +94,7 @@
 
 /* begin the constructor, allocating memory */
 #define __OOOConstructor(CLASS_NAME , ARGS...) \
-	CLASS_NAME * _##CLASS_NAME##_construct(ARGS) \
+	CLASS_NAME * CLASS_NAME##_construct(ARGS) \
 	{ \
 		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
 		assert(OOOThis);
