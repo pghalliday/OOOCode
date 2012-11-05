@@ -17,7 +17,11 @@
 <folderInfo id="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.848415119." name="/" resourcePath="">
 <toolChain id="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.toolchain.213513560" name="OpenTV SDK Toolchain" superClass="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.toolchain">
 <targetPlatform binaryParser="com.opentv.ide.sdk.core.ggg" id="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.targetPlatform.1477911683" isAbstract="false" name="release platform" osList="win32,linux" superClass="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.targetPlatform"/>
-<builder buildPath="${workspace_loc:/OOOCode/release}" id="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.builder.1806426089" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="release builder" superClass="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.builder"/>
+<builder buildPath="${workspace_loc:/OOOCode/release}" id="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.builder.1806426089" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="release builder" superClass="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.builder">
+<outputEntries>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="release"/>
+</outputEntries>
+</builder>
 <tool id="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.tool.compiler.513217286" name="OpenTV C Compiler" superClass="com.opentv.ide.sdk.projecttype.codemodule.configuration.release.tool.compiler">
 <inputType id="com.opentv.ide.sdk.tools.ccompiler.compiler.inputType.640343043" name="C compiler" superClass="com.opentv.ide.sdk.tools.ccompiler.compiler.inputType"/>
 </tool>
@@ -35,9 +39,8 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
-<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Test"/>
-<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Mocks"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Test"/>
 </sourceEntries>
 </configuration>
 </storageModule>
