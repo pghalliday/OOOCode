@@ -50,13 +50,15 @@
 #define _OOOICall(INTERFACE, METHOD_NAME, ARGS...) OOOPaste(_OOOICall, OOOIsEmpty(ARGS))(INTERFACE, METHOD_NAME, ARGS)
 #define OOOICall(INTERFACE, METHOD_NAME, ARGS...) _OOOICall(INTERFACE, METHOD_NAME, ARGS)
 
-/* call an instance method directly (can only be used inside the class implementation) */
-#define _OOOPCall0(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) \
+/* call an instance method of a private class directly (can only be used inside the class implementation) */
+#define OOOPCCall0(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) \
 	(CLASS_NAME##_##METHOD_NAME(INSTANCE, ARGS))
-#define _OOOPCall1(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) \
+#define OOOPCCall1(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) \
 	(CLASS_NAME##_##METHOD_NAME(INSTANCE))
-#define _OOOPCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) OOOPaste(_OOOPCall, OOOIsEmpty(ARGS))(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS)
-#define OOOPCall(INSTANCE, METHOD_NAME, ARGS...) _OOOPCall(OOOClass, INSTANCE, METHOD_NAME, ARGS)
+#define OOOPCCall(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS...) OOOPaste(OOOPCCall, OOOIsEmpty(ARGS))(CLASS_NAME, INSTANCE, METHOD_NAME, ARGS)
+
+/* call an instance method of the current class directly (can only be used inside the class implementation) */
+#define OOOCCall(INSTANCE, METHOD_NAME, ARGS...) OOOPCCall(OOOClass, INSTANCE, METHOD_NAME, ARGS)
 
 /* access a field of the given instance */
 #define __OOOField(CLASS_NAME, INSTANCE, FIELD_NAME) \
@@ -68,6 +70,6 @@
 #define OOOF(FIELD_NAME) OOOField(OOOThis, FIELD_NAME)
 
 /* shortcut to call an instance method directly with the current OOOThis instance */
-#define OOOC(METHOD_NAME, ARGS...) OOOPCall(OOOThis, METHOD_NAME , ##ARGS)
+#define OOOC(METHOD_NAME, ARGS...) OOOCCall(OOOThis, METHOD_NAME , ##ARGS)
 
 #endif

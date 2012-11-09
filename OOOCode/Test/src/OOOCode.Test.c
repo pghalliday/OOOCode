@@ -1,12 +1,18 @@
 #include "OOOUnitTestDefines.h"
 #include "OOOCode.h"
 
+/*
+ * Test interface
+ */
 #define OOOInterface ITest
 OOOVirtuals
 	OOOVirtual(int, addSome, int nValue)
 OOOVirtualsEnd
 #undef OOOInterface
 
+/*
+ * Test class
+ */
 #define OOOClass Test
 OOODeclare(int nValue)
 	OOOImplements
@@ -23,6 +29,10 @@ OOOPrivateDataEnd
 
 OOODestructor
 OOODestructorEnd
+
+OOOMethod(int, getPrivateValue)
+	return OOOF(nValue);
+OOOMethodEnd
 
 OOOMethod(int, getValue)
 	return OOOF(nValue);
@@ -43,17 +53,20 @@ OOOConstructor(int nValue)
 	OOOMapMethodsEnd
 	OOOF(nValue) = nValue;
 OOOConstructorEnd
-
 #undef OOOClass
 
 OOOTest(OOOCode)
 {
 	Test * pTest = OOOConstruct(Test, 5);
+
 	OOOCheck(OOOCall(pTest, getValue) == 5);
 	OOOCheck(OOOICall(OOOCast(ITest, pTest), addSome, 6) == 11);
 	/* let's see what happens when we pass a macro into a variadic macro's argument list */
 	OOOCheck(OOOICall(OOOCast(ITest, pTest), addSome, OOOICall(OOOCast(ITest, pTest), addSome, 6)) == 16);
 	/* now let's see what happens when we pass a variadic macro with no variadic arguments into a variadic macro's argument list */
 	OOOCheck(OOOICall(OOOCast(ITest, pTest), addSome, OOOICall(OOOCast(ITest, pTest), addSome, OOOCall(pTest, getValue))) == 15);
+	/* Private classes should be able to call private methods on each other directly */
+	OOOCheck(OOOPCCall(Test, pTest, getPrivateValue) == 5);
+
 	OOODestroy(pTest);
 }
