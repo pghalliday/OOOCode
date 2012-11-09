@@ -95,15 +95,22 @@
  * have been tested and should not be a problem
  */
 
-/* begin the constructor, allocating memory and set the moduleConstruct method to NULL when statically linking */
-#define __OOOConstructor(CLASS_NAME , ARGS...) \
-	CLASS_NAME * _##CLASS_NAME##_construct(ARGS) GCCO_SAFE_DS; \
+/* begin the constructor, allocating memory and set the exported construct method to the internal method */
+#define _OOOConstructor0(CLASS_NAME , ARGS...) \
+	static CLASS_NAME * _##CLASS_NAME##_construct(ARGS) GCCO_SAFE_DS; \
 	CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct; \
-	CLASS_NAME * _##CLASS_NAME##_construct(ARGS) \
+	static CLASS_NAME * _##CLASS_NAME##_construct(ARGS) \
 	{ \
 		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
 		assert(OOOThis);
-#define _OOOConstructor(CLASS_NAME, ARGS...) __OOOConstructor(CLASS_NAME, ARGS)
+#define _OOOConstructor1(CLASS_NAME , ARGS...) \
+	static CLASS_NAME * _##CLASS_NAME##_construct(void) GCCO_SAFE_DS; \
+	CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct; \
+	static CLASS_NAME * _##CLASS_NAME##_construct(void) \
+	{ \
+		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
+		assert(OOOThis);
+#define _OOOConstructor(CLASS_NAME, ARGS...) OOOPaste(_OOOConstructor, OOOIsEmpty(ARGS))(CLASS_NAME, ARGS)
 #define OOOConstructor(ARGS...) _OOOConstructor(OOOClass, ARGS)
 
 /*

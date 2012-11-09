@@ -16,12 +16,16 @@
  * defined as an extern variable to enable dynamic linking of modules
  */
 
-#define __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) \
+#define _OOODeclare0(CLASS_NAME, ARGS...) \
 	typedef struct _##CLASS_NAME CLASS_NAME; \
-	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(CONSTRUCTOR_ARGS); \
+	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(ARGS); \
 	extern CLASS_NAME##_constructor CLASS_NAME##_construct;
-#define _OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS...) __OOODeclare(CLASS_NAME, CONSTRUCTOR_ARGS)
-#define OOODeclare(CONSTRUCTOR_ARGS...) _OOODeclare(OOOClass, CONSTRUCTOR_ARGS)
+#define _OOODeclare1(CLASS_NAME, ARGS...) \
+	typedef struct _##CLASS_NAME CLASS_NAME; \
+	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(void); \
+	extern CLASS_NAME##_constructor CLASS_NAME##_construct;
+#define _OOODeclare(CLASS_NAME, ARGS...) OOOPaste(_OOODeclare, OOOIsEmpty(ARGS))(CLASS_NAME, ARGS)
+#define OOODeclare(ARGS...) _OOODeclare(OOOClass, ARGS)
 
 /*
  * Export Interfaces
