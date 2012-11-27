@@ -15,17 +15,34 @@
  * Declare the type and constructor arguments. NB. a constructor is
  * defined as an extern variable to enable dynamic linking of modules
  */
-
-#define _OOODeclare0(CLASS_NAME, ARGS...) \
-	typedef struct _##CLASS_NAME CLASS_NAME; \
-	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(ARGS); \
+#define OOODeclareStruct(CLASS_NAME) \
+	typedef struct _##CLASS_NAME CLASS_NAME;
+#define OOODeclareConstructorType0(CLASS_NAME, ARGS...) \
+	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(ARGS);
+#define OOODeclareConstructorType1(CLASS_NAME) \
+	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(void);
+#define OOODeclare0PUBLIC(CLASS_NAME, ARGS...) \
+	OOODeclareStruct(CLASS_NAME) \
+	OOODeclareConstructorType0(CLASS_NAME, ARGS) \
 	extern CLASS_NAME##_constructor CLASS_NAME##_construct;
-#define _OOODeclare1(CLASS_NAME, ARGS...) \
-	typedef struct _##CLASS_NAME CLASS_NAME; \
-	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(void); \
+#define OOODeclare1PUBLIC(CLASS_NAME, ARGS...) \
+	OOODeclareStruct(CLASS_NAME) \
+	OOODeclareConstructorType1(CLASS_NAME) \
 	extern CLASS_NAME##_constructor CLASS_NAME##_construct;
-#define _OOODeclare(CLASS_NAME, ARGS...) OOOPaste(_OOODeclare, OOOIsEmpty(ARGS))(CLASS_NAME, ARGS)
+#define OOODeclare0PRIVATE(CLASS_NAME, ARGS...) \
+	OOODeclareStruct(CLASS_NAME) \
+	OOODeclareConstructorType0(CLASS_NAME, ARGS) \
+	static CLASS_NAME * _##CLASS_NAME##_construct(ARGS) GCCO_SAFE_DS; \
+	static CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct;
+#define OOODeclare1PRIVATE(CLASS_NAME, ARGS...) \
+	OOODeclareStruct(CLASS_NAME) \
+	OOODeclareConstructorType1(CLASS_NAME) \
+	static CLASS_NAME * _##CLASS_NAME##_construct(void) GCCO_SAFE_DS; \
+	static CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct;
+#define __OOODeclare(SCOPE, CLASS_NAME, ARGS...) OOOPaste(OOOPaste(OOODeclare, OOOIsEmpty(ARGS)), SCOPE)(CLASS_NAME, ARGS)
+#define _OOODeclare(CLASS_NAME, ARGS...) __OOODeclare(PUBLIC, CLASS_NAME, ARGS)
 #define OOODeclare(ARGS...) _OOODeclare(OOOClass, ARGS)
+#define OOODeclarePrivate(ARGS...) __OOODeclare(PRIVATE, OOOClass, ARGS)
 
 /*
  * Export Interfaces

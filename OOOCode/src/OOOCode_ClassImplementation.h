@@ -96,22 +96,34 @@
  */
 
 /* begin the constructor, allocating memory and set the exported construct method to the internal method */
-#define _OOOConstructor0(CLASS_NAME , ARGS...) \
+#define OOOConstructorSignature0(CLASS_NAME, ARGS...) \
+	static CLASS_NAME * _##CLASS_NAME##_construct(ARGS)
+#define OOOConstructorSignature1(CLASS_NAME) \
+	static CLASS_NAME * _##CLASS_NAME##_construct(void)
+#define OOOConstructorBody(CLASS_NAME) \
+	{ \
+		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
+		assert(OOOThis);
+#define OOOConstructor0PUBLIC(CLASS_NAME , ARGS...) \
 	static CLASS_NAME * _##CLASS_NAME##_construct(ARGS) GCCO_SAFE_DS; \
 	CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct; \
-	static CLASS_NAME * _##CLASS_NAME##_construct(ARGS) \
-	{ \
-		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
-		assert(OOOThis);
-#define _OOOConstructor1(CLASS_NAME , ARGS...) \
+	OOOConstructorSignature0(CLASS_NAME, ARGS) \
+	OOOConstructorBody(CLASS_NAME)
+#define OOOConstructor1PUBLIC(CLASS_NAME , ARGS...) \
 	static CLASS_NAME * _##CLASS_NAME##_construct(void) GCCO_SAFE_DS; \
 	CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct; \
-	static CLASS_NAME * _##CLASS_NAME##_construct(void) \
-	{ \
-		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
-		assert(OOOThis);
-#define _OOOConstructor(CLASS_NAME, ARGS...) OOOPaste(_OOOConstructor, OOOIsEmpty(ARGS))(CLASS_NAME, ARGS)
+	OOOConstructorSignature1(CLASS_NAME) \
+	OOOConstructorBody(CLASS_NAME)
+#define OOOConstructor0PRIVATE(CLASS_NAME , ARGS...) \
+	OOOConstructorSignature0(CLASS_NAME, ARGS) \
+	OOOConstructorBody(CLASS_NAME)
+#define OOOConstructor1PRIVATE(CLASS_NAME , ARGS...) \
+	OOOConstructorSignature1(CLASS_NAME) \
+	OOOConstructorBody(CLASS_NAME)
+#define __OOOConstructor(SCOPE, CLASS_NAME, ARGS...) OOOPaste(OOOPaste(OOOConstructor, OOOIsEmpty(ARGS)), SCOPE)(CLASS_NAME, ARGS)
+#define _OOOConstructor(CLASS_NAME, ARGS...) __OOOConstructor(PUBLIC, CLASS_NAME, ARGS)
 #define OOOConstructor(ARGS...) _OOOConstructor(OOOClass, ARGS)
+#define OOOConstructorPrivate(ARGS...) __OOOConstructor(PRIVATE, OOOClass, ARGS)
 
 /*
  * Start the map of public methods to vtable entries. This is static
