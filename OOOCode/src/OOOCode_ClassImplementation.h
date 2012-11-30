@@ -69,20 +69,43 @@
  * the method prototype and can be used for safe casts when mapping
  * to virtuals in interface vtables
  */
-#define _OOOMethod0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
-	typedef RETURN_TYPE (* OOOVirtual_##CLASS_NAME##_##METHOD_NAME)(void * OOOThis, ARGS); \
-	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis, ARGS) GCCO_SAFE_DS; \
-	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis, ARGS) \
+#define OOOMethodVirtualType0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	typedef RETURN_TYPE (* OOOVirtual_##CLASS_NAME##_##METHOD_NAME)(void * OOOThis, ARGS);
+#define OOOMethodVirtualType1(CLASS_NAME, RETURN_TYPE, METHOD_NAME) \
+	typedef RETURN_TYPE (* OOOVirtual_##CLASS_NAME##_##METHOD_NAME)(void * OOOThis);
+#define OOOMethodDeclaration0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis, ARGS) GCCO_SAFE_DS;
+#define OOOMethodDeclaration1(CLASS_NAME, RETURN_TYPE, METHOD_NAME) \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis) GCCO_SAFE_DS;
+#define OOOMethodSignature0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis, ARGS)
+#define OOOMethodSignature1(CLASS_NAME, RETURN_TYPE, METHOD_NAME) \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis)
+#define OOOMethodBody \
 	{ \
 		assert(OOOThis);
-#define _OOOMethod1(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
-	typedef RETURN_TYPE (* OOOVirtual_##CLASS_NAME##_##METHOD_NAME)(void * OOOThis); \
-	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis) GCCO_SAFE_DS; \
-	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis) \
-	{ \
-		assert(OOOThis);
-#define _OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) OOOPaste(_OOOMethod, OOOIsEmpty(ARGS))(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS)
+#define OOOMethod0OOOUndeclared(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	OOOMethodVirtualType0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS) \
+	OOOMethodDeclaration0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS) \
+	OOOMethodSignature0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS) \
+	OOOMethodBody
+#define OOOMethod1OOOUndeclared(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	OOOMethodVirtualType1(CLASS_NAME, RETURN_TYPE, METHOD_NAME) \
+	OOOMethodDeclaration1(CLASS_NAME, RETURN_TYPE, METHOD_NAME) \
+	OOOMethodSignature1(CLASS_NAME, RETURN_TYPE, METHOD_NAME) \
+	OOOMethodBody
+#define OOOMethod0OOODeclared(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	OOOMethodVirtualType0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS) \
+	OOOMethodSignature0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS) \
+	OOOMethodBody
+#define OOOMethod1OOODeclared(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	OOOMethodVirtualType1(CLASS_NAME, RETURN_TYPE, METHOD_NAME) \
+	OOOMethodSignature1(CLASS_NAME, RETURN_TYPE, METHOD_NAME) \
+	OOOMethodBody
+#define __OOOMethod(DECLARED, CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) OOOPaste(OOOPaste(OOOMethod, OOOIsEmpty(ARGS)), DECLARED)(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS)
+#define _OOOMethod(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) __OOOMethod(OOOUndeclared, CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS)
 #define OOOMethod(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOMethod(OOOClass, RETURN_TYPE, METHOD_NAME, ARGS)
+#define OOOMethodDeclared(RETURN_TYPE, METHOD_NAME, ARGS...) __OOOMethod(OOODeclared, OOOClass, RETURN_TYPE, METHOD_NAME, ARGS)
 
 /* end the method */
 #define OOOMethodEnd \
@@ -104,26 +127,26 @@
 	{ \
 		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(CLASS_NAME##_PrivateData)); \
 		assert(OOOThis);
-#define OOOConstructor0PUBLIC(CLASS_NAME , ARGS...) \
+#define OOOConstructor0OOOPublic(CLASS_NAME , ARGS...) \
 	static CLASS_NAME * _##CLASS_NAME##_construct(ARGS) GCCO_SAFE_DS; \
 	CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct; \
 	OOOConstructorSignature0(CLASS_NAME, ARGS) \
 	OOOConstructorBody(CLASS_NAME)
-#define OOOConstructor1PUBLIC(CLASS_NAME , ARGS...) \
+#define OOOConstructor1OOOPublic(CLASS_NAME , ARGS...) \
 	static CLASS_NAME * _##CLASS_NAME##_construct(void) GCCO_SAFE_DS; \
 	CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct; \
 	OOOConstructorSignature1(CLASS_NAME) \
 	OOOConstructorBody(CLASS_NAME)
-#define OOOConstructor0PRIVATE(CLASS_NAME , ARGS...) \
+#define OOOConstructor0OOOPrivate(CLASS_NAME , ARGS...) \
 	OOOConstructorSignature0(CLASS_NAME, ARGS) \
 	OOOConstructorBody(CLASS_NAME)
-#define OOOConstructor1PRIVATE(CLASS_NAME , ARGS...) \
+#define OOOConstructor1OOOPrivate(CLASS_NAME , ARGS...) \
 	OOOConstructorSignature1(CLASS_NAME) \
 	OOOConstructorBody(CLASS_NAME)
 #define __OOOConstructor(SCOPE, CLASS_NAME, ARGS...) OOOPaste(OOOPaste(OOOConstructor, OOOIsEmpty(ARGS)), SCOPE)(CLASS_NAME, ARGS)
-#define _OOOConstructor(CLASS_NAME, ARGS...) __OOOConstructor(PUBLIC, CLASS_NAME, ARGS)
+#define _OOOConstructor(CLASS_NAME, ARGS...) __OOOConstructor(OOOPublic, CLASS_NAME, ARGS)
 #define OOOConstructor(ARGS...) _OOOConstructor(OOOClass, ARGS)
-#define OOOConstructorPrivate(ARGS...) __OOOConstructor(PRIVATE, OOOClass, ARGS)
+#define OOOConstructorPrivate(ARGS...) __OOOConstructor(OOOPrivate, OOOClass, ARGS)
 
 /*
  * Start the map of public methods to vtable entries. This is static

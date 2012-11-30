@@ -21,28 +21,28 @@
 	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(ARGS);
 #define OOODeclareConstructorType1(CLASS_NAME) \
 	typedef CLASS_NAME * (* CLASS_NAME##_constructor)(void);
-#define OOODeclare0PUBLIC(CLASS_NAME, ARGS...) \
+#define OOODeclare0OOOPublic(CLASS_NAME, ARGS...) \
 	OOODeclareStruct(CLASS_NAME) \
 	OOODeclareConstructorType0(CLASS_NAME, ARGS) \
 	extern CLASS_NAME##_constructor CLASS_NAME##_construct;
-#define OOODeclare1PUBLIC(CLASS_NAME, ARGS...) \
+#define OOODeclare1OOOPublic(CLASS_NAME, ARGS...) \
 	OOODeclareStruct(CLASS_NAME) \
 	OOODeclareConstructorType1(CLASS_NAME) \
 	extern CLASS_NAME##_constructor CLASS_NAME##_construct;
-#define OOODeclare0PRIVATE(CLASS_NAME, ARGS...) \
+#define OOODeclare0OOOPrivate(CLASS_NAME, ARGS...) \
 	OOODeclareStruct(CLASS_NAME) \
 	OOODeclareConstructorType0(CLASS_NAME, ARGS) \
 	static CLASS_NAME * _##CLASS_NAME##_construct(ARGS) GCCO_SAFE_DS; \
 	static CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct;
-#define OOODeclare1PRIVATE(CLASS_NAME, ARGS...) \
+#define OOODeclare1OOOPrivate(CLASS_NAME, ARGS...) \
 	OOODeclareStruct(CLASS_NAME) \
 	OOODeclareConstructorType1(CLASS_NAME) \
 	static CLASS_NAME * _##CLASS_NAME##_construct(void) GCCO_SAFE_DS; \
 	static CLASS_NAME##_constructor CLASS_NAME##_construct = _##CLASS_NAME##_construct;
 #define __OOODeclare(SCOPE, CLASS_NAME, ARGS...) OOOPaste(OOOPaste(OOODeclare, OOOIsEmpty(ARGS)), SCOPE)(CLASS_NAME, ARGS)
-#define _OOODeclare(CLASS_NAME, ARGS...) __OOODeclare(PUBLIC, CLASS_NAME, ARGS)
+#define _OOODeclare(CLASS_NAME, ARGS...) __OOODeclare(OOOPublic, CLASS_NAME, ARGS)
 #define OOODeclare(ARGS...) _OOODeclare(OOOClass, ARGS)
-#define OOODeclarePrivate(ARGS...) __OOODeclare(PRIVATE, OOOClass, ARGS)
+#define OOODeclarePrivate(ARGS...) __OOODeclare(OOOPrivate, OOOClass, ARGS)
 
 /*
  * Export Interfaces
@@ -104,5 +104,14 @@
 	};
 #define _OOODeclareEnd(CLASS_NAME) __OOODeclareEnd(CLASS_NAME)
 #define OOODeclareEnd _OOODeclareEnd(OOOClass)
+
+/* forward declare a function to be used in private calls */
+#define _OOOPCDeclare0(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis, ARGS) GCCO_SAFE_DS;
+#define _OOOPCDeclare1(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) \
+	static RETURN_TYPE CLASS_NAME##_##METHOD_NAME(CLASS_NAME * OOOThis) GCCO_SAFE_DS;
+#define _OOOPCDeclare(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS...) OOOPaste(_OOOPCDeclare, OOOIsEmpty(ARGS))(CLASS_NAME, RETURN_TYPE, METHOD_NAME, ARGS)
+#define OOOPCDeclare(RETURN_TYPE, METHOD_NAME, ARGS...) _OOOPCDeclare(OOOClass, RETURN_TYPE, METHOD_NAME, ARGS)
+
 
 #endif
