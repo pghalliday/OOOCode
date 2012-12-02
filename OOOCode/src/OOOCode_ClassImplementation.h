@@ -182,13 +182,14 @@
  * which interface is being mapped
  *
  */
-#define __OOOMapVirtuals(CLASS_NAME, INTERFACE_NAME) \
+#define ___OOOMapVirtuals(CLASS_NAME, INTERFACE_NAME) \
 		{ \
 			static INTERFACE_NAME##_VTable OOOVTable = \
 			{ \
 				(OOOVirtual_##CLASS_NAME##_destroy) CLASS_NAME##_destroy
-#define _OOOMapVirtuals(CLASS_NAME, INTERFACE_NAME) __OOOMapVirtuals(CLASS_NAME, INTERFACE_NAME)
-#define OOOMapVirtuals _OOOMapVirtuals(OOOClass, OOOInterface)
+#define __OOOMapVirtuals(CLASS_NAME, INTERFACE_NAME) ___OOOMapVirtuals(CLASS_NAME, INTERFACE_NAME)
+#define _OOOMapVirtuals(INTERFACE_NAME) __OOOMapVirtuals(OOOClass, INTERFACE_NAME)
+#define OOOMapVirtuals _OOOMapVirtuals(OOOInterface)
 
 /* add methods to the vtable in the same order as they are declared in the interface declaration */
 #define __OOOMapVirtual(CLASS_NAME, METHOD_NAME) \
