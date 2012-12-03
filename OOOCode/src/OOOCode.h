@@ -72,4 +72,10 @@
 /* shortcut to call an instance method directly with the current OOOThis instance */
 #define OOOC(METHOD_NAME, ARGS...) OOOCCall(OOOThis, METHOD_NAME , ##ARGS)
 
+/* construct a closure */
+#define __OOOClosureConstruct(CLASS_NAME, CONTAINER_CLASS, CALLBACK, ARGS...) \
+	OOOConstruct(CLASS_NAME, OOOThis, CONTAINER_CLASS##_##CALLBACK, ARGS)
+#define _OOOClosureConstruct(CLASS_NAME, CONTAINER_CLASS, CALLBACK, ARGS...) __OOOClosureConstruct(CLASS_NAME, CONTAINER_CLASS, CALLBACK, ARGS)
+#define OOOClosureConstruct(CLASS_NAME, CALLBACK, ARGS...) _OOOClosureConstruct(CLASS_NAME, OOOClass, CALLBACK, ARGS)
+
 #endif
