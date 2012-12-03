@@ -8,8 +8,8 @@
  * NB. Check MacroNotes.txt for guidelines
  */
 
-#include "OOOPastingAndQuoting.h"
-#include "OOOEmptyArguments.h"
+#include "OOOPaste.h"
+#include "OOOIsEmpty.h"
 #include "OOOCode_Interface.h"
 #include "OOOCode_ClassHeader.h"
 #include "OOOCode_ClassImplementation.h"
