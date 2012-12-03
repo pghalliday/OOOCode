@@ -4,3 +4,6 @@
 [submodule "OOOCode/submodules/Log"]
 	path = OOOCode/submodules/Log
 	url = https://github.com/pghalliday/OOOCode-Log.git
+[submodule "OOOCode/submodules/Macros"]
+	path = OOOCode/submodules/Macros
+	url = https://github.com/pghalliday/OOOCode-Macros.git
