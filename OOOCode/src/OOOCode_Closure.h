@@ -93,6 +93,10 @@ __OOOConstructor(OOOPrivate, OOOClosure, OOOClass * pContainer, OOOSimplePaste(O
 	_OOOMapMethods(OOOClosure)
 	OOOMapMethodsEnd
 
+	_OOOField(OOOClosure, OOOThis, pContainer) = pContainer;
+	_OOOField(OOOClosure, OOOThis, cbCallback) = cbCallback;
+	_OOOField(OOOClosure, OOOThis, closureData) = closureData;
+
 	OOOForEach(OOOClosureMapField, OOOClosureInputs)
 }
 OOOConstructorEnd

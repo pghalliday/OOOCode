@@ -66,9 +66,13 @@ OOODeclareEnd
 #undef OOOClosure
 
 OOOPrivateData
+	TestTarget * pTestTarget;
 OOOPrivateDataEnd
 
 OOODestructor
+{
+	OOODestroy(OOOF(pTestTarget));
+}
 OOODestructorEnd
 
 OOOMethod(void, values, short nClosureData, char * szString, int nNumber)
@@ -84,7 +88,6 @@ OOOMethodEnd
 
 OOOMethod(void, start)
 {
-	TestTarget * pTestTarget = OOOConstruct(TestTarget);
 	TestClosure * pClosure = OOOClosureConstruct
 	(
 		TestClosure,
@@ -93,7 +96,7 @@ OOOMethod(void, start)
 		TEST_NUMBER,
 		TEST_STRING
 	);
-	OOOCall(pTestTarget, close, OOOCast(ITest, pClosure));
+	OOOCall(OOOF(pTestTarget), close, OOOCast(ITest, pClosure));
 }
 OOOMethodEnd
 
@@ -102,6 +105,8 @@ OOOConstructorPrivate()
 	OOOMapMethods
 		OOOMapMethod(start)
 	OOOMapMethodsEnd
+
+	OOOF(pTestTarget) = OOOConstruct(TestTarget);
 }
 OOOConstructorEnd
 #undef OOOClass
