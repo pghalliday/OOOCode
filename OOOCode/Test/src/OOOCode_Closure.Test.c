@@ -13,7 +13,7 @@ OOOVirtualsEnd
 #undef OOOInterface
 
 #define OOOClass TestTarget
-OOODeclare()
+OOODeclarePrivate()
 	OOOImplements
 	OOOImplementsEnd
 	OOOExports
@@ -28,18 +28,22 @@ OOODestructor
 OOODestructorEnd
 
 OOOMethod(void, close, ITest * iTest)
+{
 	OOOICall(iTest, values, OOOICall(iTest, getString), OOOICall(iTest, getNumber));
+}
 OOOMethodEnd
 
-OOOConstructor()
+OOOConstructorPrivate()
+{
 	OOOMapMethods
 		OOOMapMethod(close)
 	OOOMapMethodsEnd
+}
 OOOConstructorEnd
 #undef OOOClass
 
 #define OOOClass Test
-OOODeclare()
+OOODeclarePrivate()
 	OOOImplements
 	OOOImplementsEnd
 	OOOExports
@@ -79,6 +83,7 @@ OOOMethod(void, values, short nClosureData, char * szString, int nNumber)
 OOOMethodEnd
 
 OOOMethod(void, start)
+{
 	TestTarget * pTestTarget = OOOConstruct(TestTarget);
 	TestClosure * pClosure = OOOClosureConstruct
 	(
@@ -89,17 +94,21 @@ OOOMethod(void, start)
 		TEST_STRING
 	);
 	OOOCall(pTestTarget, close, OOOCast(ITest, pClosure));
+}
 OOOMethodEnd
 
-OOOConstructor()
+OOOConstructorPrivate()
+{
 	OOOMapMethods
 		OOOMapMethod(start)
 	OOOMapMethodsEnd
+}
 OOOConstructorEnd
 #undef OOOClass
 
 OOOTest(OOOCode_Closure)
 {
 	Test * pTest = OOOConstruct(Test);
+	OOOCall(pTest, start);
 	OOODestroy(pTest);
 }
