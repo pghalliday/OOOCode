@@ -1,5 +1,4 @@
 #include "OOOUnitTestDefines.h"
-#include "OOOCode_Closure.h"
 
 #define TEST_CLOSURE_DATA	10
 #define TEST_STRING			"This is a test"

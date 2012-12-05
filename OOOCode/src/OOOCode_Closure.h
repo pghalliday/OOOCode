@@ -1,3 +1,4 @@
+#ifdef OOOClass
 #ifdef OOOClosure
 #ifdef OOOClosureType
 #ifdef OOOClosureInterface
@@ -95,6 +96,7 @@ __OOOConstructor(OOOPrivate, OOOClosure, OOOClass * pContainer, OOOPaste(OOOClos
 }
 OOOConstructorEnd
 
+#endif
 #endif
 #endif
 #endif
