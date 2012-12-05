@@ -9,23 +9,16 @@
 #include "OOOForEach.h"
 #include "OOOSimplePaste.h"
 
-#ifndef OOOCode_Closure_H
-#define OOOCode_Closure_H
-
 #define OOOClosureArgSeparator0 ,
 #define OOOClosureArgSeparator1
 
-#define OOOClosureOutputTypedArg(FIRST, LAST, ITERATION, VALUE, REMAINDER) \
-	OOOSimplePaste(OOOClosureArgSeparator, FIRST) VALUE OOOSimplePaste(output, ITERATION) REMAINDER
-#define OOOClosureOutputTypedArgs OOOForEach(OOOClosureOutputTypedArg, OOOClosureOutputs)
+#define OOOClosureTypedArg(FIRST, LAST, ITERATION, TYPE, REMAINDER) \
+	OOOSimplePaste(OOOClosureArgSeparator, FIRST) TYPE OOOSimplePaste(arg, ITERATION) REMAINDER
+#define OOOClosureTypedArgs(TYPES...) OOOForEach(OOOClosureTypedArg, TYPES)
 
-#define OOOClosureInputTypedArg(FIRST, LAST, ITERATION, VALUE, REMAINDER) \
-	OOOSimplePaste(OOOClosureArgSeparator, FIRST)  VALUE OOOSimplePaste(input, ITERATION) REMAINDER
-#define OOOClosureInputTypedArgs OOOForEach(OOOClosureInputTypedArg, OOOClosureInputs)
-
-#define OOOClosureOutputArg(FIRST, LAST, ITERATION, VALUE, REMAINDER) \
-	OOOSimplePaste(OOOClosureArgSeparator, FIRST)  OOOSimplePaste(output, ITERATION) REMAINDER
-#define OOOClosureOutputArgs OOOForEach(OOOClosureOutputArg, OOOClosureOutputs)
+#define OOOClosureArg(FIRST, LAST, ITERATION, TYPE, REMAINDER) \
+	OOOSimplePaste(OOOClosureArgSeparator, FIRST)  OOOSimplePaste(arg, ITERATION) REMAINDER
+#define OOOClosureArgs(TYPES...) OOOForEach(OOOClosureArg, TYPES)
 
 #define OOOClosurePrivateField(FIRST, LAST, ITERATION, VALUE, REMAINDER) \
 	VALUE OOOSimplePaste(input, ITERATION); \
@@ -45,14 +38,51 @@
 	REMAINDER
 
 #define OOOClosureMapField(FIRST, LAST, ITERATION, VALUE, REMAINDER) \
-	_OOOField(OOOClosure, OOOThis, OOOSimplePaste(input, ITERATION)) = OOOSimplePaste(input, ITERATION); \
+	_OOOField(OOOClosure, OOOThis, OOOSimplePaste(input, ITERATION)) = OOOSimplePaste(arg, ITERATION); \
 	REMAINDER
 
-#endif
+#define OOOClosureCallbackTypedef0(OUTPUT_TYPES...) \
+	typedef void (* OOOSimplePaste(OOOClosure,_CallbackType))(OOOClass * pContainer, OOOClosureType closureData, OOOClosureTypedArgs(OUTPUT_TYPES));
+#define OOOClosureCallbackTypedef1(OUTPUT_TYPES...) \
+	typedef void (* OOOSimplePaste(OOOClosure,_CallbackType))(OOOClass * pContainer, OOOClosureType closureData);
+#define OOOClosureCallbackTypedef(OUTPUT_TYPES...) OOOSimplePaste(OOOClosureCallbackTypedef,OOOIsEmpty(OUTPUT_TYPES))(OUTPUT_TYPES)
 
-typedef void (* OOOSimplePaste(OOOClosure, _CallbackType))(OOOClass *, OOOClosureType, OOOClosureOutputTypedArgs);
+#define OOOClosureDeclare0(INPUT_TYPES...) \
+	__OOODeclare(OOOPrivate, OOOClosure, OOOClass * pContainer, OOOSimplePaste(OOOClosure,_CallbackType) cbCallback, OOOClosureType closureData, OOOClosureTypedArgs(INPUT_TYPES))
+#define OOOClosureDeclare1(INPUT_TYPES...) \
+	__OOODeclare(OOOPrivate, OOOClosure, OOOClass * pContainer, OOOSimplePaste(OOOClosure,_CallbackType) cbCallback, OOOClosureType closureData)
+#define OOOClosureDeclare(INPUT_TYPES...) OOOSimplePaste(OOOClosureDeclare,OOOIsEmpty(INPUT_TYPES))(INPUT_TYPES)
 
-__OOODeclare(OOOPrivate, OOOClosure, OOOClass * pContainer, OOOSimplePaste(OOOClosure, _CallbackType) cbCallback, OOOClosureType closureData, OOOClosureInputTypedArgs)
+#define OOOClosureCallbackMethod0(OUTPUT_TYPES...) \
+	_OOOMethod(OOOClosure, void, callback, OOOClosureTypedArgs(OUTPUT_TYPES))
+#define OOOClosureCallbackMethod1(OUTPUT_TYPES...) \
+	_OOOMethod(OOOClosure, void, callback)
+#define OOOClosureCallbackMethod(OUTPUT_TYPES...) OOOSimplePaste(OOOClosureCallbackMethod,OOOIsEmpty(OUTPUT_TYPES))(OUTPUT_TYPES)
+
+#define OOOClosureCallback0(OUTPUT_TYPES...) \
+	_OOOField(OOOClosure, OOOThis, cbCallback) \
+	( \
+		_OOOField(OOOClosure, OOOThis, pContainer), \
+		_OOOField(OOOClosure, OOOThis, closureData), \
+		OOOClosureArgs(OUTPUT_TYPES) \
+	);
+#define OOOClosureCallback1(OUTPUT_TYPES...) \
+	_OOOField(OOOClosure, OOOThis, cbCallback) \
+	( \
+		_OOOField(OOOClosure, OOOThis, pContainer), \
+		_OOOField(OOOClosure, OOOThis, closureData) \
+	);
+#define OOOClosureCallback(OUTPUT_TYPES...) OOOSimplePaste(OOOClosureCallback,OOOIsEmpty(OUTPUT_TYPES))(OUTPUT_TYPES)
+
+#define OOOClosureConstructor0(INPUT_TYPES...) \
+	__OOOConstructor(OOOPrivate, OOOClosure, OOOClass * pContainer, OOOSimplePaste(OOOClosure, _CallbackType) cbCallback, OOOClosureType closureData, OOOClosureTypedArgs(INPUT_TYPES))
+#define OOOClosureConstructor1(INPUT_TYPES...) \
+	__OOOConstructor(OOOPrivate, OOOClosure, OOOClass * pContainer, OOOSimplePaste(OOOClosure, _CallbackType) cbCallback, OOOClosureType closureData)
+#define OOOClosureConstructor(INPUT_TYPES...) OOOSimplePaste(OOOClosureConstructor,OOOIsEmpty(INPUT_TYPES))(INPUT_TYPES)
+
+OOOClosureCallbackTypedef(OOOClosureOutputs)
+
+OOOClosureDeclare(OOOClosureInputs)
 	OOOImplements
 		OOOImplement(OOOClosureInterface)
 	_OOOImplementsEnd(OOOClosure)
@@ -72,19 +102,14 @@ _OOODestructorEnd(OOOClosure)
 
 OOOForEach(OOOClosureAccessor, OOOClosureInputs)
 
-_OOOMethod(OOOClosure, void, callback, OOOClosureOutputTypedArgs)
+OOOClosureCallbackMethod(OOOClosureOutputs)
 {
-	_OOOField(OOOClosure, OOOThis, cbCallback)
-	(
-		_OOOField(OOOClosure, OOOThis, pContainer),
-		_OOOField(OOOClosure, OOOThis, closureData),
-		OOOClosureOutputArgs
-	);
+	OOOClosureCallback(OOOClosureOutputs)
 	OOODestroy(OOOThis);
 }
 OOOMethodEnd
 
-__OOOConstructor(OOOPrivate, OOOClosure, OOOClass * pContainer, OOOSimplePaste(OOOClosure, _CallbackType) cbCallback, OOOClosureType closureData, OOOClosureInputTypedArgs)
+OOOClosureConstructor(OOOClosureInputs)
 {
 	__OOOMapVirtuals(OOOClosure, OOOClosureInterface)
 		OOOForEach(OOOClosureAccessorMap, OOOClosureInputs)
