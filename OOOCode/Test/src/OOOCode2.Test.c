@@ -12,17 +12,17 @@ OOOInterface2(
 /*
  * Test class
  */
-OOOClass2(
+OOOClassDeclare2(
 	Test,
 	OOOConstructor2(int nValue),
-	OOOImplements2(ITest),
+	OOOImplement2(ITest),
 	OOOExport2(int, getValue)
 )
 
-OOOClass2(
+OOOClassImplement2(
 	Test,
-	OOOMapVirtuals2(ITest, addSome),
-	OOOMapExports2(getValue),
+	OOOImplement2(ITest, addSome),
+	OOOExport2(getValue),
 	OOOPrivateData2(
 		int nValue
 	),
@@ -41,21 +41,6 @@ OOOClass2(
 		return nValue + OOOC(getValue);
 	)
 )
-
-OOOMethod2(Test, int, getValue)
-{
-	return OOOF(nValue);
-}
-
-OOOMethod2(Test, int, addSome, int nValue)
-{
-	return nValue + OOOC(getValue);
-}
-
-OOOConstructor2(Test, int nValue)
-{
-	OOOF(nValue) = nValue;
-}
 
 OOOTest(OOOCode2)
 {
