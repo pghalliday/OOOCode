@@ -24,18 +24,18 @@
 	OOOPost(LIST_REMAINDER)
 
 #define _OOOInterface2(NAME,LISTS...) \
-	typedef struct OOOPaste(_,NAME,_VTable) OOOPaste(NAME,_VTable); \
-	typedef struct OOOPaste(_,NAME) NAME; \
-	struct OOOPaste(_,NAME) \
-	{ \
-		void * pInstance; \
-		OOOPaste(NAME,_VTable) * pVTable; \
-	}; \
-	struct OOOPaste(_,NAME,_VTable) \
+	typedef struct \
 	{ \
 		void (* idestroy)(void * OOOThis); \
 		OOOForEachList(OOOInterfaceVirtual2,OOOFilter(OOOVirtual2Label,LISTS)) \
-	};
+	} \
+	OOOPaste(NAME,_VTable); \
+	typedef struct \
+	{ \
+		void * pInstance; \
+		OOOPaste(NAME,_VTable) * pVTable; \
+	} \
+	NAME;
 #define OOOInterface2(ARGS...) _OOOInterface2(ARGS)
 
 #endif
