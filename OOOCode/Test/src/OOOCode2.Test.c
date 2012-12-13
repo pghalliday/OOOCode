@@ -11,12 +11,12 @@
 #include "OOOPreList.h"
 #include "OOOPostList.h"
 #include "OOOIsEmpty.h"
+#include "OOOForEachList.h"
 
 #define OOOPrivateData2Label	4
 #define OOOConstructor2Label	5
 #define OOODestructor2Label		6
 #define OOOMethod2Label			7
-#define OOOArgs2				8
 
 #define OOOPrivateData2(ARGS...)	OOOList(OOOPrivateData2Label,ARGS)
 #define OOOConstructor2(ARGS...)	OOOList(OOOConstructor2Label,ARGS)
@@ -59,6 +59,64 @@
 	_OOOClassImplement2Method(OOOPreList(0,CLOSURE_LIST_REMAINDER),OOOPreList(1,CLOSURE_LIST_REMAINDER)) \
 	OOOPostList(1,CLOSURE_LIST_REMAINDER)
 
+#define __OOOClassImplement2ConstructorImplementExport(CLASS_NAME,NAME,ARGS...) \
+	, OOOPaste(CLASS_NAME,_,NAME)
+#define _OOOClassImplement2ConstructorImplementExport(CLASS_NAME,ARGS...) __OOOClassImplement2ConstructorImplementExport(CLASS_NAME,ARGS)
+#define OOOClassImplement2ConstructorImplementExport(FIRST,LAST,ITERATION,CLOSURE_LIST_REMAINDER...) \
+	_OOOClassImplement2ConstructorImplementExport(OOOPreList(0,CLOSURE_LIST_REMAINDER),OOOPreList(1,CLOSURE_LIST_REMAINDER)) \
+	OOOPostList(1,CLOSURE_LIST_REMAINDER)
+
+#define OOOClassImplement2ConstructorImplementInterfaceMethod(FIRST,LAST,ITERATION,NAME,REMAINDER...) \
+	, (OOOPaste(OOOVirtual_,CLASS_NAME,_,NAME)) OOOPaste(CLASS_NAME,_,NAME) \
+	REMAINDER
+
+#define __OOOClassImplement2ConstructorImplementInterface(CLASS_NAME,NAME,METHODS...) \
+	static OOOPaste(NAME,_VTable) OOOPaste(OOO,NAME,VTable) = \
+	{ \
+		(OOOPaste(OOOVirtual_,CLASS_NAME,_destroy)) OOOPaste(CLASS_NAME,_destroy) \
+		OOOForEach(OOOClassImplement2ConstructorImplementInterfaceMethod,METHODS) \
+	};
+#define _OOOClassImplement2ConstructorImplementInterface(CLASS_NAME,METHODS...) __OOOClassImplement2ConstructorImplementInterface(CLASS_NAME,METHODS)
+#define OOOClassImplement2ConstructorImplementInterface(FIRST,LAST,ITERATION,CLOSURE_LIST_REMAINDER...) \
+	_OOOClassImplement2ConstructorImplementInterface(OOOPreList(0,CLOSURE_LIST_REMAINDER),OOOPreList(1,CLOSURE_LIST_REMAINDER)) \
+	OOOPostList(1,CLOSURE_LIST_REMAINDER)
+
+#define __OOOClassImplement2ConstructorAssignInterface(NAME,METHODS...) \
+	OOOThis->tInterfaces.OOOPaste(t,NAME).pInstance = OOOThis; \
+	OOOThis->tInterfaces.OOOPaste(t,NAME).pVTable = &OOOPaste(OOO,NAME,VTable);
+#define _OOOClassImplement2ConstructorAssignInterface(ARGS...) __OOOClassImplement2ConstructorAssignInterface(ARGS)
+#define OOOClassImplement2ConstructorAssignInterface(FIRST,LAST,ITERATION,LIST_REMAINDER...) \
+	_OOOClassImplement2ConstructorAssignInterface(OOOPre(LIST_REMAINDER)) \
+	OOOPost(LIST_REMAINDER)
+
+#define OOOClassImplement2ConstructorImplement(CLASS_NAME,ARGS) \
+	{ \
+		static OOOPaste(CLASS_NAME,_VTable) OOOVTable = \
+		{ \
+			OOOPaste(CLASS_NAME, _destroy) \
+			OOOForEachClosure(OOOClassImplement2ConstructorImplementExport,OOOList(CLASS_NAME),OOOPreList(1,ARGS)) \
+		}; \
+		OOOForEachClosure(OOOClassImplement2ConstructorImplementInterface,OOOList(CLASS_NAME),OOOPreList(0,ARGS)) \
+		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(OOOPaste(CLASS_NAME,_PrivateData))); \
+		assert(OOOThis); \
+		OOOThis->pVTable = &OOOVTable; \
+		OOOForEachList(OOOClassImplement2ConstructorAssignInterface,OOOList(CLASS_NAME),OOOPreList(0,ARGS)) \
+		{ \
+			OOOPost(OOOPostList(1,ARGS)) \
+		} \
+		return OOOThis; \
+	} \
+	OOOPaste(CLASS_NAME,_constructor) OOOPaste(CLASS_NAME,_construct) = OOOPaste(_,CLASS_NAME,_construct);
+#define OOOClassImplement2Constructor0(CLASS_NAME,ARGS...) \
+	static CLASS_NAME * OOOPaste(_,CLASS_NAME,_construct)(OOOPre(OOOPostList(1,ARGS))) GCCO_SAFE_DS; \
+	static CLASS_NAME * OOOPaste(_,CLASS_NAME,_construct)(OOOPre(OOOPostList(1,ARGS))) \
+	OOOClassImplement2ConstructorImplement(CLASS_NAME,ARGS)
+#define OOOClassImplement2Constructor1(CLASS_NAME,ARGS...) \
+	static CLASS_NAME * OOOPaste(_,CLASS_NAME,_construct)(void) GCCO_SAFE_DS; \
+	static CLASS_NAME * OOOPaste(_,CLASS_NAME,_construct)(void) \
+	OOOClassImplement2ConstructorImplement(CLASS_NAME,ARGS)
+#define OOOClassImplement2Constructor(CLASS_NAME,ARGS...) OOOPaste(OOOClassImplement2Constructor,OOOIsEmpty(OOOPre(OOOPostList(1,ARGS))))(CLASS_NAME,ARGS)
+
 #define OOOClassImplement2(NAME,ARGS...) \
 	typedef struct \
 	{ \
@@ -79,36 +137,7 @@
 		O_free((OOOPaste(NAME,_PrivateData) *) OOOThis); \
 	} \
 	OOOForEachClosure(OOOClassImplement2Method,OOOList(NAME),OOOFilter(OOOMethod2Label,ARGS)) \
-
-	static CLASS_NAME * OOOPaste(_, CLASS_NAME, _construct)(ARGS)
-	static CLASS_NAME * OOOPaste(_, CLASS_NAME, _construct)(void)
-	{ \
-		CLASS_NAME * OOOThis = (CLASS_NAME *) O_calloc(1, sizeof(OOOPaste(CLASS_NAME, _PrivateData))); \
-		assert(OOOThis);
-	static CLASS_NAME * OOOPaste(_, CLASS_NAME, _construct)(ARGS) GCCO_SAFE_DS; \
-	OOOPaste(CLASS_NAME, _constructor) OOOPaste(CLASS_NAME, _construct) = OOOPaste(_, CLASS_NAME, _construct); \
-	static CLASS_NAME * OOOPaste(_, CLASS_NAME, _construct)(void) GCCO_SAFE_DS; \
-	OOOPaste(CLASS_NAME, _constructor) OOOPaste(CLASS_NAME, _construct) = OOOPaste(_, CLASS_NAME, _construct); \
-		{ \
-			static OOOPaste(CLASS_NAME, _VTable) OOOVTable = \
-			{ \
-				OOOPaste(CLASS_NAME, _destroy)
-				, OOOPaste(CLASS_NAME, _, METHOD_NAME)
-			}; \
-			OOOThis->pVTable = &OOOVTable; \
-		}
-		{ \
-			static OOOPaste(INTERFACE_NAME, _VTable) OOOVTable = \
-			{ \
-				(OOOPaste(OOOVirtual_, CLASS_NAME, _destroy)) OOOPaste(CLASS_NAME, _destroy)
-				, (OOOPaste(OOOVirtual_, CLASS_NAME, _, METHOD_NAME)) OOOPaste(CLASS_NAME, _, METHOD_NAME)
-			}; \
-			OOOThis->tInterfaces.OOOPaste(t, INTERFACE_NAME).pInstance = OOOThis; \
-			OOOThis->tInterfaces.OOOPaste(t, INTERFACE_NAME).pVTable = &OOOVTable; \
-		}
-		return OOOThis; \
-	}
-
+	OOOClassImplement2Constructor(NAME,OOOList(OOOFilter(OOOImplement2Label,ARGS)),OOOList(OOOFilter(OOOExport2Label,ARGS)),OOOPre(OOOFilter(OOOConstructor2Label,ARGS)))
 
 /*
  * Test interface
